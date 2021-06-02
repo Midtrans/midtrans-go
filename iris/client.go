@@ -13,6 +13,7 @@ type Gateway struct {
 	Options midtrans.ConfigOptions
 }
 
+//New : this function will always be called when the Iris is initiated
 func (g *Gateway) New(irisApiKey string, env midtrans.EnvironmentType) {
 	g.Iris = &Client{
 		IrisApiKey: &irisApiKey,
