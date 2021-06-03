@@ -30,7 +30,7 @@ type Request struct {
 	CustomField3       string                      `json:"custom_field3,omitempty"`
 }
 
-// CreditCardDetails : Represent credit card detail for SourceCreditCard payment type
+// CreditCardDetails : Represent credit card detail for PaymentTypeCreditCard payment type
 type CreditCardDetails struct {
 	// indicate if generated token should be saved for next charge
 	SaveCard bool `json:"save_card,omitempty"`
@@ -159,7 +159,7 @@ type ShopeePayDetails struct {
 	CallbackUrl string `json:"callback_url,omitempty"`
 }
 
-// Cstore : Cstore object is for SourceAlfamart free text
+// Cstore : Cstore object is for PaymentTypeAlfamart free text
 type Cstore struct {
 	AlfamartFreeText1 string `json:"alfamart_free_text_1"`
 	AlfamartFreeText2 string `json:"alfamart_free_text_2"`

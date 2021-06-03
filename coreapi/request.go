@@ -34,7 +34,7 @@ type ChargeReq struct {
 	CustomField3 *string       `json:"custom_field3,omitempty"`
 }
 
-// CreditCardDetails : Represent credit card detail for SourceCreditCard payment type
+// CreditCardDetails : Represent credit card detail for PaymentTypeCreditCard payment type
 type CreditCardDetails struct {
 	// TokenID represents customer credit card information
 	TokenID string `json:"token_id"`

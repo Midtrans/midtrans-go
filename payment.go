@@ -3,110 +3,111 @@ package midtrans
 type PaymentType string
 
 const (
-	// SourceBankTransfer : bank_transfer
-	SourceBankTransfer PaymentType = "bank_transfer"
+	// PaymentTypeBankTransfer : bank_transfer
+	PaymentTypeBankTransfer PaymentType = "bank_transfer"
 
-	// SourceBNIVA : bni_va
-	SourceBNIVA PaymentType = "bni_va"
+	// PaymentTypeBNIVA : bni_va
+	PaymentTypeBNIVA PaymentType = "bni_va"
 
-	// PermataVA : permata_va
-	PermataVA PaymentType = "permata_va"
+	// PaymentTypePermataVA : permata_va
+	PaymentTypePermataVA PaymentType = "permata_va"
 
-	// SourceBCAVA : bca_va
-	SourceBCAVA PaymentType = "bca_va"
+	// PaymentTypeBCAVA : bca_va
+	PaymentTypeBCAVA PaymentType = "bca_va"
 
-	// SourceBRIVA : bca_va
-	SourceBRIVA PaymentType = "bri_va"
+	// PaymentTypeBRIVA : bca_va
+	PaymentTypeBRIVA PaymentType = "bri_va"
 
-	// SourceOtherVA : other_va
-	SourceOtherVA PaymentType = "other_va"
+	// PaymentTypeOtherVA : other_va
+	PaymentTypeOtherVA PaymentType = "other_va"
 
-	// SourceBCAKlikpay : bca_klikpay
-	SourceBCAKlikpay PaymentType = "bca_klikpay"
+	// PaymentTypeBCAKlikpay : bca_klikpay
+	PaymentTypeBCAKlikpay PaymentType = "bca_klikpay"
 
-	// SourceBRIEpay : bri_epay
-	SourceBRIEpay PaymentType = "bri_epay"
+	// PaymentTypeBRIEpay : bri_epay
+	PaymentTypeBRIEpay PaymentType = "bri_epay"
 
-	// SourceCreditCard : credit_card
-	SourceCreditCard PaymentType = "credit_card"
+	// PaymentTypeCreditCard : credit_card
+	PaymentTypeCreditCard PaymentType = "credit_card"
 
-	// SourceCimbClicks : cimb_clicks
-	SourceCimbClicks PaymentType = "cimb_clicks"
+	// PaymentTypeCimbClicks : cimb_clicks
+	PaymentTypeCimbClicks PaymentType = "cimb_clicks"
 
-	// SourceDanamonOnline : danamon_online
-	SourceDanamonOnline PaymentType = "danamon_online"
+	// PaymentTypeDanamonOnline : danamon_online
+	PaymentTypeDanamonOnline PaymentType = "danamon_online"
 
-	// SourceConvenienceStore : cstore
-	SourceConvenienceStore PaymentType = "cstore"
+	// PaymentTypeConvenienceStore : cstore
+	PaymentTypeConvenienceStore PaymentType = "cstore"
 
-	// SourceKlikBca : bca_klikbca
-	SourceKlikBca PaymentType = "bca_klikbca"
+	// PaymentTypeKlikBca : bca_klikbca
+	PaymentTypeKlikBca PaymentType = "bca_klikbca"
 
-	// SourceEChannel : echannel
-	SourceEChannel PaymentType = "echannel"
+	// PaymentTypeEChannel : echannel
+	PaymentTypeEChannel PaymentType = "echannel"
 
-	// SourceMandiriClickpay : mandiri_clickpay
-	SourceMandiriClickpay PaymentType = "mandiri_clickpay"
+	// PaymentTypeMandiriClickpay : mandiri_clickpay
+	PaymentTypeMandiriClickpay PaymentType = "mandiri_clickpay"
 
-	// SourceTelkomselCash : telkomsel_cash
-	SourceTelkomselCash PaymentType = "telkomsel_cash"
+	// PaymentTypeTelkomselCash : telkomsel_cash
+	PaymentTypeTelkomselCash PaymentType = "telkomsel_cash"
 
-	// SourceIndosatDompetku : indosat_dompetku
-	SourceIndosatDompetku PaymentType = "indosat_dompetku"
+	// PaymentTypeIndosatDompetku : indosat_dompetku
+	PaymentTypeIndosatDompetku PaymentType = "indosat_dompetku"
 
-	// SourceMandiriEcash : mandiri_ecash
-	SourceMandiriEcash PaymentType = "mandiri_ecash"
+	// PaymentTypeMandiriEcash : mandiri_ecash
+	PaymentTypeMandiriEcash PaymentType = "mandiri_ecash"
 
-	// SourceKioson : kioson
-	SourceKioson PaymentType = "kioson"
+	// PaymentTypeKioson : kioson
+	PaymentTypeKioson PaymentType = "kioson"
 
-	// SourceIndomaret : indomaret
-	SourceIndomaret PaymentType = "indomaret"
+	// PaymentTypeIndomaret : indomaret
+	PaymentTypeIndomaret PaymentType = "indomaret"
 
-	// SourceAlfamart : alfamart
-	SourceAlfamart PaymentType = "alfamart"
+	// PaymentTypeAlfamart : alfamart
+	PaymentTypeAlfamart PaymentType = "alfamart"
 
-	// SourceGiftCardIndo : gci
-	SourceGiftCardIndo PaymentType = "gci"
+	// PaymentTypeGiftCardIndo : gci
+	PaymentTypeGiftCardIndo PaymentType = "gci"
 
-	// SourceGopay : gopay
-	SourceGopay PaymentType = "gopay"
+	// PaymentTypeGopay : gopay
+	PaymentTypeGopay PaymentType = "gopay"
 
-	// SourceShopeepay : shopeepay
-	SourceShopeepay PaymentType = "shopeepay"
+	// PaymentTypeShopeepay : shopeepay
+	PaymentTypeShopeepay PaymentType = "shopeepay"
 
-	// SourceQris : qris
-	SourceQris PaymentType = "qris"
+	// PaymentTypeQris : qris
+	PaymentTypeQris PaymentType = "qris"
 
-	// SourceAkulaku : akulaku
-	SourceAkulaku PaymentType = "akulaku"
+	// PaymentTypeAkulaku : akulaku
+	PaymentTypeAkulaku PaymentType = "akulaku"
 )
 
-// AllPaymentSource : Get All available PaymentType
-var AllPaymentSource = []PaymentType{
-	SourceGopay,
-	SourceShopeepay,
-	SourceCreditCard,
-	SourceBankTransfer,
-	SourceBNIVA,
-	PermataVA,
-	SourceBCAVA,
-	SourceBRIVA,
-	SourceOtherVA,
-	SourceMandiriClickpay,
-	SourceCimbClicks,
-	SourceDanamonOnline,
-	SourceKlikBca,
-	SourceBCAKlikpay,
-	SourceBRIEpay,
-	SourceMandiriEcash,
-	SourceTelkomselCash,
-	SourceIndosatDompetku,
-	SourceEChannel,
-	SourceIndomaret,
-	SourceKioson,
-	SourceGiftCardIndo,
-	SourceAkulaku,
-	SourceAlfamart,
-	SourceConvenienceStore,
+// AllPaymentType : Get All available PaymentType
+var AllPaymentType = []PaymentType{
+	PaymentTypeGopay,
+	PaymentTypeShopeepay,
+	PaymentTypeQris,
+	PaymentTypeCreditCard,
+	PaymentTypeBankTransfer,
+	PaymentTypeBNIVA,
+	PaymentTypePermataVA,
+	PaymentTypeBCAVA,
+	PaymentTypeBRIVA,
+	PaymentTypeOtherVA,
+	PaymentTypeMandiriClickpay,
+	PaymentTypeCimbClicks,
+	PaymentTypeDanamonOnline,
+	PaymentTypeKlikBca,
+	PaymentTypeBCAKlikpay,
+	PaymentTypeBRIEpay,
+	PaymentTypeMandiriEcash,
+	PaymentTypeTelkomselCash,
+	PaymentTypeIndosatDompetku,
+	PaymentTypeEChannel,
+	PaymentTypeIndomaret,
+	PaymentTypeKioson,
+	PaymentTypeGiftCardIndo,
+	PaymentTypeAkulaku,
+	PaymentTypeAlfamart,
+	PaymentTypeConvenienceStore,
 }
