@@ -167,10 +167,15 @@ func notification(w http.ResponseWriter, r *http.Request) {
 				} else if resp.FraudStatus == "accept" {
 					// TODO set transaction status on your database to 'success'
 				}
-			} else if resp.TransactionStatus == "cancel" || resp.TransactionStatus == "deny" || resp.TransactionStatus == "expire" {
-				// TODO set transaction status on your database to 'failure'
+			} else if resp.TransactionStatus == "settlement" {
+				// TODO set transaction status on your databaase to 'success'
+			} else if resp.TransactionStatus == "deny"{
+				// TODO you can ignore 'deny', because most of the time it allows payment retries
+				// and later can become success
+			} else if resp.TransactionStatus == "cancel" || resp.TransactionStatus == "expire" {
+				// TODO set transaction status on your databaase to 'failure'
 			} else if resp.TransactionStatus == "pending" {
-				// TODO set transaction status on your database to 'pending' / waiting payment
+				// TODO set transaction status on your databaase to 'pending' / waiting payment
 			}
 		}
 	}
