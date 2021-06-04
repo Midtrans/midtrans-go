@@ -94,6 +94,9 @@ func DirectRefundTransaction() {
 		Reason:    "Item out of stock",
 	}
 
+	// Optional: set payment idempotency key to prevent duplicate request
+	c.Options.SetPaymentIdempotencyKey("UNIQUE-ID")
+
 	res, err := c.DirectRefundTransaction("YOUR_ORDER_ID_or_TRANSACTION-ID", refundRequest)
 	if err != nil {
 		// do something on error handle
