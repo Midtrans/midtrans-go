@@ -37,19 +37,19 @@ func mockBeneficiaries() Beneficiaries {
 }
 
 func TestGetBalance(t *testing.T) {
-	var g = Gateway{}
-	g.New(irisCreatorKeySandbox, midtrans.Sandbox)
-	resp2, err2 := g.Iris.GetBalance()
+	var iris = Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
+	resp2, err2 := iris.GetBalance()
 	assert.Nil(t, err2)
 	assert.NotNil(t, resp2)
 }
 
 func TestCreateAndUpdateBeneficiaries(t *testing.T) {
-	g := Gateway{}
-	g.New(irisCreatorKeySandbox, midtrans.Sandbox)
+	iris := Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
 
 	newBeneficiaries := mockBeneficiaries()
-	resp1, err1 := g.Iris.CreateBeneficiaries(newBeneficiaries)
+	resp1, err1 := iris.CreateBeneficiaries(newBeneficiaries)
 	assert.Nil(t, err1)
 	assert.Equal(t, resp1.Status, "created")
 
@@ -57,9 +57,9 @@ func TestCreateAndUpdateBeneficiaries(t *testing.T) {
 }
 
 func getListAndUpdateBeneficiaries(t *testing.T, beneficiaries Beneficiaries) {
-	g := Gateway{}
-	g.New(irisCreatorKeySandbox, midtrans.Sandbox)
-	beneficiariesList, _ := g.Iris.GetBeneficiaries()
+	iris := Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
+	beneficiariesList, _ := iris.GetBeneficiaries()
 
 	b := Beneficiaries{}
 	for _, account := range beneficiariesList {
@@ -77,7 +77,7 @@ func getListAndUpdateBeneficiaries(t *testing.T, beneficiaries Beneficiaries) {
 		Email:     b.Email,
 	}
 
-	resp, _ := g.Iris.UpdateBeneficiaries(b.AliasName, updateBeneficiaries)
+	resp, _ := iris.UpdateBeneficiaries(b.AliasName, updateBeneficiaries)
 	assert.Equal(t, resp.Status, "updated")
 }
 
@@ -95,18 +95,18 @@ func createPayout() []CreatePayoutDetailResponse {
 
 	cp := CreatePayoutReq{Payouts: payouts}
 
-	g := Gateway{}
-	g.New(irisCreatorKeySandbox, midtrans.Sandbox)
-	payoutReps, err := g.Iris.CreatePayout(cp)
+	iris := Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
+	payoutReps, err := iris.CreatePayout(cp)
 	fmt.Println(payoutReps, err)
 
 	return payoutReps.Payouts
 }
 
 func getPayoutDetails(refNo string) string {
-	g := Gateway{}
-	g.New(irisCreatorKeySandbox, midtrans.Sandbox)
-	payoutReps, err := g.Iris.GetPayoutDetails(refNo)
+	iris := Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
+	payoutReps, err := iris.GetPayoutDetails(refNo)
 	fmt.Println(payoutReps, err)
 	return payoutReps.ReferenceNo
 }
@@ -122,9 +122,9 @@ func TestCreateAndApprovePayout(t *testing.T) {
 		ReferenceNo: refNos,
 		OTP:         "335163",
 	}
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	approveResp, err2 := gw.Iris.ApprovePayout(ap)
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	approveResp, err2 := iris.ApprovePayout(ap)
 	assert.Nil(t, err2)
 	assert.Equal(t, approveResp.Status, "ok")
 
@@ -142,9 +142,9 @@ func TestCreateAndRejectPayout(t *testing.T) {
 		ReferenceNo:  refNos,
 		RejectReason: "MidGoUnitTest",
 	}
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	approveResp, err2 := gw.Iris.RejectPayout(ap)
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	approveResp, err2 := iris.RejectPayout(ap)
 	assert.Nil(t, err2)
 	assert.Equal(t, approveResp.Status, "ok")
 }
@@ -152,35 +152,35 @@ func TestCreateAndRejectPayout(t *testing.T) {
 func TestPayoutHistory(t *testing.T)  {
 	fromDate, toDate := generateDate()
 
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := gw.Iris.GetTransactionHistory(fromDate, toDate)
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	resp, err := iris.GetTransactionHistory(fromDate, toDate)
 	assert.Nil(t, err)
 	assert.NotNil(t, resp)
 }
 
 
 func TestGetTopUpChannels(t *testing.T)  {
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := gw.Iris.GetTopUpChannels()
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	resp, err := iris.GetTopUpChannels()
 	assert.Nil(t, err)
 	assert.NotNil(t, resp)
 }
 
 func TestGetListBeneficiaryBank(t *testing.T)  {
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := gw.Iris.GetBeneficiaryBanks()
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	resp, err := iris.GetBeneficiaryBanks()
 	assert.Nil(t, err)
 	assert.NotNil(t, resp)
 }
 
 
 func TestValidateBankAccount(t *testing.T)  {
-	gw := Gateway{}
-	gw.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := gw.Iris.ValidateBankAccount("danamon", "000001137298")
+	iris := Client{}
+	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
+	resp, err := iris.ValidateBankAccount("danamon", "000001137298")
 	assert.Nil(t, err)
 	assert.Equal(t, resp.AccountNo, "000001137298")
 }

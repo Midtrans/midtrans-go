@@ -8,30 +8,23 @@ import (
 	"net/http"
 )
 
-type Gateway struct {
-	Iris    *Client
-	Options midtrans.ConfigOptions
-}
-
-//New : this function will always be called when the Iris is initiated
-func (g *Gateway) New(irisApiKey string, env midtrans.EnvironmentType) {
-	g.Iris = &Client{
-		IrisApiKey: &irisApiKey,
-		Env:        env,
-		Options:    &g.Options,
-		HttpClient: &midtrans.ClientImplementation{
-			HttpClient: midtrans.DefaultHttpClient,
-			Logger:     midtrans.GetDefaultLogger(env),
-		},
-	}
-}
-
-// Client struct
+// Client : Iris Client struct
 type Client struct {
 	IrisApiKey *string
 	Env        midtrans.EnvironmentType
 	HttpClient midtrans.Client
 	Options    *midtrans.ConfigOptions
+}
+
+//New : this function will always be called when the Iris is initiated
+func (c *Client) New(irisApiKey string, env midtrans.EnvironmentType) {
+	c.Env 			= env
+	c.IrisApiKey 	= &irisApiKey
+	c.Options 		= &midtrans.ConfigOptions{}
+	c.HttpClient	= &midtrans.ClientImplementation{
+		HttpClient: midtrans.DefaultHttpClient,
+		Logger:     midtrans.GetDefaultLogger(env),
+	}
 }
 
 // CreateBeneficiaries : to perform create a new beneficiary information for quick access

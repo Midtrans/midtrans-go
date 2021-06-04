@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-var irisCreator iris.Gateway
-var irisApprover iris.Gateway
+var irisCreator iris.Client
+var irisApprover iris.Client
 
 func setupIrisGateway()  {
 	irisCreator.New(example.IrisCreatorKeySandbox, midtrans.Sandbox)
@@ -19,7 +19,7 @@ func setupIrisGateway()  {
 }
 
 func GetBalance() {
-	res, err := irisCreator.Iris.GetBalance()
+	res, err := irisCreator.GetBalance()
 	if err != nil {
 		fmt.Println("Error: ", err.GetMessage())
 	}
@@ -28,14 +28,14 @@ func GetBalance() {
 
 func CreateAndUpdateBeneficiaries() {
 	newBeneficiaries := mockBeneficiaries()
-	resp, _ := irisCreator.Iris.CreateBeneficiaries(newBeneficiaries)
+	resp, _ := irisCreator.CreateBeneficiaries(newBeneficiaries)
 	fmt.Println("Iris Create beneficiary response: ", resp)
 
 	getListAndUpdateBeneficiaries(newBeneficiaries)
 }
 
 func getListAndUpdateBeneficiaries(beneficiaries iris.Beneficiaries) {
-	beneficiariesList, _ := irisCreator.Iris.GetBeneficiaries()
+	beneficiariesList, _ := irisCreator.GetBeneficiaries()
 
 	b := iris.Beneficiaries{}
 	for _, account := range beneficiariesList {
@@ -53,7 +53,7 @@ func getListAndUpdateBeneficiaries(beneficiaries iris.Beneficiaries) {
 		Email:     b.Email,
 	}
 
-	resp, _ := irisCreator.Iris.UpdateBeneficiaries(b.AliasName, updateBeneficiaries)
+	resp, _ := irisCreator.UpdateBeneficiaries(b.AliasName, updateBeneficiaries)
 	fmt.Println("Iris Update Beneficiary: ", resp)
 }
 
@@ -71,14 +71,14 @@ func createPayout() []iris.CreatePayoutDetailResponse {
 
 	cp := iris.CreatePayoutReq{Payouts: payouts}
 
-	payoutReps, err := irisCreator.Iris.CreatePayout(cp)
+	payoutReps, err := irisCreator.CreatePayout(cp)
 	fmt.Println(payoutReps, err)
 
 	return payoutReps.Payouts
 }
 
 func GetPayoutDetails(refNo string) {
-	payoutReps, _ := irisCreator.Iris.GetPayoutDetails(refNo)
+	payoutReps, _ := irisCreator.GetPayoutDetails(refNo)
 	fmt.Println("Iris Payout details",payoutReps)
 }
 
@@ -93,7 +93,7 @@ func CreateAndApprovePayout() {
 		OTP:         "335163",
 	}
 
-	approveResp, _ := irisApprover.Iris.ApprovePayout(ap)
+	approveResp, _ := irisApprover.ApprovePayout(ap)
 	fmt.Println("Iris Approve payout resp: ", approveResp)
 }
 
@@ -108,31 +108,31 @@ func CreateAndRejectPayout() {
 		RejectReason: "MidGoUnitTest",
 	}
 
-	approveResp, _ := irisApprover.Iris.RejectPayout(ap)
+	approveResp, _ := irisApprover.RejectPayout(ap)
 	fmt.Println("Iris reject payout resp: ", approveResp)
 }
 
 func PayoutHistory()  {
 	fromDate, toDate := generateDate()
 
-	resp, _ := irisApprover.Iris.GetTransactionHistory(fromDate, toDate)
+	resp, _ := irisApprover.GetTransactionHistory(fromDate, toDate)
 	fmt.Println("Iris Payout history: ", resp)
 }
 
 
 func GetTopUpChannels()  {
-	resp, _ := irisApprover.Iris.GetTopUpChannels()
+	resp, _ := irisApprover.GetTopUpChannels()
 	fmt.Println("Iris TopUp Channels resp: ", resp)
 }
 
 func GetListBeneficiaryBank()  {
-	resp, _ := irisApprover.Iris.GetBeneficiaryBanks()
+	resp, _ := irisApprover.GetBeneficiaryBanks()
 	fmt.Println("Iris Beneficiary Banks Resp: ", resp)
 }
 
 
 func ValidateBankAccount()  {
-	resp, _ := irisApprover.Iris.ValidateBankAccount("danamon", "000001137298")
+	resp, _ := irisApprover.ValidateBankAccount("danamon", "000001137298")
 	fmt.Println("Validate Bank Account Resp: ", resp)
 }
 
