@@ -14,7 +14,7 @@ type Client interface {
 	Call(method string, url string, apiKey *string, options *ConfigOptions, body io.Reader, result interface{}) *Error
 }
 
-//ClientImplementation : this is for Client Implementation
+// ClientImplementation : this is for midtrans Client Implementation
 type ClientImplementation struct {
 	HttpClient *http.Client
 	Logger     LoggerInterface
@@ -134,7 +134,7 @@ func (c *ClientImplementation) DoRequest(req *http.Request, result interface{}) 
 			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", res.Status, string(resBody)),
 			StatusCode:     res.StatusCode,
 			RawApiResponse: rawResponse,
-			RawError: err,
+			RawError:       err,
 		}
 
 	}
@@ -166,6 +166,7 @@ type ApiResponse struct {
 	Request *http.Request
 }
 
+// newHTTPResponse : internal function to set HTTP Raw response return to ApiResponse
 func newHTTPResponse(res *http.Response, responseBody []byte) *ApiResponse {
 	return &ApiResponse{
 		Status:     res.Status,
@@ -177,6 +178,7 @@ func newHTTPResponse(res *http.Response, responseBody []byte) *ApiResponse {
 	}
 }
 
+// logHttpHeaders : internal function to perform log from headers
 func logHttpHeaders(log LoggerInterface, header http.Header, isReq bool) {
 	// Loop through headers to perform log
 	for name, headers := range header {

@@ -8,7 +8,7 @@ import (
 type RequestParamWithMap map[string]interface{}
 
 // Request : Represent SNAP API request payload that are used in Create Snap Token parameter.
-//https://snap-docs.midtrans.com/#json-objects
+// https://snap-docs.midtrans.com/#json-objects
 type Request struct {
 	TransactionDetails midtrans.TransactionDetails `json:"transaction_details"`
 	Items              *[]midtrans.ItemDetails     `json:"item_details,omitempty"`
@@ -144,11 +144,11 @@ type PermataVa struct {
 // GopayDetails : Represent gopay detail
 type GopayDetails struct {
 	// EnableCallback : Enable redirect back to merchant from GoJek apps. Default: false
-	EnableCallback bool   `json:"enable_callback"`
+	EnableCallback bool `json:"enable_callback"`
 
 	// CallbackUrl : Determine where should customer be redirected from GoJek apps.
 	// It supports both HTTP and deeplink. Default: same value as finish url
-	CallbackUrl    string `json:"callback_url"`
+	CallbackUrl string `json:"callback_url"`
 }
 
 // ShopeePayDetails : Represent shopeepay detail
@@ -173,8 +173,8 @@ type ExpiryDetails struct {
 	StartTime string `json:"start_time,omitempty"`
 
 	// Unit Expiry unit. Options: day, hour, minute (plural term also accepted)
-	Unit      string `json:"unit"`
+	Unit string `json:"unit"`
 
 	// Duration Expiry duration
-	Duration  int64  `json:"duration"`
+	Duration int64 `json:"duration"`
 }

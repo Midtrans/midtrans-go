@@ -18,16 +18,16 @@ type Client struct {
 
 //New : this function will always be called when the Snap is initiated
 func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
-	c.Env 			= env
-	c.ServerKey 	= serverKey
-	c.Options 		= &midtrans.ConfigOptions{}
-	c.HttpClient	= &midtrans.ClientImplementation{
+	c.Env = env
+	c.ServerKey = serverKey
+	c.Options = &midtrans.ConfigOptions{}
+	c.HttpClient = &midtrans.ClientImplementation{
 		HttpClient: midtrans.DefaultHttpClient,
 		Logger:     midtrans.GetDefaultLogger(env),
 	}
 }
 
-//getDefaultClient : this function to get default Client
+//getDefaultClient : this is internal function to get default Snap Client
 func getDefaultClient() Client {
 	return Client{
 		ServerKey:  midtrans.ServerKey,

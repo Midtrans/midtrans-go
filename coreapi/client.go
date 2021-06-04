@@ -18,33 +18,33 @@ type Client struct {
 	Options    *midtrans.ConfigOptions
 }
 
-//New : this function will always be called when the CoreApi is initiated
+// New : this function will always be called when the CoreApi is initiated
 func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
-	c.Env 			= env
-	c.ServerKey 	= serverKey
-	c.Options 		= &midtrans.ConfigOptions{}
-	c.HttpClient	= &midtrans.ClientImplementation{
+	c.Env = env
+	c.ServerKey = serverKey
+	c.Options = &midtrans.ConfigOptions{}
+	c.HttpClient = &midtrans.ClientImplementation{
 		HttpClient: midtrans.DefaultHttpClient,
 		Logger:     midtrans.GetDefaultLogger(env),
 	}
 }
 
-//getClient : this function to get default Client
-func getClient() Client {
+// getDefaultClient : internal function to get default Client
+func getDefaultClient() Client {
 	return Client{
-		ServerKey	: midtrans.ServerKey,
-		ClientKey	: midtrans.ClientKey,
-		Env			: midtrans.Environment,
-		HttpClient	: midtrans.GetClient(),
-		Options		: &midtrans.ConfigOptions{
+		ServerKey:  midtrans.ServerKey,
+		ClientKey:  midtrans.ClientKey,
+		Env:        midtrans.Environment,
+		HttpClient: midtrans.GetClient(),
+		Options: &midtrans.ConfigOptions{
 			PaymentOverrideNotification: midtrans.PaymentOverrideNotification,
 			PaymentAppendNotification:   midtrans.PaymentAppendNotification,
 		},
 	}
 }
 
-//ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
-//body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
+// ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
+// body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
 func (c Client) ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap, *midtrans.Error) {
 	resp := ResponseWithMap{}
 	jsonReq, _ := json.Marshal(req)
@@ -61,14 +61,14 @@ func (c Client) ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap
 	return resp, nil
 }
 
-//ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
-//body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
+// ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
+// body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
 func ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap, *midtrans.Error) {
-	return getClient().ChargeTransactionWithMap(req)
+	return getDefaultClient().ChargeTransactionWithMap(req)
 }
 
-//ChargeTransaction : Do `/charge` API request to Midtrans Core API return `coreapi.Response` with `coreapi.ChargeReq` as
-//body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
+// ChargeTransaction : Do `/charge` API request to Midtrans Core API return `coreapi.Response` with `coreapi.ChargeReq`
+// as body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
 func (c Client) ChargeTransaction(req *ChargeReq) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	jsonReq, _ := json.Marshal(req)
@@ -86,14 +86,14 @@ func (c Client) ChargeTransaction(req *ChargeReq) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//ChargeTransaction : Do `/charge` API request to Midtrans Core API return `coreapi.Response` with `coreapi.ChargeReq` as
-//body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
+// ChargeTransaction : Do `/charge` API request to Midtrans Core API return `coreapi.Response` with `coreapi.ChargeReq`
+// as body parameter, will be converted to JSON, more detail refer to: https://api-docs.midtrans.com
 func ChargeTransaction(req *ChargeReq) (*Response, *midtrans.Error) {
-	return getClient().ChargeTransaction(req)
+	return getDefaultClient().ChargeTransaction(req)
 }
 
-//CardToken : Do `/token` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-token
+// CardToken : Do `/token` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-token
 func (c Client) CardToken(cardNumber string, expMonth int, expYear int, cvv string, clientKey string) (*CardTokenResponse, *midtrans.Error) {
 	resp := &CardTokenResponse{}
 	URL := c.Env.BaseUrl() +
@@ -110,15 +110,15 @@ func (c Client) CardToken(cardNumber string, expMonth int, expYear int, cvv stri
 	return resp, nil
 }
 
-//CardToken : Do `/token` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-token
+// CardToken : Do `/token` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-token
 func CardToken(cardNumber string, expMonth int, expYear int, cvv string) (*CardTokenResponse, *midtrans.Error) {
-	c := getClient()
+	c := getDefaultClient()
 	return c.CardToken(cardNumber, expMonth, expYear, cvv, c.ClientKey)
 }
 
-//RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#register-card
+// RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#register-card
 func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, cvv string, clientKey string) (*CardRegisterResponse, *midtrans.Error) {
 	resp := &CardRegisterResponse{}
 	URL := c.Env.BaseUrl() +
@@ -136,15 +136,15 @@ func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, cvv s
 	return resp, nil
 }
 
-//RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#register-card
+// RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#register-card
 func RegisterCard(cardNumber string, expMonth int, expYear int, cvv string) (*CardRegisterResponse, *midtrans.Error) {
-	c := getClient()
+	c := getDefaultClient()
 	return c.RegisterCard(cardNumber, expMonth, expYear, cvv, c.ClientKey)
 }
 
-//CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#point-inquiry
+// CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#point-inquiry
 func (c Client) CardPointInquiry(cardToken string) (*CardTokenResponse, *midtrans.Error) {
 	resp := &CardTokenResponse{}
 	err := c.HttpClient.Call(
@@ -162,14 +162,14 @@ func (c Client) CardPointInquiry(cardToken string) (*CardTokenResponse, *midtran
 	return resp, nil
 }
 
-//CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#point-inquiry
+// CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#point-inquiry
 func CardPointInquiry(cardToken string) (*CardTokenResponse, *midtrans.Error) {
-	return getClient().CardPointInquiry(cardToken)
+	return getDefaultClient().CardPointInquiry(cardToken)
 }
 
-//GetBIN : Do `v1/bins/{bin}` API request to Midtrans Core API return `coreapi.BinResponse`,
-//more detail refer to: https://api-docs.midtrans.com/#bin-api
+// GetBIN : Do `v1/bins/{bin}` API request to Midtrans Core API return `coreapi.BinResponse`,
+// more detail refer to: https://api-docs.midtrans.com/#bin-api
 func (c Client) GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
 	resp := &BinResponse{}
 	err := c.HttpClient.Call(
@@ -187,14 +187,14 @@ func (c Client) GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
 	return resp, nil
 }
 
-//GetBIN : Do `/v1/bins/{bin}` API request to Midtrans Core API return `coreapi.BinResponse`,
-//more detail refer to: https://api-docs.midtrans.com/#bin-api
+// GetBIN : Do `/v1/bins/{bin}` API request to Midtrans Core API return `coreapi.BinResponse`,
+// more detail refer to: https://api-docs.midtrans.com/#bin-api
 func GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
-	return getClient().GetBIN(binNumber)
+	return getDefaultClient().GetBIN(binNumber)
 }
 
-//CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
+// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
 func (c Client) CheckTransaction(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -212,14 +212,14 @@ func (c Client) CheckTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
+// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
 func CheckTransaction(param string) (*Response, *midtrans.Error) {
-	return getClient().CheckTransaction(param)
+	return getDefaultClient().CheckTransaction(param)
 }
 
-//ApproveTransaction : Do `/{orderId}/approve` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#approve-transaction
+// ApproveTransaction : Do `/{orderId}/approve` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#approve-transaction
 func (c Client) ApproveTransaction(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -237,14 +237,14 @@ func (c Client) ApproveTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//ApproveTransaction : Do `/{orderId}/approve` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#approve-transaction
+// ApproveTransaction : Do `/{orderId}/approve` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#approve-transaction
 func ApproveTransaction(param string) (*Response, *midtrans.Error) {
-	return getClient().ApproveTransaction(param)
+	return getDefaultClient().ApproveTransaction(param)
 }
 
-//DenyTransaction : Do `/{orderId}/deny` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#deny-transaction
+// DenyTransaction : Do `/{orderId}/deny` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#deny-transaction
 func (c Client) DenyTransaction(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -262,14 +262,14 @@ func (c Client) DenyTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//DenyTransaction : Do `/{orderId}/deny` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#deny-transaction
+// DenyTransaction : Do `/{orderId}/deny` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#deny-transaction
 func DenyTransaction(param string) (*Response, *midtrans.Error) {
-	return getClient().ApproveTransaction(param)
+	return getDefaultClient().ApproveTransaction(param)
 }
 
-//CancelTransaction : Do `/{orderId}/cancel` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#cancel-transaction
+// CancelTransaction : Do `/{orderId}/cancel` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#cancel-transaction
 func (c Client) CancelTransaction(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -287,14 +287,14 @@ func (c Client) CancelTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//CancelTransaction : Do `/{orderId}/cancel` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#cancel-transaction
+// CancelTransaction : Do `/{orderId}/cancel` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#cancel-transaction
 func CancelTransaction(param string) (*Response, *midtrans.Error) {
-	return getClient().ApproveTransaction(param)
+	return getDefaultClient().ApproveTransaction(param)
 }
 
-//ExpireTransaction : Do `/{orderId}/expire` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#expire-transaction
+// ExpireTransaction : Do `/{orderId}/expire` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#expire-transaction
 func (c Client) ExpireTransaction(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -312,15 +312,15 @@ func (c Client) ExpireTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//ExpireTransaction : Do `/{orderId}/expire` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#expire-transaction
+// ExpireTransaction : Do `/{orderId}/expire` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#expire-transaction
 func ExpireTransaction(param string) (*Response, *midtrans.Error) {
-	return getClient().ExpireTransaction(param)
+	return getDefaultClient().ExpireTransaction(param)
 }
 
-//RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.RefundReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#refund-transaction
+// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.RefundReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#refund-transaction
 func (c Client) RefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	jsonReq, _ := json.Marshal(req)
@@ -339,16 +339,16 @@ func (c Client) RefundTransaction(param string, req *RefundReq) (*Response, *mid
 	return resp, nil
 }
 
-//RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.RefundReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#refund-transaction
+// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.RefundReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#refund-transaction
 func RefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
-	return getClient().RefundTransaction(param, req)
+	return getDefaultClient().RefundTransaction(param, req)
 }
 
-//DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.CaptureReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
+// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.CaptureReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
 func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	jsonReq, _ := json.Marshal(req)
@@ -367,16 +367,16 @@ func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*Response
 	return resp, nil
 }
 
-//DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.RefundReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
+// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.RefundReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
 func DirectRefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
-	return getClient().DirectRefundTransaction(param, req)
+	return getDefaultClient().DirectRefundTransaction(param, req)
 }
 
-//CaptureTransaction : Do `/{orderId}/capture` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.CaptureReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#capture-transaction
+// CaptureTransaction : Do `/{orderId}/capture` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.CaptureReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#capture-transaction
 func (c Client) CaptureTransaction(req *CaptureReq) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	jsonReq, _ := json.Marshal(req)
@@ -395,15 +395,15 @@ func (c Client) CaptureTransaction(req *CaptureReq) (*Response, *midtrans.Error)
 	return resp, nil
 }
 
-//CaptureTransaction : Do `/{orderId}/capture` API request to Midtrans Core API return `coreapi.Response`,
-//with `coreapi.CaptureReq` as body parameter, will be converted to JSON, more detail refer
-//more detail refer to: https://api-docs.midtrans.com/#capture-transaction
+// CaptureTransaction : Do `/{orderId}/capture` API request to Midtrans Core API return `coreapi.Response`,
+// with `coreapi.CaptureReq` as body parameter, will be converted to JSON,
+// more detail refer to: https://api-docs.midtrans.com/#capture-transaction
 func CaptureTransaction(req *CaptureReq) (*Response, *midtrans.Error) {
-	return getClient().CaptureTransaction(req)
+	return getDefaultClient().CaptureTransaction(req)
 }
 
-//GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
+// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
 func (c Client) GetStatusB2B(param string) (*Response, *midtrans.Error) {
 	resp := &Response{}
 	err := c.HttpClient.Call(
@@ -421,8 +421,8 @@ func (c Client) GetStatusB2B(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-//GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
-//more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
+// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
+// more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
 func GetStatusB2B(param string) (*Response, *midtrans.Error) {
-	return getClient().GetStatusB2B(param)
+	return getDefaultClient().GetStatusB2B(param)
 }

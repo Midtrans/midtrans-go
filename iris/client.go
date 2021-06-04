@@ -16,12 +16,12 @@ type Client struct {
 	Options    *midtrans.ConfigOptions
 }
 
-//New : this function will always be called when the Iris is initiated
+// New : this function will always be called when the Iris is initiated
 func (c *Client) New(irisApiKey string, env midtrans.EnvironmentType) {
-	c.Env 			= env
-	c.IrisApiKey 	= &irisApiKey
-	c.Options 		= &midtrans.ConfigOptions{}
-	c.HttpClient	= &midtrans.ClientImplementation{
+	c.Env = env
+	c.IrisApiKey = &irisApiKey
+	c.Options = &midtrans.ConfigOptions{}
+	c.HttpClient = &midtrans.ClientImplementation{
 		HttpClient: midtrans.DefaultHttpClient,
 		Logger:     midtrans.GetDefaultLogger(env),
 	}
@@ -262,6 +262,7 @@ func (c Client) GetFacilitatorBalance(accountId string) (*BalanceResponse, *midt
 	}
 	return resp, nil
 }
+
 // GetBeneficiaryBanks : Show list of supported banks in IRIS. https://iris-docs.midtrans.com/#list-banks
 func (c Client) GetBeneficiaryBanks() (*ListBeneficiaryBankResponse, *midtrans.Error) {
 	resp := &ListBeneficiaryBankResponse{}
