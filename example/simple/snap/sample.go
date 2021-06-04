@@ -8,12 +8,15 @@ import (
 	"github.com/midtrans/midtrans-go/snap"
 )
 
-var s snap.Gateway
+var s snap.Client
 
 func setupGlobalMidtransConfig() {
 	midtrans.ServerKey = example.SandboxServerKey1
 	midtrans.Environment = midtrans.Sandbox
+
+	// Optional : here is how if you want to set append payment notification globally
 	midtrans.SetPaymentAppendNotification("https://example.com/append")
+	// Optional : here is how if you want to set override payment notification globally
 	midtrans.SetPaymentOverrideNotification("https://example.com/override")
 
 	//// remove the comment bellow, in cases you need to change the default for Log Level
@@ -22,7 +25,7 @@ func setupGlobalMidtransConfig() {
 	// }
 }
 
-func setupSnapGateway()  {
+func initializeSnapClient() {
 	s.New(example.SandboxServerKey1, midtrans.Sandbox)
 }
 
@@ -34,45 +37,49 @@ func createTransactionWithGlobalConfig() {
 	fmt.Println("Snap response", res)
 }
 
-func createTransactionWithGateway()  {
-	s.Options.SetPaymentAppendNotification("https://example.com/")
+func createTransaction() {
+	// Optional : here is how if you want to set append payment notification for this request
+	s.Options.SetPaymentAppendNotification("https://example.com/append")
 
-	resp, err := s.Snap.CreateTransaction(GenerateSnapReq())
+	// Optional : here is how if you want to set override payment notification for this request
+	s.Options.SetPaymentOverrideNotification("https://example.com/override")
+	// Send request to Midtrans Snap API
+
+	resp, err := s.CreateTransaction(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Error :", err.GetMessage())
 	}
 	fmt.Println("Response : ", resp)
 }
 
-func createTokenTransactionWithGateway()  {
+func createTokenTransactionWithGateway() {
 	s.Options.SetPaymentOverrideNotification("https://example.com/url2")
 
-	resp, err := s.Snap.CreateTransactionToken(GenerateSnapReq())
+	resp, err := s.CreateTransactionToken(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Error :", err.GetMessage())
 	}
 	fmt.Println("Response : ", resp)
 }
 
-func createUrlTransactionWithGateway()  {
+func createUrlTransactionWithGateway() {
 	s.Options.SetContext(context.Background())
 
-	resp, err := s.Snap.CreateTransactionUrl(GenerateSnapReq())
+	resp, err := s.CreateTransactionUrl(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Error :", err.GetMessage())
 	}
 	fmt.Println("Response : ", resp)
 }
-
 
 func main() {
 	fmt.Println("================ Request with global config ================")
 	setupGlobalMidtransConfig()
 	createTransactionWithGlobalConfig()
 
-	fmt.Println("================ Request with Snap Gateway ================")
-	setupSnapGateway()
-	createTransactionWithGateway()
+	fmt.Println("================ Request with Snap Client ================")
+	initializeSnapClient()
+	createTransaction()
 
 	fmt.Println("================ Request Snap token ================")
 	createTokenTransactionWithGateway()
@@ -85,40 +92,37 @@ func GenerateSnapReq() *snap.Request {
 
 	// Initiate Customer address
 	custAddress := &midtrans.CustomerAddress{
-		FName: "John",
-		LName: "Doe",
-		Phone: "081234567890",
-		Address: "Baker Street 97th",
-		City: "Jakarta",
-		Postcode: "16000",
+		FName:       "John",
+		LName:       "Doe",
+		Phone:       "081234567890",
+		Address:     "Baker Street 97th",
+		City:        "Jakarta",
+		Postcode:    "16000",
 		CountryCode: "IDN",
 	}
 
 	// Initiate Snap Request
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID: "MID-GO-ID-"+ example.Random(),
+			OrderID:  "MID-GO-ID-" + example.Random(),
 			GrossAmt: 200000,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: "John",
-			LName: "Doe",
-			Email: "john@doe.com",
-			Phone: "081234567890",
+			FName:    "John",
+			LName:    "Doe",
+			Email:    "john@doe.com",
+			Phone:    "081234567890",
 			BillAddr: custAddress,
 			ShipAddr: custAddress,
 		},
 		Items: &[]midtrans.ItemDetails{
-			midtrans.ItemDetails{
-				ID: "ITEM1",
+			{
+				ID:    "ITEM1",
 				Price: 200000,
-				Qty: 1,
-				Name: "Someitem",
+				Qty:   1,
+				Name:  "Someitem",
 			},
 		},
 	}
 	return snapReq
 }
-
-
-

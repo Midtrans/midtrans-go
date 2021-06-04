@@ -61,10 +61,10 @@ func TestSnapCreateTransactionUrlWithMap(t *testing.T) {
 }
 
 func TestSnapCreateTransaction(t *testing.T)  {
-	s := Gateway{}
+	s := Client{}
 	s.New(sandboxServerKey, midtrans.Sandbox)
 
-	res, err := s.Snap.CreateTransactionToken(GenerateSnapReq())
+	res, err := s.CreateTransactionToken(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Snap Request Error", err.GetMessage())
 	}
@@ -75,10 +75,10 @@ func TestSnapCreateTransaction(t *testing.T)  {
 }
 
 func TestSnapCreateTransactionToken(t *testing.T)  {
-	s := Gateway{}
+	s := Client{}
 	s.New(sandboxServerKey, midtrans.Sandbox)
 
-	res, err := s.Snap.CreateTransactionToken(GenerateSnapReq())
+	res, err := s.CreateTransactionToken(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Snap Request Error", err.GetMessage())
 	}
@@ -89,10 +89,10 @@ func TestSnapCreateTransactionToken(t *testing.T)  {
 }
 
 func TestSnapCreateTransactionUrl(t *testing.T)  {
-	s := Gateway{}
+	s := Client{}
 	s.New(sandboxServerKey, midtrans.Sandbox)
 
-	res, err := s.Snap.CreateTransactionUrl(GenerateSnapReq())
+	res, err := s.CreateTransactionUrl(GenerateSnapReq())
 	if err != nil {
 		fmt.Println("Snap Request Error", err.GetMessage())
 	}

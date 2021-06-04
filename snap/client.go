@@ -8,25 +8,27 @@ import (
 	"net/http"
 )
 
-type Gateway struct {
-	Snap    *Client
-	Options midtrans.ConfigOptions
+// Client : Snap Client struct
+type Client struct {
+	ServerKey  string
+	Env        midtrans.EnvironmentType
+	HttpClient midtrans.Client
+	Options    *midtrans.ConfigOptions
 }
 
 //New : this function will always be called when the Snap is initiated
-func (g *Gateway) New(serverKey string, env midtrans.EnvironmentType) {
-	g.Snap = &Client{
-		ServerKey: serverKey,
-		Env:       env,
-		Options:   &g.Options,
-		HttpClient: &midtrans.ClientImplementation{
-			HttpClient: midtrans.DefaultHttpClient,
-			Logger:     midtrans.GetDefaultLogger(env),
-		},
+func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
+	c.Env 			= env
+	c.ServerKey 	= serverKey
+	c.Options 		= &midtrans.ConfigOptions{}
+	c.HttpClient	= &midtrans.ClientImplementation{
+		HttpClient: midtrans.DefaultHttpClient,
+		Logger:     midtrans.GetDefaultLogger(env),
 	}
 }
-//getClient : this function to get default Client
-func getClient() Client {
+
+//getDefaultClient : this function to get default Client
+func getDefaultClient() Client {
 	return Client{
 		ServerKey:  midtrans.ServerKey,
 		Env:        midtrans.Environment,
@@ -36,14 +38,6 @@ func getClient() Client {
 			PaymentAppendNotification:   midtrans.PaymentAppendNotification,
 		},
 	}
-}
-
-// Client struct
-type Client struct {
-	ServerKey  string
-	Env        midtrans.EnvironmentType
-	HttpClient midtrans.Client
-	Options    *midtrans.ConfigOptions
 }
 
 //CreateTransactionWithMap : Do `/transactions` API request to SNAP API return RAW JSON with Map as
@@ -69,7 +63,7 @@ func (c Client) CreateTransactionWithMap(req *RequestParamWithMap) (ResponseWith
 // CreateTransactionWithMap : Do `/transactions` API request to SNAP API to get Snap token and redirect url with map as
 // body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransactionWithMap(req *RequestParamWithMap) (ResponseWithMap, *midtrans.Error) {
-	return getClient().CreateTransactionWithMap(req)
+	return getDefaultClient().CreateTransactionWithMap(req)
 }
 
 // CreateTransactionTokenWithMap : Do `/transactions` API request to SNAP API to get Snap token with map as
@@ -96,7 +90,7 @@ func (c Client) CreateTransactionTokenWithMap(req *RequestParamWithMap) (string,
 // CreateTransactionTokenWithMap : Do `/transactions` API request to SNAP API to get Snap token with map as
 // body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransactionTokenWithMap(req *RequestParamWithMap) (string, *midtrans.Error) {
-	return getClient().CreateTransactionTokenWithMap(req)
+	return getDefaultClient().CreateTransactionTokenWithMap(req)
 }
 
 // CreateTransactionUrlWithMap : Do `/transactions` API request to SNAP API to get Snap redirect url with map as
@@ -123,7 +117,7 @@ func (c Client) CreateTransactionUrlWithMap(req *RequestParamWithMap) (string, *
 // CreateTransactionUrlWithMap : Do `/transactions` API request to SNAP API to get Snap redirect url with map
 // as body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransactionUrlWithMap(req *RequestParamWithMap) (string, *midtrans.Error) {
-	return getClient().CreateTransactionUrlWithMap(req)
+	return getDefaultClient().CreateTransactionUrlWithMap(req)
 }
 
 // CreateTransaction : Do `/transactions` API request to SNAP API to get Snap token and redirect url with `snap.Request`
@@ -149,7 +143,7 @@ func (c Client) CreateTransaction(req *Request) (*Response, *midtrans.Error) {
 // CreateTransaction : Do `/transactions` API request to SNAP API to get Snap token and redirect url with `snap.Request`
 // as body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransaction(req *Request) (*Response, *midtrans.Error) {
-	return getClient().CreateTransaction(req)
+	return getDefaultClient().CreateTransaction(req)
 }
 
 // CreateTransactionToken : Do `/transactions` API request to SNAP API to get Snap token with `snap.Request` as
@@ -170,7 +164,7 @@ func (c Client) CreateTransactionToken(req *Request) (string, *midtrans.Error) {
 // CreateTransactionToken : Do `/transactions` API request to SNAP API to get Snap token with `snap.Request` as
 // body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransactionToken(req *Request) (string, *midtrans.Error) {
-	return getClient().CreateTransactionToken(req)
+	return getDefaultClient().CreateTransactionToken(req)
 }
 
 // CreateTransactionUrl : Do `/transactions` API request to SNAP API to get Snap redirect url with `snap.Request`
@@ -191,5 +185,5 @@ func (c Client) CreateTransactionUrl(req *Request) (string, *midtrans.Error) {
 // CreateTransactionUrl : Do `/transactions` API request to SNAP API to get Snap redirect url with `snap.Request`
 // as body parameter, will be converted to JSON, more detail refer to: https://snap-docs.midtrans.com
 func CreateTransactionUrl(req *Request) (string, *midtrans.Error) {
-	return getClient().CreateTransactionUrl(req)
+	return getDefaultClient().CreateTransactionUrl(req)
 }
