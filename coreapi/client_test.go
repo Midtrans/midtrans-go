@@ -62,9 +62,9 @@ func TestCardToken(t *testing.T) {
 	resp1, _ := CardToken(sampleCardNumber, 12, 2021, "123")
 	assert.Equal(t, resp1.StatusCode, "200")
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CoreApi.CardToken(bniCardNumber, 12, 2021, "123", sandboxClientKey)
+	resp2, _ := c.CardToken(bniCardNumber, 12, 2021, "123", sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "200")
 }
 
@@ -92,9 +92,9 @@ func TestChargeTransactionWithMap(t *testing.T) {
 		},
 	}
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CoreApi.ChargeTransactionWithMap(req2)
+	resp2, _ := c.ChargeTransactionWithMap(req2)
 	assert.Equal(t, resp2["status_code"], "201")
 	assert.Equal(t, resp2["payment_type"], "bank_transfer")
 }
@@ -105,9 +105,9 @@ func TestChargeTransaction(t *testing.T) {
 	assert.Equal(t, resp1.StatusCode, "201")
 	assert.Equal(t, resp1.PaymentType, "gopay")
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CoreApi.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), midtrans.PaymentTypeGopay, ""))
+	resp2, _ := c.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), midtrans.PaymentTypeGopay, ""))
 	assert.Equal(t, resp2.StatusCode, "201")
 	assert.Equal(t, resp2.PaymentType, "gopay")
 }
@@ -121,12 +121,12 @@ func TestChargeTransactionWithIdempotencyKey(t *testing.T) {
 		},
 	}
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
 	c.Options.SetPaymentIdempotencyKey(timestamp())
 
-	resp1, _ := c.CoreApi.ChargeTransaction(req)
-	resp2, _ := c.CoreApi.ChargeTransaction(req)
+	resp1, _ := c.ChargeTransaction(req)
+	resp2, _ := c.ChargeTransaction(req)
 
 	assert.Equal(t, resp2, resp1)
 }
@@ -145,9 +145,9 @@ func TestRegisterCardFailure(t *testing.T) {
 	assert.Equal(t, resp1.StatusCode, "400")
 	assert.Equal(t, resp1.StatusMessage, "One or more parameters in the payload is invalid.")
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CoreApi.RegisterCard(bniCardNumber, 12, 2020, "123", sandboxClientKey)
+	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2020, "123", sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "400")
 	assert.Equal(t, resp2.StatusMessage, "One or more parameters in the payload is invalid.")
 }
@@ -159,9 +159,9 @@ func TestCardTokenFailure(t *testing.T) {
 	assert.Equal(t, res.StatusCode, "400")
 	assert.Equal(t, res.StatusMessage, "One or more parameters in the payload is invalid.")
 
-	c := Gateway{}
+	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CoreApi.CardToken(bniCardNumber, 12, 2020, "123", sandboxClientKey)
+	resp2, _ := c.CardToken(bniCardNumber, 12, 2020, "123", sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "400")
 	assert.Equal(t, resp2.StatusMessage, "One or more parameters in the payload is invalid.")
 }
@@ -183,8 +183,8 @@ func TestChargeWrongServerKey(t *testing.T) {
 	_, err := ChargeTransaction(&ChargeReq{})
 	assert.Equal(t, err.GetStatusCode(), 401)
 
-	c := Gateway{}
+	c := Client{}
 	c.New("DUMMY", midtrans.Sandbox)
-	c.CoreApi.ChargeTransaction(&ChargeReq{})
+	c.ChargeTransaction(&ChargeReq{})
 	assert.Equal(t, err.GetStatusCode(), 401)
 }

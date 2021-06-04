@@ -9,46 +9,38 @@ import (
 	"strconv"
 )
 
-
-type Gateway struct {
-	CoreApi *Client
-	Options midtrans.ConfigOptions
-}
-
-//New : this function will always be called when the CoreApi is initiated
-func (g *Gateway) New(serverKey string, env midtrans.EnvironmentType) {
-	g.CoreApi = &Client{
-		ServerKey:  serverKey,
-		Env:        env,
-		Options:    &g.Options,
-		HttpClient: &midtrans.ClientImplementation{
-			HttpClient: midtrans.DefaultHttpClient,
-			Logger:     midtrans.GetDefaultLogger(env),
-		},
-	}
-}
-
-//getClient : this function to get default Client
-func getClient() Client {
-	return Client{
-		ServerKey:  midtrans.ServerKey,
-		ClientKey:  midtrans.ClientKey,
-		Env:        midtrans.Environment,
-		HttpClient: midtrans.GetClient(),
-		Options: &midtrans.ConfigOptions{
-			PaymentOverrideNotification: midtrans.PaymentOverrideNotification,
-			PaymentAppendNotification:   midtrans.PaymentAppendNotification,
-		},
-	}
-}
-
-// Client struct
+// Client : CoreAPI Client struct
 type Client struct {
 	ServerKey  string
 	ClientKey  string
 	Env        midtrans.EnvironmentType
 	HttpClient midtrans.Client
 	Options    *midtrans.ConfigOptions
+}
+
+//New : this function will always be called when the CoreApi is initiated
+func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
+	c.Env 			= env
+	c.ServerKey 	= serverKey
+	c.Options 		= &midtrans.ConfigOptions{}
+	c.HttpClient	= &midtrans.ClientImplementation{
+		HttpClient: midtrans.DefaultHttpClient,
+		Logger:     midtrans.GetDefaultLogger(env),
+	}
+}
+
+//getClient : this function to get default Client
+func getClient() Client {
+	return Client{
+		ServerKey	: midtrans.ServerKey,
+		ClientKey	: midtrans.ClientKey,
+		Env			: midtrans.Environment,
+		HttpClient	: midtrans.GetClient(),
+		Options		: &midtrans.ConfigOptions{
+			PaymentOverrideNotification: midtrans.PaymentOverrideNotification,
+			PaymentAppendNotification:   midtrans.PaymentAppendNotification,
+		},
+	}
 }
 
 //ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as

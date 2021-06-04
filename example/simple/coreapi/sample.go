@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/midtrans/midtrans-go"
@@ -9,17 +10,12 @@ import (
 	"net/http"
 )
 
-var c coreapi.Gateway
+var c coreapi.Client
 
 func setupGlobalMidtransConfigApi() {
 	midtrans.ServerKey = example.SandboxServerKey1
+	// change value to `midtrans.Production`, if you want change the env to production
 	midtrans.Environment = midtrans.Sandbox
-	midtrans.SetPaymentAppendNotification("https://midtrans-java.herokuapp.com/notif/append1")
-	midtrans.SetPaymentOverrideNotification("https://midtrans-java.herokuapp.com/notif/override")
-}
-
-func setupCoreApiMidtrans() {
-	c.New(example.SandboxServerKey1, midtrans.Production)
 }
 
 func chargeWithMapGlobalConfig() {
@@ -31,7 +27,14 @@ func chargeWithMapGlobalConfig() {
 }
 
 func chargeTransactionWithMap() {
-	resp, err := c.CoreApi.ChargeTransactionWithMap(example.CoreParam())
+	// Optional: here is how if you want to set idempotency for this request
+	c.Options.SetPaymentIdempotencyKey(example.Random())
+	// Optional: here is how if you want to set context for this request
+	c.Options.SetContext(context.Background())
+	// Optional: here is how if you want to set payment override for this request
+	c.Options.SetPaymentOverrideNotification("https://example.com")
+
+	resp, err := c.ChargeTransactionWithMap(example.CoreParam())
 	if err != nil {
 		fmt.Println("Error coreapi api", err.GetMessage())
 	}
@@ -75,8 +78,8 @@ func getBin(bin string) {
 }
 
 func requestCreditCard() {
-	var m = coreapi.Gateway{}
-	m.New(example.SandboxServerKey1, midtrans.Sandbox)
+	var c = coreapi.Client{}
+	c.New(example.SandboxServerKey1, midtrans.Sandbox)
 
 	chargeReq := &coreapi.ChargeReq{
 		PaymentType: midtrans.PaymentTypeCreditCard,
@@ -98,38 +101,45 @@ func requestCreditCard() {
 		},
 	}
 
-	res, _ := m.CoreApi.ChargeTransaction(chargeReq)
+	res, _ := c.ChargeTransaction(chargeReq)
 	fmt.Println(res)
 
 }
 
 func main() {
-	//1. Using global config
-	midtrans.ServerKey = example.SandboxServerKey1
-	//midtrans.Environment = midtrans.Production
-	midtrans.SetPaymentAppendNotification("https://midtrans-java.herokuapp.com/notif/append1")
-	midtrans.SetPaymentOverrideNotification("https://midtrans-java.herokuapp.com/notif/override")
-	//2. ChargeTransaction from client
-	chargeWithMapGlobalConfig()
-	//
-	//3. Using initialize object
+	// 1. Setup with global config
+	setupGlobalMidtransConfigApi()
 
+	// Optional: here is how if you want to set append payment notification globally
+	midtrans.SetPaymentAppendNotification("https://midtrans-java.herokuapp.com/notif/append1")
+	// Optional: here is how if you want to set override payment notification globally
+	midtrans.SetPaymentOverrideNotification("https://midtrans-java.herokuapp.com/notif/override")
+
+	// 2. ChargeTransaction with global config
+	chargeWithMapGlobalConfig()
 
 	fmt.Println("################# REQUEST 2 FROM OBJECT ################")
 
+	// 3. Using initialize object
 	c.New(example.SandboxServerKey1, midtrans.Sandbox)
-	//4. ChargeTransaction from initial object
-	c.Options.SetPaymentIdempotencyKey("example.Random()iuhjnkjyhiknhggggyui")
-	chargeTransactionWithMap()
+
+	// 4. ChargeTransaction from initial object
 	chargeTransactionWithMap()
 
+	// 5. Sample request card token
 	getCardToken()
+
+	// 6. Sample request card register
 	registerCard()
+
+	// 7. Sample request card point inquiry
 	cardPointInquiry()
+
+	// 8. Sample request BIN
 	getBin("410505")
 
+	// 9. Sample request charge with credit card
 	requestCreditCard()
-
 }
 
 // notification : Midtrans-Go simple sample HTTP Notification handling
@@ -145,7 +155,7 @@ func notification(w http.ResponseWriter, r *http.Request) {
 	resArray := make(map[string]string)
 	err = json.Unmarshal(encode, &resArray)
 
-	resp, e := c.CoreApi.CheckTransaction(resArray["order_id"])
+	resp, e := c.CheckTransaction(resArray["order_id"])
 	if e != nil {
 		http.Error(w, e.GetMessage(), http.StatusInternalServerError)
 		return
