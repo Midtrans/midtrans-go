@@ -299,7 +299,7 @@ chargeReq := &coreapi.ChargeReq{
 coreApiRes, _ := c.ChargeTransaction(chargeReq)
 fmt.Println("Response :", coreApiRes)
 ```
->INFO:
+>**INFO:**
 > When using client, you can set config options like `SetIdempotencyKey`, `SetContext`, `SetPaymentOverrideNotif`, etc
 > from Options object on gateway, please see the detail usage for config options [here](README.md#3-advance-usage)
 
@@ -504,7 +504,9 @@ For Midtrans Payment, there are two headers we provide:
 
 1. `X-Append-Notification`: to add new notification url(s) alongside the settings on dashboard
 2. `X-Override-Notification`: to use new notification url(s) disregarding the settings on dashboard
-   Both header can only receive up to maximum of 3 urls.
+   Both header can only receive up to maximum of **3 urls**.
+
+> **Note:** When both `SetPaymentAppendNotif` and `SetPaymentOverrideNotif` are used together then only `OverrideNotif` will be used.
 
 #### 3.1.1 Set Override/Append notification globally
 ```go
