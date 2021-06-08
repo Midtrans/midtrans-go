@@ -188,3 +188,34 @@ func TestChargeWrongServerKey(t *testing.T) {
 	c.ChargeTransaction(&ChargeReq{})
 	assert.Equal(t, err.GetStatusCode(), 401)
 }
+
+func TestRefundTransaction(t *testing.T)  {
+	refundReq := &RefundReq{
+		Amount:    10000,
+		Reason:    "Out of stock",
+	}
+	midtrans.ServerKey = sandboxServerKey
+	res1, _ := RefundTransaction("DUMMY", refundReq)
+	assert.Equal(t, res1.StatusCode, "404")
+
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	res2, _ := c.RefundTransaction("DUMMY", refundReq)
+	assert.Equal(t, res2.StatusCode, "404")
+}
+
+func TestDirectRefundTransaction(t *testing.T)  {
+	refundReq := &RefundReq{
+		RefundKey: "ORDER-ID-UNIQUE-ID",
+		Amount:    10000,
+		Reason:    "Out of stock",
+	}
+	midtrans.ServerKey = sandboxServerKey
+	resp1, _ := DirectRefundTransaction("DUMMY", refundReq)
+	assert.Nil(t, resp1)
+
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	resp2, _ := c.DirectRefundTransaction("DUMMY", refundReq)
+	assert.Nil(t, resp2)
+}

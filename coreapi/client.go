@@ -318,11 +318,11 @@ func ExpireTransaction(param string) (*Response, *midtrans.Error) {
 	return getDefaultClient().ExpireTransaction(param)
 }
 
-// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
+// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.RefundResponse`,
 // with `coreapi.RefundReq` as body parameter, will be converted to JSON,
 // more detail refer to: https://api-docs.midtrans.com/#refund-transaction
-func (c Client) RefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
-	resp := &Response{}
+func (c Client) RefundTransaction(param string, req *RefundReq) (*RefundResponse, *midtrans.Error) {
+	resp := &RefundResponse{}
 	jsonReq, _ := json.Marshal(req)
 	err := c.HttpClient.Call(
 		http.MethodPost,
@@ -339,18 +339,18 @@ func (c Client) RefundTransaction(param string, req *RefundReq) (*Response, *mid
 	return resp, nil
 }
 
-// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.Response`,
+// RefundTransaction : Do `/{orderId}/refund` API request to Midtrans Core API return `coreapi.RefundResponse`,
 // with `coreapi.RefundReq` as body parameter, will be converted to JSON,
 // more detail refer to: https://api-docs.midtrans.com/#refund-transaction
-func RefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
+func RefundTransaction(param string, req *RefundReq) (*RefundResponse, *midtrans.Error) {
 	return getDefaultClient().RefundTransaction(param, req)
 }
 
-// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
+// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.RefundResponse`,
 // with `coreapi.CaptureReq` as body parameter, will be converted to JSON,
 // more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
-func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
-	resp := &Response{}
+func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*RefundResponse, *midtrans.Error) {
+	resp := &RefundResponse{}
 	jsonReq, _ := json.Marshal(req)
 	err := c.HttpClient.Call(
 		http.MethodPost,
@@ -367,10 +367,10 @@ func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*Response
 	return resp, nil
 }
 
-// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.Response`,
+// DirectRefundTransaction : Do `/{orderId}/refund/online/direct` API request to Midtrans Core API return `coreapi.RefundResponse`,
 // with `coreapi.RefundReq` as body parameter, will be converted to JSON,
 // more detail refer to: https://api-docs.midtrans.com/#direct-refund-transaction
-func DirectRefundTransaction(param string, req *RefundReq) (*Response, *midtrans.Error) {
+func DirectRefundTransaction(param string, req *RefundReq) (*RefundResponse, *midtrans.Error) {
 	return getDefaultClient().DirectRefundTransaction(param, req)
 }
 

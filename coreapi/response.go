@@ -61,20 +61,41 @@ type Response struct {
 	RefundChargebackID   int             `json:"refund_chargeback_id"`
 	RefundAmount         string          `json:"refund_amount"`
 	RefundKey            string          `json:"refund_key"`
-	Refunds              []Refund        `json:"refunds"`
+	Refunds              []RefundDetails `json:"refunds"`
 	ChannelResponseCode  string          `json:"channel_response_code"`
 	ChannelStatusMessage string          `json:"channel_status_message"`
 }
 
-// Refund Details
-type Refund struct {
-	RefundChargebackID int    `json:"refund_chargeback_id"`
-	RefundAmount       string `json:"refund_amount"`
-	Reason             string `json:"reason"`
-	RefundKey          string `json:"refund_key"`
-	RefundMethod       string `json:"refund_method"`
-	BankConfirmedAt    string `json:"bank_confirmed_at"`
-	CreatedAt          string `json:"created_at"`
+// RefundDetails Details
+type RefundDetails struct {
+	RefundChargebackID   int    `json:"refund_chargeback_id"`
+	RefundChargebackUUID string `json:"refund_chargeback_uuid"`
+	RefundAmount         string `json:"refund_amount"`
+	Reason               string `json:"reason"`
+	RefundKey            string `json:"refund_key"`
+	RefundMethod         string `json:"refund_method"`
+	BankConfirmedAt      string `json:"bank_confirmed_at"`
+	CreatedAt            string `json:"created_at"`
+}
+
+type RefundResponse struct {
+	StatusCode           string `json:"status_code"`
+	StatusMessage        string `json:"status_message"`
+	ID                   string `json:"id"`
+	TransactionID        string `json:"transaction_id"`
+	OrderID              string `json:"order_id"`
+	GrossAmount          string `json:"gross_amount"`
+	Currency             string `json:"currency"`
+	MerchantID           string `json:"merchant_id"`
+	PaymentType          string `json:"payment_type"`
+	TransactionTime      string `json:"transaction_time"`
+	TransactionStatus    string `json:"transaction_status"`
+	SettlementTime       string `json:"settlement_time"`
+	FraudStatus          string `json:"fraud_status"`
+	RefundChargebackID   int    `json:"refund_chargeback_id"`
+	RefundChargebackUUID string `json:"refund_chargeback_uuid"`
+	RefundAmount         string `json:"refund_amount"`
+	RefundKey            string `json:"refund_key"`
 }
 
 type CardTokenResponse struct {
