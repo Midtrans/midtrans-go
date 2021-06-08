@@ -127,6 +127,9 @@ func GenerateSnapReq() *Request {
 			OrderID: "MID-GO-ID-" + time.Now().UTC().Format("2006010215040105"),
 			GrossAmt: 200000,
 		},
+		CreditCard: &CreditCardDetails{
+			Secure: true,
+		},
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: "John",
 			LName: "Doe",

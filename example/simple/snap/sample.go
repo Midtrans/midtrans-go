@@ -107,6 +107,9 @@ func GenerateSnapReq() *snap.Request {
 			OrderID:  "MID-GO-ID-" + example.Random(),
 			GrossAmt: 200000,
 		},
+		CreditCard: &snap.CreditCardDetails{
+			Secure: true,
+		},
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName:    "John",
 			LName:    "Doe",
