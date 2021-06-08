@@ -21,49 +21,42 @@ type PaymentAmount struct {
 	Amount string `json:"amount"`
 }
 
-// Response after calling the API
+//Response : CoreAPI response struct when calling Midtrans API
 type Response struct {
-	StatusCode           string          `json:"status_code"`
-	StatusMessage        string          `json:"status_message"`
-	PermataVaNumber      string          `json:"permata_va_number"`
-	SignKey              string          `json:"signature_key"`
-	CardToken            string          `json:"token_id"`
-	SavedCardTokenID     string          `json:"saved_token_id"`
-	SavedTokenExpAt      string          `json:"saved_token_id_expired_at"`
-	SecureToken          bool            `json:"secure_token"`
-	Bank                 string          `json:"bank"`
-	BillerCode           string          `json:"biller_code"`
-	BillKey              string          `json:"bill_key"`
-	XlTunaiOrderID       string          `json:"xl_tunai_order_id"`
-	BIIVaNumber          string          `json:"bii_va_number"`
-	ReURL                string          `json:"redirect_url"`
-	ECI                  string          `json:"eci"`
-	ValMessages          []string        `json:"validation_messages"`
-	Page                 int             `json:"page"`
-	TotalPage            int             `json:"total_page"`
-	TotalRecord          int             `json:"total_record"`
-	FraudStatus          string          `json:"fraud_status"`
-	PaymentType          string          `json:"payment_type"`
-	OrderID              string          `json:"order_id"`
-	TransactionID        string          `json:"transaction_id"`
-	TransactionTime      string          `json:"transaction_time"`
-	TransactionStatus    string          `json:"transaction_status"`
-	GrossAmount          string          `json:"gross_amount"`
-	VANumbers            []VANumber      `json:"va_numbers"`
-	PaymentAmounts       []PaymentAmount `json:"payment_amounts"`
-	PaymentCode          string          `json:"payment_code"`
-	Store                string          `json:"store"`
-	MerchantID           string          `json:"merchant_id"`
-	MaskedCard           string          `json:"masked_card"`
-	Currency             string          `json:"currency"`
-	CardType             string          `json:"card_type"`
-	Actions              []Action        `json:"actions"`
-	RefundChargebackID   int             `json:"refund_chargeback_id"`
-	RefundAmount         string          `json:"refund_amount"`
-	RefundKey            string          `json:"refund_key"`
-	Refunds              []RefundDetails `json:"refunds"`
-	ChannelResponseCode  string          `json:"channel_response_code"`
-	ChannelStatusMessage string          `json:"channel_status_message"`
+	TransactionID          string     `json:"transaction_id"`
+	OrderID                string     `json:"order_id"`
+	GrossAmount            string     `json:"gross_amount"`
+	PaymentType            string     `json:"payment_type"`
+	TransactionTime        string     `json:"transaction_time"`
+	TransactionStatus      string     `json:"transaction_status"`
+	FraudStatus            string     `json:"fraud_status"`
+	MaskedCard             string     `json:"masked_card"`
+	StatusCode             string     `json:"status_code"`
+	Bank                   string     `json:"bank"`
+	StatusMessage          string     `json:"status_message"`
+	ApprovalCode           string     `json:"approval_code"`
+	ChannelResponseCode    string     `json:"channel_response_code"`
+	ChannelResponseMessage string     `json:"channel_response_message"`
+	Currency               string     `json:"currency"`
+	CardType               string     `json:"card_type"`
+	RedirectURL            string     `json:"redirect_url"`
+	ID                     string     `json:"id"`
+	ValidationMessages     []string   `json:"validation_messages"`
+	InstallmentTerm        string     `json:"installment_term"`
+	Eci                    string     `json:"eci"`
+	SavedTokenID           string     `json:"saved_token_id"`
+	SavedTokenIDExpiredAt  string     `json:"saved_token_id_expired_at"`
+	PointRedeemAmount      int        `json:"point_redeem_amount"`
+	PointRedeemQuantity    int        `json:"point_redeem_quantity"`
+	PointBalanceAmount     string     `json:"point_balance_amount"`
+	PermataVaNumber        string     `json:"permata_va_number"`
+	VaNumbers              []VANumber `json:"va_numbers"`
+	BillKey                string     `json:"bill_key"`
+	BillerCode             string     `json:"biller_code"`
+	Acquirer               string     `json:"acquirer"`
+	Actions                []Action   `json:"actions"`
+	PaymentCode            string     `json:"payment_code"`
+	Store                  string     `json:"store"`
 }
 
 type TransactionStatusResponse struct {
