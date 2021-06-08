@@ -96,6 +96,7 @@ type TransactionStatusResponse struct {
 	CustomField1           string          `json:"custom_field1"`
 	CustomField2           string          `json:"custom_field2"`
 	CustomField3           string          `json:"custom_field3"`
+	Metadata               interface{}     `json:"metadata"`
 }
 
 type TransactionStatusB2bResponse struct {
