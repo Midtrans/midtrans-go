@@ -193,10 +193,10 @@ func GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
 	return getDefaultClient().GetBIN(binNumber)
 }
 
-// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
+// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.TransactionStatusResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
-func (c Client) CheckTransaction(param string) (*Response, *midtrans.Error) {
-	resp := &Response{}
+func (c Client) CheckTransaction(param string) (*TransactionStatusResponse, *midtrans.Error) {
+	resp := &TransactionStatusResponse{}
 	err := c.HttpClient.Call(
 		http.MethodGet,
 		fmt.Sprintf("%s/v2/%s/status", c.Env.BaseUrl(), param),
@@ -212,9 +212,9 @@ func (c Client) CheckTransaction(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.Response`,
+// CheckTransaction : Do `/{orderId}/status` API request to Midtrans Core API return `coreapi.TransactionStatusResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#get-transaction-status
-func CheckTransaction(param string) (*Response, *midtrans.Error) {
+func CheckTransaction(param string) (*TransactionStatusResponse, *midtrans.Error) {
 	return getDefaultClient().CheckTransaction(param)
 }
 
@@ -402,10 +402,10 @@ func CaptureTransaction(req *CaptureReq) (*Response, *midtrans.Error) {
 	return getDefaultClient().CaptureTransaction(req)
 }
 
-// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
+// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.TransactionStatusB2bResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
-func (c Client) GetStatusB2B(param string) (*Response, *midtrans.Error) {
-	resp := &Response{}
+func (c Client) GetStatusB2B(param string) (*TransactionStatusB2bResponse, *midtrans.Error) {
+	resp := &TransactionStatusB2bResponse{}
 	err := c.HttpClient.Call(
 		http.MethodGet,
 		fmt.Sprintf("%s/v2/%s/status/b2b", c.Env.BaseUrl(), param),
@@ -421,8 +421,8 @@ func (c Client) GetStatusB2B(param string) (*Response, *midtrans.Error) {
 	return resp, nil
 }
 
-// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
+// GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.TransactionStatusB2bResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#get-transaction-status-b2b
-func GetStatusB2B(param string) (*Response, *midtrans.Error) {
+func GetStatusB2B(param string) (*TransactionStatusB2bResponse, *midtrans.Error) {
 	return getDefaultClient().GetStatusB2B(param)
 }

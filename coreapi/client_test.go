@@ -219,3 +219,25 @@ func TestDirectRefundTransaction(t *testing.T)  {
 	resp2, _ := c.DirectRefundTransaction("DUMMY", refundReq)
 	assert.Nil(t, resp2)
 }
+
+func TestCheckTransaction(t *testing.T) {
+	midtrans.ServerKey = sandboxServerKey
+	res1, _ := CheckTransaction("DUMMY")
+	assert.Equal(t, res1.StatusCode, "404")
+
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	res2, _ := c.CheckTransaction("DUMMY")
+	assert.Equal(t, res2.StatusCode, "404")
+}
+
+func TestGetStatusB2B(t *testing.T) {
+	midtrans.ServerKey = sandboxServerKey
+	res1, _ := GetStatusB2B("DUMMY")
+	assert.Equal(t, res1.StatusCode, "404")
+
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	res2, _ := GetStatusB2B("DUMMY")
+	assert.Equal(t, res2.StatusCode, "404")
+}
