@@ -3,15 +3,15 @@
 Midtrans :heart: Go !
 
 Go is a very modern, terse, and combine aspect of dynamic and static typing that in a way very well suited for web development, among other things.
-Its small memory footprint is also an advantage of itself. Now, Midtrans is available to be used in Go, too.
+Its small memory footprint is also an advantage of itself. This module will help you use Midtrans product's REST APIs in Go.
 
 ## 1. Installation
 ### 1.1 Using Go Module
-Run this command on your project
+Run this command on your project to initialize Go mod (if you haven't):
 ```go
 go mod init
 ```
-and reference midtrans-go in your project file with `import`:
+then reference midtrans-go in your project file with `import`:
 ```go
 import (
     "github.com/midtrans/midtrans-go"
@@ -37,6 +37,8 @@ We have [3 different products](https://beta-docs.midtrans.com/) that you can use
 - [Core API (VT-Direct)](#22C-core-api-vt-direct) - Basic backend implementation, you can customize the frontend embedded on **your web/app** as you like (no redirection). [doc ref](https://api-docs.midtrans.com/)
 - [Iris Disbursement](#22D-iris-api) - Iris is Midtrans’ cash management solution that allows you to disburse payments to any bank accounts in Indonesia securely and easily. [doc ref](https://iris-docs.midtrans.com/)
 
+To learn more and understand each of the product's quick overview you can visit https://docs.midtrans.com.
+
 
 ### 2.2 Client Initialization and Configuration
 Get your client key and server key from [Midtrans Dashboard](https://dashboard.midtrans.com)
@@ -44,42 +46,33 @@ Get your client key and server key from [Midtrans Dashboard](https://dashboard.m
 Create API client object, You can also check the [project's implementation](example/simple) for more examples. Please proceed there for more detail on how to run the example.
 
 #### 2.2.1 Using global config
-Set a config with globally, except iris api
+Set a config with globally, (except for iris api)
 
 ```go
 midtrans.ServerKey = "YOUR-SERVER-KEY"
 midtrans.Environment = midtrans.Sandbox
 ```
 
-#### 2.2.2 Using Gateway
+#### 2.2.2 Using Client
 ```go
-//Initiate for Midtrans CoreAPI
+//Initiate client for Midtrans CoreAPI
 var c = coreapi.Client
 c.New("YOUR-SERVER-KEY", midtrans.Sandbox)
 
-//Initiate for Midtrans Snap
+//Initiate client for Midtrans Snap
 var s = snap.Client
 s.New("YOUR-SERVER-KEY", midtrans.Sandbox)
 
-//Initiate gateway for Iris disbursement
+//Initiate client for Iris disbursement
 var i = iris.Client
 i.New("IRIS-API-KEY", midtrans.Sandbox)
 ```
 ### 2.3 Snap
 Snap is Midtrans existing tool to help merchant charge customers using a mobile-friendly, in-page,
-no-redirect checkout facilities. Using snap is completely simple.
+no-redirect checkout facilities. [Using snap is simple](https://docs.midtrans.com/en/snap/overview).
 
 Available methods for Snap
 ```go
-// CreateTransactionWithMap : Do `/transactions` API request to SNAP API to get Snap token and redirect url with Map request
-func CreateTransactionWithMap(req *snap.RequestParamWithMap) (ResponseWithMap, *midtrans.Error)
-
-// CreateTransactionTokenWithMap : Do `/transactions` API request to SNAP API to get Snap token with Map request
-func CreateTransactionTokenWithMap(req *snap.RequestParamWithMap) (string, *midtrans.Error)
-
-// CreateTransactionUrlWithMap : Do `/transactions` API request to SNAP API to get Snap redirect url with Map request
-func CreateTransactionUrlWithMap(req *snap.RequestParamWithMap) (string, *midtrans.Error) 
-
 // CreateTransaction : Do `/transactions` API request to SNAP API to get Snap token and redirect url with `snap.Request`
 func CreateTransaction(req *snap.Request) (*Response, *midtrans.Error)
 
@@ -88,9 +81,19 @@ func CreateTransactionToken(req *snap.Request) (string, *midtrans.Error)
 
 // CreateTransactionUrl : Do `/transactions` API request to SNAP API to get Snap redirect url with `snap.Request`
 func CreateTransactionUrl(req *snap.Request) (string, *midtrans.Error)
+
+// CreateTransactionWithMap : Do `/transactions` API request to SNAP API to get Snap token and redirect url with Map request
+func CreateTransactionWithMap(req *snap.RequestParamWithMap) (ResponseWithMap, *midtrans.Error)
+
+// CreateTransactionTokenWithMap : Do `/transactions` API request to SNAP API to get Snap token with Map request
+func CreateTransactionTokenWithMap(req *snap.RequestParamWithMap) (string, *midtrans.Error)
+
+// CreateTransactionUrlWithMap : Do `/transactions` API request to SNAP API to get Snap redirect url with Map request
+func CreateTransactionUrlWithMap(req *snap.RequestParamWithMap) (string, *midtrans.Error) 
 ```
-Snap create transaction with minimum Snap parameters:
-#### 2.3.1 Using global Config
+Snap usage example, create transaction with minimum Snap parameters (choose **one** of alternatives below):
+#### 2.3.1 Using global Config & static function
+Sample usage if you prefer Midtrans global configuration & using static function. Useful if you only use 1 merchant account API key, and keep the code short.
 ```go
 // 1. Set you ServerKey with globally
 midtrans.ServerKey = "YOUR-SERVER-KEY"
@@ -109,6 +112,8 @@ snapResp, _ := CreateTransaction(req)
 fmt.Println("Response :", snapResp)
 ```
 #### 2.3.2 Using Client
+Sample usage if you prefer to use client instance & config. Useful if you plan to use multiple merchant account API keys, want to have multiple client instances, or prefer the code to be object-oriented.
+
 ```go
 // 1. Initiate Snap client
 var s = snap.Client
@@ -127,21 +132,43 @@ snapResp, _ := s.CreateTransaction(req)
 fmt.Println("Response :", snapResp)
 ```
 
-On the client side:
-```javascript
-var token = $("#snap-token").val();
-snap.pay(token, {
-    onSuccess: function(res) { alert("Payment accepted!"); },
-    onPending: function(res) { alert("Payment pending", res); },
-    onError: function(res) { alert("Error", res); }
-});
+On the frontend side (on the HTML payment page), you will [need to include snap.js library and implement the payment page](https://docs.midtrans.com/en/snap/integration-guide?id=_2-displaying-snap-payment-page-on-frontend).
+
+Sample HTML payment page implementation:
+```html
+<html>
+  <body>
+    <button id="pay-button">Pay!</button>
+    <pre><div id="result-json">JSON result will appear here after payment:<br></div></pre> 
+
+<!-- TODO: Remove ".sandbox" from script src URL for production environment. Also input your client key in "data-client-key" -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<Set your ClientKey here>"></script>
+    <script type="text/javascript">
+      document.getElementById('pay-button').onclick = function(){
+        // SnapToken acquired from previous step
+        snap.pay('PUT_TRANSACTION_TOKEN_HERE', {
+          // Optional
+          onSuccess: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onPending: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onError: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
 ```
 
-You may want to override those `onSuccess`, `onPending` and `onError`
-functions to reflect the behaviour that you wished when the charging
-result in their respective state.
+You may want to override those `onSuccess`, `onPending` and `onError` functions to implement the behaviour that you want on each respective event.
 
-Implement Notification Handler, [Refer to this section](README.md#26-handle-http-notification)
+Then implement Backend Notification Handler, [Refer to this section](README.md#26-handle-http-notification)
 
 Alternativelly, more complete Snap parameter:
 
@@ -186,14 +213,21 @@ func GenerateSnapReq() *snap.Request {
 }
 ```
 
+>**INFO:**
+> When using client, you can set config options like `SetIdempotencyKey`, `SetContext`, `SetPaymentOverrideNotif`, etc
+> from Options object on the client, [check the usage detail on how to configure options here](README.md#3-advance-usage)
+
+#### Alternative, perform Core API Charge with Map type
+Snap client have `...WithMap` function, which is useful if you want to send custom JSON payload that the type/struct is not defined in this module. Refer to file `sample.go` in folder [Core API simple sample](example/simple/snap/sample.go).
+
 ### 2.4 CoreApi
 Available methods for `CoreApi`
 ```go
-// ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
-func ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap, *midtrans.Error)
-
 // ChargeTransaction : Do `/charge` API request to Midtrans Core API return `coreapi.Response` with `coreapi.ChargeReq`
 func ChargeTransaction(req *ChargeReq) (*Response, *midtrans.Error)
+
+// ChargeTransactionWithMap : Do `/charge` API request to Midtrans Core API return RAW MAP with Map as
+func ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap, *midtrans.Error)
 
 // CardToken : Do `/token` API request to Midtrans Core API return `coreapi.Response`,
 func CardToken(cardNumber string, expMonth int, expYear int, cvv string) (*CardTokenResponse, *midtrans.Error)
@@ -237,7 +271,9 @@ func CaptureTransaction(req *CaptureReq) (*Response, *midtrans.Error)
 // GetStatusB2B : Do `/{orderId}/status/b2b` API request to Midtrans Core API return `coreapi.Response`,
 func GetStatusB2B(param string) (*Response, *midtrans.Error)
 ```
-#### 2.4.1 Using global config
+#### 2.4.1 Using global Config & static function
+Sample usage if you prefer Midtrans global configuration & using static function. Useful if you only use 1 merchant account API key, and keep the code short.
+
 ```go
 // 1. Set you ServerKey with globally
 midtrans.ServerKey = "YOUR-SERVER-KEY"
@@ -269,6 +305,8 @@ coreApiRes, _ := coreapi.ChargeTransaction(chargeReq)
 fmt.Println("Response :", coreApiRes)
 ```
 #### 2.4.2 Using Client
+Sample usage if you prefer to use client instance & config. Useful if you plan to use multiple merchant account API keys, want to have multiple client instances, or prefer the code to be object-oriented.
+
 ```go
 // 1. Initiate coreapi client  
 c := coreapi.Client{}
@@ -301,15 +339,13 @@ fmt.Println("Response :", coreApiRes)
 ```
 >**INFO:**
 > When using client, you can set config options like `SetIdempotencyKey`, `SetContext`, `SetPaymentOverrideNotif`, etc
-> from Options object on gateway, please see the detail usage for config options [here](README.md#3-advance-usage)
+> from Options object on the client, [check the usage detail on how to configure options here](README.md#3-advance-usage)
 
-
-#### How Core API does charge with map type?
-please refer to file `sample.go` in folder [Core API simple sample](example/simple/coreapi/sample.go)
--
+#### Alternative, perform Core API Charge with Map type
+CoreApi client have `ChargeTransactionWithMap` function, which is useful if you want to send custom JSON payload that the type/struct is not defined in this module. Refer to file `sample.go` in folder [Core API simple sample](example/simple/coreapi/sample.go).
 
 ### 2.5 Iris Client
-Iris is Midtrans cash management solution that allows you to disburse payments to any bank accounts in Indonesia securely and easily. Iris connects to the banks’ hosts to enable seamless transfer using integrated APIs.
+Iris is Midtrans cash management solution that allows you to disburse payments to any supported bank accounts securely and easily. Iris connects to the banks’ hosts to enable seamless transfer using integrated APIs.
 Available methods for `Iris`
 ```go
 // CreateBeneficiaries : to perform create a new beneficiary information for quick access on the payout page in Iris Portal.
@@ -356,7 +392,7 @@ func (c Client) GetBeneficiaryBanks() (*ListBeneficiaryBankResponse, *midtrans.E
 func (c Client) ValidateBankAccount(bankName string, accountNo string) (*BankAccountDetailResponse, *midtrans.Error)
 ```
 
->Note: `IrisApiKey` used for `IrisGateway`'s `the API Key can be found in Iris Dashboard. The API Key is different with Midtrans' payment gateway account's key.
+>Note: `IrisApiKey` will be used in `Iris.Client`'s the API Key can be found in Iris Dashboard. The API Key is different to Midtrans' payment gateway account's API key.
 ```go
 var i iris.Client
 i.New("YOUR-IRIS-API-KEY", midtrans.Sandbox)
@@ -411,7 +447,7 @@ func notification(w http.ResponseWriter, r *http.Request) {
 }
 ```
 ### 2.7 Transaction Action
-Also available as examples [here](example/simple/transaction/sample.go)
+Other functions related to actions that can be performed to transaction(s). Also available as examples [here](example/simple/transaction/sample.go)
 #### Get Status
 ```go
 // get status of transaction that already recorded on midtrans (already `charge`-ed) 
@@ -514,7 +550,7 @@ For Midtrans Payment, there are two headers we provide:
 midtrans.SetPaymentAppendNotification("YOUR-APPEND-NOTIFICATION-ENDPOINT")
 midtrans.SetPaymentOverrideNotification("YOUR-OVERRID-NOTIFICATION-ENDPOINT")
 ```
-#### 3.1.2 Set Override/Append notification via gateway options
+#### 3.1.2 Set Override/Append notification via client options
 ```go
 // 1. Initiate Gateway
 var c = coreapi.Client
@@ -536,8 +572,8 @@ c.Options.SetContext(context.Background())
 ```
 
 ### 3.3 Log Configuration
-By default in `Sandbox` the log level will be use `LogDebug` show informational messages for debugging. In `Production` our library only logs the error messages (`LogError`), show error message and sent to `os.stderr`.
-You have option to change the default log configuration with global variable `midtrans.DefaultLoggerLevel`:
+By default in `Sandbox` the log level will use `LogDebug` level, that outputs informational messages for debugging. In `Production` this module will only logs the error messages (`LogError` level), that outputs error message to `os.stderr`.
+You have option to change the default log level configuration with global variable `midtrans.DefaultLoggerLevel`:
 ```go
 midtrans.DefaultLoggerLevel = &midtrans.LoggerImplementation{LogLevel: midtrans.LogDebug}
 
