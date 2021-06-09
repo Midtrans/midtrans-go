@@ -8,6 +8,8 @@ import (
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/midtrans/midtrans-go/example"
 	"net/http"
+	"net/http/httptest"
+	"strings"
 )
 
 var c coreapi.Client
@@ -140,46 +142,57 @@ func main() {
 
 	// 9. Sample request charge with credit card
 	requestCreditCard()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{\n    \"masked_card\": \"451111-1117\",\n    \"bank\": \"bca\",\n    \"eci\": \"06\",\n    \"channel_response_code\": \"7\",\n    \"channel_response_message\": \"Denied\",\n    \"transaction_time\": \"2021-06-08 15:49:54\",\n    \"gross_amount\": \"100000.00\",\n    \"currency\": \"IDR\",\n      \"payment_type\": \"credit_card\",\n    \"signature_key\": \"76fe68ed1b7040c7c329356c1cd47819be3ccb8b056376ff3488bfa9af1db52a85ded0501b2dab1de56e5852982133a9ef7a47c54222abbe72288c2c4f591a71\",\n    \"status_code\": \"202\",\n    \"transaction_id\": \"36f3687e-05d4-4879-a428-fd6d1ffb786e\",\n    \"transaction_status\": \"deny\",\n    \"fraud_status\": \"challenge\",\n    \"status_message\": \"Success, transaction is found\",\n    \"merchant_id\": \"G812785002\",\n    \"card_type\": \"credit\"\n}"))
+	notification(w, r)
 }
 
 // notification : Midtrans-Go simple sample HTTP Notification handling
 func notification(w http.ResponseWriter, r *http.Request) {
-	reqPayload := &coreapi.ChargeReqWithMap{}
-	err := json.NewDecoder(r.Body).Decode(reqPayload)
+	// 1. Initialize empty map
+	var notificationPayload map[string]interface{}
+
+	// 2. Parse JSON request body and use it to set json to payload
+	err := json.NewDecoder(r.Body).Decode(&notificationPayload)
 	if err != nil {
-		// do something
+		// do something on error when decode
+		return
+	}
+	// 3. Get order-id from payload
+	orderId, exists := notificationPayload["order_id"].(string)
+	if !exists {
+		// do something when key `order_id` not found
 		return
 	}
 
-	encode, _ := json.Marshal(reqPayload)
-	resArray := make(map[string]string)
-	err = json.Unmarshal(encode, &resArray)
-
-	resp, e := c.CheckTransaction(resArray["order_id"])
+	// 4. Check transaction to Midtrans with param orderId
+	transactionStatusResp, e := c.CheckTransaction(orderId)
 	if e != nil {
 		http.Error(w, e.GetMessage(), http.StatusInternalServerError)
 		return
 	} else {
-		if resp != nil {
-			if resp.TransactionStatus == "capture" {
-				if resp.FraudStatus == "challenge" {
-					// TODO set transaction status on your database to 'challenge' e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
-				} else if resp.FraudStatus == "accept" {
+		if transactionStatusResp != nil {
+			// 5. Do set transaction status based on response from check transaction status
+			if transactionStatusResp.TransactionStatus == "capture" {
+				if transactionStatusResp.FraudStatus == "challenge" {
+					// TODO set transaction status on your database to 'challenge'
+					// e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
+				} else if transactionStatusResp.FraudStatus == "accept" {
 					// TODO set transaction status on your database to 'success'
 				}
-			} else if resp.TransactionStatus == "settlement" {
+			} else if transactionStatusResp.TransactionStatus == "settlement" {
 				// TODO set transaction status on your databaase to 'success'
-			} else if resp.TransactionStatus == "deny"{
+			} else if transactionStatusResp.TransactionStatus == "deny" {
 				// TODO you can ignore 'deny', because most of the time it allows payment retries
 				// and later can become success
-			} else if resp.TransactionStatus == "cancel" || resp.TransactionStatus == "expire" {
+			} else if transactionStatusResp.TransactionStatus == "cancel" || transactionStatusResp.TransactionStatus == "expire" {
 				// TODO set transaction status on your databaase to 'failure'
-			} else if resp.TransactionStatus == "pending" {
+			} else if transactionStatusResp.TransactionStatus == "pending" {
 				// TODO set transaction status on your databaase to 'pending' / waiting payment
 			}
 		}
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("ok"))
 }
