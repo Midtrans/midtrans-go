@@ -12,7 +12,7 @@ import (
 type Client struct {
 	ServerKey  string
 	Env        midtrans.EnvironmentType
-	HttpClient midtrans.Client
+	HttpClient midtrans.HttpClient
 	Options    *midtrans.ConfigOptions
 }
 
@@ -21,10 +21,7 @@ func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
 	c.Env = env
 	c.ServerKey = serverKey
 	c.Options = &midtrans.ConfigOptions{}
-	c.HttpClient = &midtrans.ClientImplementation{
-		HttpClient: midtrans.DefaultHttpClient,
-		Logger:     midtrans.GetDefaultLogger(env),
-	}
+	c.HttpClient = midtrans.GetHttpClient(env)
 }
 
 //getDefaultClient : this is internal function to get default Snap Client
@@ -32,7 +29,7 @@ func getDefaultClient() Client {
 	return Client{
 		ServerKey:  midtrans.ServerKey,
 		Env:        midtrans.Environment,
-		HttpClient: midtrans.GetClient(),
+		HttpClient: midtrans.GetHttpClient(midtrans.Environment),
 		Options: &midtrans.ConfigOptions{
 			PaymentOverrideNotification: midtrans.PaymentOverrideNotification,
 			PaymentAppendNotification:   midtrans.PaymentAppendNotification,

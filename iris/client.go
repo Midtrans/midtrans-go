@@ -12,7 +12,7 @@ import (
 type Client struct {
 	IrisApiKey *string
 	Env        midtrans.EnvironmentType
-	HttpClient midtrans.Client
+	HttpClient midtrans.HttpClient
 	Options    *midtrans.ConfigOptions
 }
 
@@ -21,8 +21,8 @@ func (c *Client) New(irisApiKey string, env midtrans.EnvironmentType) {
 	c.Env = env
 	c.IrisApiKey = &irisApiKey
 	c.Options = &midtrans.ConfigOptions{}
-	c.HttpClient = &midtrans.ClientImplementation{
-		HttpClient: midtrans.DefaultHttpClient,
+	c.HttpClient = &midtrans.HttpClientImplementation{
+		HttpClient: midtrans.DefaultGoHttpClient,
 		Logger:     midtrans.GetDefaultLogger(env),
 	}
 }

@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-type Client interface {
+type HttpClient interface {
 	Call(method string, url string, apiKey *string, options *ConfigOptions, body io.Reader, result interface{}) *Error
 }
 
-// ClientImplementation : this is for midtrans Client Implementation
-type ClientImplementation struct {
+// HttpClientImplementation : this is for midtrans HttpClient Implementation
+type HttpClientImplementation struct {
 	HttpClient *http.Client
 	Logger     LoggerInterface
 }
@@ -23,7 +23,7 @@ type ClientImplementation struct {
 // Call the Midtrans API at specific `path` using the specified HTTP `method`. The result will be
 // given to `result` if there is no error. If any error occurred, the return of this function is the `midtrans.Error`
 // itself, otherwise nil.
-func (c *ClientImplementation) Call(method string, url string, apiKey *string, options *ConfigOptions, body io.Reader, result interface{}) *Error {
+func (c *HttpClientImplementation) Call(method string, url string, apiKey *string, options *ConfigOptions, body io.Reader, result interface{}) *Error {
 	// NewRequest is used by Call to generate an http.Request.
 	req, err := http.NewRequest(method, url, body)
 
@@ -91,13 +91,13 @@ func (c *ClientImplementation) Call(method string, url string, apiKey *string, o
 }
 
 // DoRequest : is used by Call to execute an API request using HTTP client and parse the response into `result`.
-func (c *ClientImplementation) DoRequest(req *http.Request, result interface{}) *Error {
+func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface{}) *Error {
 	start := time.Now()
 	res, err := c.HttpClient.Do(req)
 	if err != nil {
 		c.Logger.Error("Cannot send request: %v", err.Error())
 		return &Error{
-			Message:    fmt.Sprintf("Error when request via Client, Cannot send request with error: %s", err.Error()),
+			Message:    fmt.Sprintf("Error when request via HttpClient, Cannot send request with error: %s", err.Error()),
 			StatusCode: res.StatusCode,
 			RawError:   err,
 		}

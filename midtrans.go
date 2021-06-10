@@ -51,18 +51,18 @@ var (
 	//Environment default Environment for Midtrans API
 	Environment = Sandbox
 
-	//DefaultHttpTimeout default timeout for go HTTP Client
+	//DefaultHttpTimeout default timeout for go HTTP HttpClient
 	DefaultHttpTimeout = 80 * time.Second
 
-	//DefaultHttpClient default HTTP Client for Midtrans API
-	DefaultHttpClient = &http.Client{Timeout: DefaultHttpTimeout}
+	//DefaultGoHttpClient default Go HTTP Client for Midtrans HttpClient API
+	DefaultGoHttpClient = &http.Client{Timeout: DefaultHttpTimeout}
 
 	//DefaultLoggerLevel logging level that will be used for config globally by Midtrans logger
 	DefaultLoggerLevel = &LoggerImplementation{LogLevel: LogError}
 
-	//defaultClientImplementation
-	defaultClientImplementation = &ClientImplementation{
-		HttpClient: DefaultHttpClient,
+	//defaultHttpClientImplementation
+	defaultHttpClientImplementation = &HttpClientImplementation{
+		HttpClient: DefaultGoHttpClient,
 		Logger:     GetDefaultLogger(Environment),
 	}
 )
@@ -76,20 +76,12 @@ func GetDefaultLogger(env EnvironmentType) LoggerInterface {
 	}
 }
 
-var client = clientWrapper{}
-
-//clientWrapper Client wrapper
-type clientWrapper struct {
-	c Client
-}
-
-//GetClient : get Client implementation with midtrans global config
-func GetClient() Client {
-	if client.c != nil {
-		return client.c
+//GetHttpClient : get HttpClient implementation
+func GetHttpClient(Env EnvironmentType) *HttpClientImplementation {
+	return &HttpClientImplementation{
+		HttpClient: DefaultGoHttpClient,
+		Logger:     GetDefaultLogger(Env),
 	}
-	client.c = defaultClientImplementation
-	return client.c
 }
 
 var typeString = map[EnvironmentType]string{

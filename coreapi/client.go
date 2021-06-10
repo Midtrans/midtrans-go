@@ -14,7 +14,7 @@ type Client struct {
 	ServerKey  string
 	ClientKey  string
 	Env        midtrans.EnvironmentType
-	HttpClient midtrans.Client
+	HttpClient midtrans.HttpClient
 	Options    *midtrans.ConfigOptions
 }
 
@@ -23,10 +23,7 @@ func (c *Client) New(serverKey string, env midtrans.EnvironmentType) {
 	c.Env = env
 	c.ServerKey = serverKey
 	c.Options = &midtrans.ConfigOptions{}
-	c.HttpClient = &midtrans.ClientImplementation{
-		HttpClient: midtrans.DefaultHttpClient,
-		Logger:     midtrans.GetDefaultLogger(env),
-	}
+	c.HttpClient = midtrans.GetHttpClient(env)
 }
 
 // getDefaultClient : internal function to get default Client
@@ -35,7 +32,7 @@ func getDefaultClient() Client {
 		ServerKey:  midtrans.ServerKey,
 		ClientKey:  midtrans.ClientKey,
 		Env:        midtrans.Environment,
-		HttpClient: midtrans.GetClient(),
+		HttpClient: midtrans.GetHttpClient(midtrans.Environment),
 		Options: &midtrans.ConfigOptions{
 			PaymentOverrideNotification: midtrans.PaymentOverrideNotification,
 			PaymentAppendNotification:   midtrans.PaymentAppendNotification,
