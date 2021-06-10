@@ -50,11 +50,11 @@ func TestRegisterCard(t *testing.T) {
 	assert.Equal(t, resp1.StatusCode, "200")
 	assert.Equal(t, resp1.MaskCard, "481111-1114")
 
-	//c := CoreApiBuilder{}
-	//c.CoreApiBuilder(sandboxServerKey, midtrans.Sandbox)
-	//resp2, _ := c.CoreApi.RegisterCard(bniCardNumber, 12, 2021, "123", sandboxClientKey)
-	//assert.Equal(t, resp2.StatusCode, "200")
-	//assert.Equal(t, resp2.MaskCard, "410505-1467")
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2021, "123", sandboxClientKey)
+	assert.Equal(t, resp2.StatusCode, "200")
+	assert.Equal(t, resp2.MaskCard, "410505-1467")
 }
 
 func TestCardToken(t *testing.T) {
@@ -77,8 +77,6 @@ func TestChargeTransactionWithMap(t *testing.T) {
 		},
 	}
 
-	//loglvl := midtrans.LogDebug
-	//midtrans.LoggerLevel = &loglvl
 	midtrans.ServerKey = sandboxServerKey
 	resp, _ := ChargeTransactionWithMap(req1)
 	assert.Equal(t, resp["status_code"], "201")
