@@ -28,6 +28,7 @@ type Request struct {
 	CustomField1       string                      `json:"custom_field1,omitempty"`
 	CustomField2       string                      `json:"custom_field2,omitempty"`
 	CustomField3       string                      `json:"custom_field3,omitempty"`
+	Metadata           interface{}                 `json:"metadata,omitempty"`
 }
 
 // CreditCardDetails : Represent credit card detail for PaymentTypeCreditCard payment type
