@@ -35,7 +35,7 @@ func TestSnapCreateTransactionWithMap(t *testing.T) {
 
 func TestSnapCreateTransactionTokenWithMap(t *testing.T) {
 	midtrans.ServerKey = sandboxServerKey
-	//assert.Equal(t, sandboxServerKey, midtrans.ServerKey )
+	assert.Equal(t, sandboxServerKey, midtrans.ServerKey )
 
 	res, err := CreateTransactionTokenWithMap(generateReqWithMap())
 	if err != nil {
