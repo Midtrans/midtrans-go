@@ -104,6 +104,9 @@ req := & snap.RequestParam{
 	TransactionDetails: midtrans.TransactionDetails{
 		OrderID:  "YOUR-ORDER-ID-12345", 
 		GrossAmt: 100000,
+	}, 
+	CreditCard: &snap.CreditCardDetails{
+		Secure: true,
 	},
 }
 
@@ -124,6 +127,9 @@ req := & snap.RequestParam{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  "YOUR-ORDER-ID-12345",
 			GrossAmt: 100000,
+		}, 
+		CreditCard: &snap.CreditCardDetails{
+			Secure: true,
 		},
 	}
 
@@ -190,6 +196,9 @@ func GenerateSnapReq() *snap.Request {
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID: "YOUR-UNIQUE-ORDER-ID-1234",
 			GrossAmt: 200000,
+		}, 
+		CreditCard: &snap.CreditCardDetails{
+			Secure: true,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: "John",
@@ -408,40 +417,49 @@ Example also available in `sample.go` in folder [example/simple/coreapi](example
 
 ```go
 func notification(w http.ResponseWriter, r *http.Request) {
-	reqPayload := &coreapi.ChargeReqWithMap{}
-	err := json.NewDecoder(r.Body).Decode(reqPayload)
+	// 1. Initialize empty map
+	var notificationPayload map[string]interface{}
+
+	// 2. Parse JSON request body and use it to set json to payload
+	err := json.NewDecoder(r.Body).Decode(&notificationPayload)
 	if err != nil {
-		// do something
+		// do something on error when decode
+		return
+	}
+	// 3. Get order-id from payload
+	orderId, exists := notificationPayload["order_id"].(string)
+	if !exists {
+		// do something when key `order_id` not found
 		return
 	}
 
-	encode, _ := json.Marshal(reqPayload)
-	resArray := make(map[string]string)
-	err = json.Unmarshal(encode, &resArray)
-
-	resp, e := c.CheckTransaction(resArray["order_id"])
+	// 4. Check transaction to Midtrans with param orderId
+	transactionStatusResp, e := c.CheckTransaction(orderId)
 	if e != nil {
 		http.Error(w, e.GetMessage(), http.StatusInternalServerError)
 		return
 	} else {
-		if resp.TransactionStatus == "capture" {
-			if resp.FraudStatus == "challenge" {
-				// TODO set transaction status on your database to 'challenge' e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
-			} else if resp.FraudStatus == "accept" {
-				// TODO set transaction status on your database to 'success'
+		if transactionStatusResp != nil {
+			// 5. Do set transaction status based on response from check transaction status
+			if transactionStatusResp.TransactionStatus == "capture" {
+				if transactionStatusResp.FraudStatus == "challenge" {
+					// TODO set transaction status on your database to 'challenge'
+					// e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
+				} else if transactionStatusResp.FraudStatus == "accept" {
+					// TODO set transaction status on your database to 'success'
+				}
+			} else if transactionStatusResp.TransactionStatus == "settlement" {
+				// TODO set transaction status on your databaase to 'success'
+			} else if transactionStatusResp.TransactionStatus == "deny" {
+				// TODO you can ignore 'deny', because most of the time it allows payment retries
+				// and later can become success
+			} else if transactionStatusResp.TransactionStatus == "cancel" || transactionStatusResp.TransactionStatus == "expire" {
+				// TODO set transaction status on your databaase to 'failure'
+			} else if transactionStatusResp.TransactionStatus == "pending" {
+				// TODO set transaction status on your databaase to 'pending' / waiting payment
 			}
-		} else if resp.TransactionStatus == "settlement" {
-            // TODO set transaction status on your databaase to 'success'
-        } else if resp.TransactionStatus == "deny" {
-            // TODO you can ignore 'deny', because most of the time it allows payment retries
-            // and later can become success
-        } else if resp.TransactionStatus == "cancel" || resp.TransactionStatus == "expire" {
-            // TODO set transaction status on your databaase to 'failure'
-        } else if resp.TransactionStatus == "pending" {
-            // TODO set transaction status on your databaase to 'pending' / waiting payment
-        }
+		}
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("ok"))
 }
