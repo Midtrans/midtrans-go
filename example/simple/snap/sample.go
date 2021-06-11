@@ -118,6 +118,7 @@ func GenerateSnapReq() *snap.Request {
 			BillAddr: custAddress,
 			ShipAddr: custAddress,
 		},
+		EnabledPayments: snap.AllSnapPaymentType,
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    "ITEM1",

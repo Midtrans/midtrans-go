@@ -13,7 +13,7 @@ type Request struct {
 	TransactionDetails midtrans.TransactionDetails `json:"transaction_details"`
 	Items              *[]midtrans.ItemDetails     `json:"item_details,omitempty"`
 	CustomerDetail     *midtrans.CustomerDetails   `json:"customer_details,omitempty"`
-	EnabledPayments    []midtrans.PaymentType      `json:"enabled_payments,omitempty"`
+	EnabledPayments    []SnapPaymentType           `json:"enabled_payments,omitempty"`
 	CreditCard         *CreditCardDetails          `json:"credit_card,omitempty"`
 	BcaVa              *BcaVa                      `json:"bca_va,omitempty"`
 	BniVa              *BniVa                      `json:"bni_va,omitempty"`
