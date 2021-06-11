@@ -178,15 +178,15 @@ type CardRegisterResponse struct {
 
 type BinResponse struct {
 	Data struct {
-		RegistrationRequired interface{} `json:"registration_required"`
-		CountryName          interface{} `json:"country_name"`
-		CountryCode          string      `json:"country_code"`
-		Channel              string      `json:"channel"`
-		Brand                string      `json:"brand"`
-		BinType              interface{} `json:"bin_type"`
-		BinClass             interface{} `json:"bin_class"`
-		Bin                  string      `json:"bin"`
-		BankCode             interface{} `json:"bank_code"`
-		Bank                 string      `json:"bank"`
+		RegistrationRequired string `json:"registration_required"`
+		CountryName          string `json:"country_name"`
+		CountryCode          string `json:"country_code"`
+		Channel              string `json:"channel"`
+		Brand                string `json:"brand"`
+		BinType              string `json:"bin_type"`
+		BinClass             string `json:"bin_class"`
+		Bin                  string `json:"bin"`
+		BankCode             string `json:"bank_code"`
+		Bank                 string `json:"bank"`
 	} `json:"data"`
 }
