@@ -9,7 +9,7 @@ type ChargeReqWithMap map[string]interface{}
 
 // ChargeReq : Represent Charge request payload
 type ChargeReq struct {
-	PaymentType        midtrans.PaymentType        `json:"payment_type"`
+	PaymentType        CoreapiPaymentType          `json:"payment_type"`
 	TransactionDetails midtrans.TransactionDetails `json:"transaction_details"`
 
 	Items           *[]midtrans.ItemDetails   `json:"item_details,omitempty"`

@@ -84,7 +84,7 @@ func requestCreditCard() {
 	c.New(example.SandboxServerKey1, midtrans.Sandbox)
 
 	chargeReq := &coreapi.ChargeReq{
-		PaymentType: midtrans.PaymentTypeCreditCard,
+		PaymentType: coreapi.PaymentTypeCreditCard,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  "12345",
 			GrossAmt: 200000,

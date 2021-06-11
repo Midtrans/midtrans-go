@@ -22,8 +22,8 @@ func getCardToken(cardNumber string) string {
 	return res.TokenID
 }
 
-func createPayload(orderId string, paymentType midtrans.PaymentType, cardToken string) *ChargeReq {
-	if paymentType == midtrans.PaymentTypeCreditCard {
+func createPayload(orderId string, paymentType CoreapiPaymentType, cardToken string) *ChargeReq {
+	if paymentType == PaymentTypeCreditCard {
 		return &ChargeReq{
 			PaymentType: paymentType,
 			TransactionDetails: midtrans.TransactionDetails{
@@ -83,7 +83,7 @@ func TestChargeTransactionWithMap(t *testing.T) {
 	assert.Equal(t, resp["payment_type"], "gopay")
 
 	req2 := &ChargeReqWithMap{
-		"payment_type": midtrans.PaymentTypeBankTransfer,
+		"payment_type": PaymentTypeBankTransfer,
 		"transaction_details": map[string]interface{}{
 			"order_id":     "MID-GO-UNIT_TEST-4" + timestamp(),
 			"gross_amount": 10000,
@@ -99,20 +99,20 @@ func TestChargeTransactionWithMap(t *testing.T) {
 
 func TestChargeTransaction(t *testing.T) {
 	midtrans.ServerKey = sandboxServerKey
-	resp1, _ := ChargeTransaction(createPayload("MID-GO-UNIT_TEST-1"+timestamp(), midtrans.PaymentTypeGopay, ""))
+	resp1, _ := ChargeTransaction(createPayload("MID-GO-UNIT_TEST-1"+timestamp(), PaymentTypeGopay, ""))
 	assert.Equal(t, resp1.StatusCode, "201")
 	assert.Equal(t, resp1.PaymentType, "gopay")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), midtrans.PaymentTypeGopay, ""))
+	resp2, _ := c.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), PaymentTypeGopay, ""))
 	assert.Equal(t, resp2.StatusCode, "201")
 	assert.Equal(t, resp2.PaymentType, "gopay")
 }
 
 func TestChargeTransactionWithIdempotencyKey(t *testing.T) {
 	req := &ChargeReq{
-		PaymentType: midtrans.PaymentTypeGopay,
+		PaymentType: PaymentTypeGopay,
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  "MID-GO-UNIT_TEST-" + timestamp(),
 			GrossAmt: 10000,
