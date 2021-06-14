@@ -78,7 +78,7 @@ func (c Client) ChargeTransaction(req *ChargeReq) (*ChargeResponse, *midtrans.Er
 	)
 
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	return resp, nil
 }
@@ -102,7 +102,7 @@ func (c Client) CardToken(cardNumber string, expMonth int, expYear int, cvv stri
 	err := c.HttpClient.Call(http.MethodGet, URL, nil, c.Options, nil, resp)
 
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	return resp, nil
 }
