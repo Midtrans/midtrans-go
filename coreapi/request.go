@@ -75,7 +75,7 @@ type BankTransferDetails struct {
 
 // PermataBankTransferDetail : Represent Recipient for bank transfer Permata
 type PermataBankTransferDetail struct {
-	RecipientName string `json:"recipient_name"`
+	RecipientName string `json:"recipient_name,omitempty"`
 }
 
 // BCABankTransferDetailFreeText : Represent BCA bank_transfer detail free_text
@@ -90,9 +90,10 @@ type BCABankTransferLangDetail struct {
 	LangEN string `json:"en,omitempty"`
 }
 
-// BcaBankTransferDetail : Represent Recipient for bank transfer Permata
+// BcaBankTransferDetail : BCA sub company code directed for this transactions
+// NOTE: Please contact Midtrans Sales Team.
 type BcaBankTransferDetail struct {
-	SubCompanyCode string `json:"sub_company_code"`
+	SubCompanyCode string `json:"sub_company_code,omitempty"`
 }
 
 // EChannelDetail : Represent Mandiri Bill bank transfer detail
@@ -141,7 +142,7 @@ type CIMBClicksDetails struct {
 // QrisDetails QRIS is a QR payment standard in Indonesia that is developed by Bank Indonesia (BI).
 // Users could scan and pay the QR from any payment providers registered as the issuer
 type QrisDetails struct {
-	Acquirer string `json:"acquirer"`
+	Acquirer string `json:"acquirer,omitempty"`
 }
 
 // ConvStoreDetails : Represent cstore detail
@@ -156,8 +157,8 @@ type ConvStoreDetails struct {
 
 // GopayDetails : Represent gopay detail
 type GopayDetails struct {
-	EnableCallback bool   `json:"enable_callback"`
-	CallbackUrl    string `json:"callback_url"`
+	EnableCallback bool   `json:"enable_callback,omitempty"`
+	CallbackUrl    string `json:"callback_url,omitempty"`
 }
 
 // ShopeePayDetails : Represent shopeepay detail
