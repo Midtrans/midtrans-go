@@ -8,7 +8,7 @@ type TransactionDetails struct {
 
 // ItemDetails : Represent the transaction details
 type ItemDetails struct {
-	ID           string `json:"id"`
+	ID           string `json:"id,omitempty"`
 	Name         string `json:"name"`
 	Price        int64  `json:"price"`
 	Qty          int32  `json:"quantity"`
@@ -19,13 +19,13 @@ type ItemDetails struct {
 
 // CustomerAddress : Represent the customer address
 type CustomerAddress struct {
-	FName       string `json:"first_name"`
-	LName       string `json:"last_name"`
-	Phone       string `json:"phone"`
-	Address     string `json:"address"`
-	City        string `json:"city"`
-	Postcode    string `json:"postal_code"`
-	CountryCode string `json:"country_code"`
+	FName       string `json:"first_name,omitempty"`
+	LName       string `json:"last_name,omitempty"`
+	Phone       string `json:"phone,omitempty"`
+	Address     string `json:"address,omitempty"`
+	City        string `json:"city,omitempty"`
+	Postcode    string `json:"postal_code,omitempty"`
+	CountryCode string `json:"country_code,omitempty"`
 }
 
 // CustomerDetails : Represent the customer detail
@@ -40,8 +40,4 @@ type CustomerDetails struct {
 	Phone    string           `json:"phone,omitempty"`
 	BillAddr *CustomerAddress `json:"billing_address,omitempty"`
 	ShipAddr *CustomerAddress `json:"customer_address,omitempty"`
-}
-
-type Callbacks struct {
-	Finish string `json:"finish"`
 }
