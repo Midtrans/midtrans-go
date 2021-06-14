@@ -181,7 +181,7 @@ func (c Client) GetTransactionHistory(fromDate string, toDate string) ([]Transac
 		&resp,
 	)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 
 	return resp, nil
@@ -200,7 +200,7 @@ func (c Client) GetTopUpChannels() ([]TopUpAccountResponse, *midtrans.Error) {
 		&resp,
 	)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 
 	return resp, nil
@@ -220,7 +220,7 @@ func (c Client) GetBalance() (*BalanceResponse, *midtrans.Error) {
 	)
 
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	return resp, nil
 }
@@ -238,7 +238,7 @@ func (c Client) GetListBankAccount() ([]BankAccountResponse, *midtrans.Error) {
 		&resp,
 	)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 
 	return resp, nil
@@ -258,7 +258,7 @@ func (c Client) GetFacilitatorBalance(accountId string) (*BalanceResponse, *midt
 	)
 
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	return resp, nil
 }
@@ -275,7 +275,7 @@ func (c Client) GetBeneficiaryBanks() (*ListBeneficiaryBankResponse, *midtrans.E
 		&resp,
 	)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	return resp, nil
 }
