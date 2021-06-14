@@ -293,7 +293,7 @@ func CancelTransaction(param string) (*CancelResponse, *midtrans.Error) {
 // ExpireTransaction : Do `/{orderId}/expire` API request to Midtrans Core API return `coreapi.ExpireResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#expire-transaction
 func (c Client) ExpireTransaction(param string) (*ExpireResponse, *midtrans.Error) {
-	resp := &ChargeResponse{}
+	resp := &ExpireResponse{}
 	err := c.HttpClient.Call(
 		http.MethodPost,
 		fmt.Sprintf("%s/v2/%s/expire", c.Env.BaseUrl(), param),
