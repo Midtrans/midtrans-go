@@ -17,11 +17,11 @@ type Request struct {
 	CreditCard         *CreditCardDetails          `json:"credit_card,omitempty"`
 	BcaVa              *BcaVa                      `json:"bca_va,omitempty"`
 	BniVa              *BniVa                      `json:"bni_va,omitempty"`
-	BriVa              *BriVa                      `json:"bri_va"`
-	PermataVa          *PermataVa                  `json:"permata_va"`
+	BriVa              *BriVa                      `json:"bri_va,omitempty"`
+	PermataVa          *PermataVa                  `json:"permata_va,omitempty"`
 	Gopay              *GopayDetails               `json:"gopay,omitempty"`
 	ShopeePay          *ShopeePayDetails           `json:"shopeepay,omitempty"`
-	Callbacks          *midtrans.Callbacks         `json:"callbacks,omitempty"`
+	Callbacks          *Callbacks                  `json:"callbacks,omitempty"`
 	Expiry             *ExpiryDetails              `json:"expiry,omitempty"`
 	UserId             string                      `json:"user_id,omitempty"`
 	Cstore             *Cstore                     `json:"cstore,omitempty"`
@@ -66,7 +66,7 @@ type CreditCardDetails struct {
 // InstallmentDetail : Represent installment detail
 type InstallmentDetail struct {
 	// Force installment when using credit card. Default: false
-	Required bool `json:"required"`
+	Required bool `json:"required,omitempty"`
 
 	// Available installment terms
 	Terms *InstallmentTermsDetail `json:"terms,omitempty"`
@@ -87,15 +87,15 @@ type InstallmentTermsDetail struct {
 type DynamicDescriptor struct {
 	// First 25 digit on customer’s billing statement. Mostly used to show the merchant or product name.
 	// Only works for BNI.
-	MerchantName string `json:"merchant_name"`
+	MerchantName string `json:"merchant_name,omitempty"`
 
 	// Next 13 digit on customer’s billing statement. It works as secondary metadata on the statement.
 	// Mostly used to show city name or region. Only works for BNI.
-	CityName string `json:"city_name"`
+	CityName string `json:"city_name,omitempty"`
 
 	// Last 2 digit on customer’s billing statement. Mostly used to show country code.
 	// The format is ISO 3166-1 alpha-2. Only works for BNI.
-	CountryCode string `json:"country_code"`
+	CountryCode string `json:"country_code,omitempty"`
 }
 
 // BcaVa : BCA Virtual Account is a virtual payment method offered by Bank BCA.
@@ -103,7 +103,7 @@ type DynamicDescriptor struct {
 type BcaVa struct {
 	// VaNumber : Custom VA Number, Length should be within 1 to 11.
 	// https://snap-docs.midtrans.com/#custom-virtual-account-number
-	VaNumber       string `json:"va_number"`
+	VaNumber       string `json:"va_number,omitempty"`
 	SubCompanyCode string `json:"sub_company_code,omitempty"`
 	FreeText       struct {
 		Inquiry []struct {
@@ -122,7 +122,7 @@ type BcaVa struct {
 type BniVa struct {
 	// VaNumber : Custom VA Number, Length should be within 1 to 8.
 	// https://snap-docs.midtrans.com/#custom-virtual-account-number
-	VaNumber string `json:"va_number"`
+	VaNumber string `json:"va_number,omitempty"`
 }
 
 // BriVa : BRI Virtual Account is a virtual payment method offered by Bank BRI.
@@ -130,7 +130,7 @@ type BniVa struct {
 type BriVa struct {
 	// VaNumber : Custom VA Number, Length should be within 1 to 13.
 	// https://snap-docs.midtrans.com/#custom-virtual-account-number
-	VaNumber string `json:"va_number"`
+	VaNumber string `json:"va_number,omitempty"`
 }
 
 // PermataVa : Permata Virtual Account is a virtual payment method offered by Bank Permata.
@@ -138,18 +138,18 @@ type BriVa struct {
 type PermataVa struct {
 	// VaNumber : Custom VA Number, Length should be 10. Only supported for b2b transactions.
 	// https://snap-docs.midtrans.com/#custom-virtual-account-number
-	VaNumber      string `json:"va_number"`
-	RecipientName string `json:"recipient_name"`
+	VaNumber      string `json:"va_number,omitempty"`
+	RecipientName string `json:"recipient_name,omitempty"`
 }
 
 // GopayDetails : Represent gopay detail
 type GopayDetails struct {
 	// EnableCallback : Enable redirect back to merchant from GoJek apps. Default: false
-	EnableCallback bool `json:"enable_callback"`
+	EnableCallback bool `json:"enable_callback,omitempty"`
 
 	// CallbackUrl : Determine where should customer be redirected from GoJek apps.
 	// It supports both HTTP and deeplink. Default: same value as finish url
-	CallbackUrl string `json:"callback_url"`
+	CallbackUrl string `json:"callback_url,omitempty"`
 }
 
 // ShopeePayDetails : Represent shopeepay detail
@@ -162,9 +162,9 @@ type ShopeePayDetails struct {
 
 // Cstore : Cstore object is for PaymentTypeAlfamart free text
 type Cstore struct {
-	AlfamartFreeText1 string `json:"alfamart_free_text_1"`
-	AlfamartFreeText2 string `json:"alfamart_free_text_2"`
-	AlfamartFreeText3 string `json:"alfamart_free_text_3"`
+	AlfamartFreeText1 string `json:"alfamart_free_text_1,omitempty"`
+	AlfamartFreeText2 string `json:"alfamart_free_text_2,omitempty"`
+	AlfamartFreeText3 string `json:"alfamart_free_text_3,omitempty"`
 }
 
 // ExpiryDetails : Represent SNAP expiry details
@@ -178,4 +178,10 @@ type ExpiryDetails struct {
 
 	// Duration Expiry duration
 	Duration int64 `json:"duration"`
+}
+
+// Callbacks : Redirect URL after transaction is successfully paid (Overriden by JS callback).
+// Can also be set via Snap Settings menu in your dashboard.
+type Callbacks struct {
+	Finish string `json:"finish,omitempty"`
 }
