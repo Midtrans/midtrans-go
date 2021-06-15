@@ -227,7 +227,7 @@ func GenerateSnapReq() *snap.Request {
 > from Options object on the client, [check the usage detail on how to configure options here](README.md#3-advance-usage)
 
 #### Alternative, perform Core API Charge with Map type
-Snap client have `...WithMap` function, which is useful if you want to send custom JSON payload that the type/struct is not defined in this module. Refer to file `sample.go` in folder [Core API simple sample](example/simple/snap/sample.go).
+Snap client have `...WithMap` function, which is useful if you want to send custom JSON payload that the type/struct is not defined in this module. Refer to file `sample.go` in folder [Snap API simple sample](example/simple/snap/sample.go).
 
 ### 2.4 CoreApi
 Available methods for `CoreApi`
