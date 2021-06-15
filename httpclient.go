@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -123,22 +124,6 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 	logHttpHeaders(c.Logger, rawResponse.Header, false)
 	c.Logger.Debug("Response Body: %v", string(rawResponse.RawBody))
 
-	if res.StatusCode >= 400 && res.StatusCode != 407 {
-		return &Error{
-			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", res.Status, string(resBody)),
-			StatusCode:     res.StatusCode,
-			RawApiResponse: rawResponse,
-		}
-	} else if res.StatusCode >= 400 {
-		return &Error{
-			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", res.Status, string(resBody)),
-			StatusCode:     res.StatusCode,
-			RawApiResponse: rawResponse,
-			RawError:       err,
-		}
-
-	}
-
 	if result != nil {
 		if err = json.Unmarshal(resBody, &result); err != nil {
 			return &Error{
@@ -149,6 +134,29 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 			}
 		}
 	}
+
+	// Check status_code from Midtrans response body
+	if found, data := HasOwnProperty("status_code", resBody); found {
+		statusCode, _ := strconv.Atoi(data["status_code"].(string))
+		if statusCode >= 401 && statusCode != 407 {
+			return &Error{
+				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", res.Status, string(resBody)),
+				StatusCode:     statusCode,
+				RawApiResponse: rawResponse,
+			}
+		}
+	}
+
+	// Check StatusCode from Midtrans HTTP response api StatusCode
+	if res.StatusCode >= 400 {
+		return &Error{
+			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", res.Status, string(resBody)),
+			StatusCode:     res.StatusCode,
+			RawApiResponse: rawResponse,
+			RawError:       err,
+		}
+	}
+
 	return nil
 }
 
@@ -194,5 +202,16 @@ func logHttpHeaders(log LoggerInterface, header http.Header, isReq bool) {
 				}
 			}
 		}
+	}
+}
+
+//HasOwnProperty : Convert HTTP raw response body to map and check if the body has own field
+func HasOwnProperty(key string, body []byte) (bool, map[string]interface{}) {
+	d := make(map[string]interface{})
+	_ = json.Unmarshal(body, &d)
+	if _, found := d[key].(string); found {
+		return found, d
+	} else {
+		return found, d
 	}
 }
