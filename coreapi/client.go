@@ -53,7 +53,7 @@ func (c Client) ChargeTransactionWithMap(req *ChargeReqWithMap) (ResponseWithMap
 		bytes.NewBuffer(jsonReq),
 		&resp)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -78,7 +78,7 @@ func (c Client) ChargeTransaction(req *ChargeReq) (*ChargeResponse, *midtrans.Er
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -102,7 +102,7 @@ func (c Client) CardToken(cardNumber string, expMonth int, expYear int, cvv stri
 	err := c.HttpClient.Call(http.MethodGet, URL, nil, c.Options, nil, resp)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -128,7 +128,7 @@ func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, cvv s
 	err := c.HttpClient.Call(http.MethodGet, URL, nil, c.Options, nil, resp)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -154,7 +154,7 @@ func (c Client) CardPointInquiry(cardToken string) (*CardTokenResponse, *midtran
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -179,7 +179,7 @@ func (c Client) GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -204,7 +204,7 @@ func (c Client) CheckTransaction(param string) (*TransactionStatusResponse, *mid
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -229,7 +229,7 @@ func (c Client) ApproveTransaction(param string) (*ApproveResponse, *midtrans.Er
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -254,7 +254,7 @@ func (c Client) DenyTransaction(param string) (*DenyResponse, *midtrans.Error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -279,7 +279,7 @@ func (c Client) CancelTransaction(param string) (*CancelResponse, *midtrans.Erro
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -304,7 +304,7 @@ func (c Client) ExpireTransaction(param string) (*ExpireResponse, *midtrans.Erro
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -331,7 +331,7 @@ func (c Client) RefundTransaction(param string, req *RefundReq) (*RefundResponse
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -359,7 +359,7 @@ func (c Client) DirectRefundTransaction(param string, req *RefundReq) (*RefundRe
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -387,7 +387,7 @@ func (c Client) CaptureTransaction(req *CaptureReq) (*CaptureResponse, *midtrans
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -413,7 +413,7 @@ func (c Client) GetStatusB2B(param string) (*TransactionStatusB2bResponse, *midt
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }

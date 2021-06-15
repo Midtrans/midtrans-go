@@ -42,7 +42,7 @@ func (c Client) CreateBeneficiaries(req Beneficiaries) (*BeneficiariesResponse, 
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -62,7 +62,7 @@ func (c Client) UpdateBeneficiaries(aliasName string, req Beneficiaries) (*Benef
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -81,7 +81,7 @@ func (c Client) GetBeneficiaries() ([]Beneficiaries, *midtrans.Error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -101,7 +101,7 @@ func (c Client) CreatePayout(req CreatePayoutReq) (*CreatePayoutResponse, *midtr
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -121,7 +121,7 @@ func (c Client) ApprovePayout(req ApprovePayoutReq) (*ApprovePayoutResponse, *mi
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -140,7 +140,7 @@ func (c Client) RejectPayout(req RejectPayoutReq) (*RejectPayoutResponse, *midtr
 		resp)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -163,7 +163,7 @@ func (c Client) GetPayoutDetails(referenceNo string) (*PayoutDetailResponse, *mi
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -181,7 +181,7 @@ func (c Client) GetTransactionHistory(fromDate string, toDate string) ([]Transac
 		&resp,
 	)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	return resp, nil
@@ -200,7 +200,7 @@ func (c Client) GetTopUpChannels() ([]TopUpAccountResponse, *midtrans.Error) {
 		&resp,
 	)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	return resp, nil
@@ -220,7 +220,7 @@ func (c Client) GetBalance() (*BalanceResponse, *midtrans.Error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -238,7 +238,7 @@ func (c Client) GetListBankAccount() ([]BankAccountResponse, *midtrans.Error) {
 		&resp,
 	)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	return resp, nil
@@ -258,7 +258,7 @@ func (c Client) GetFacilitatorBalance(accountId string) (*BalanceResponse, *midt
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -275,7 +275,7 @@ func (c Client) GetBeneficiaryBanks() (*ListBeneficiaryBankResponse, *midtrans.E
 		&resp,
 	)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
@@ -293,7 +293,7 @@ func (c Client) ValidateBankAccount(bankName string, accountNo string) (*BankAcc
 	)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	return resp, nil
 }
