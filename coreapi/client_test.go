@@ -165,15 +165,17 @@ func TestCardTokenFailure(t *testing.T) {
 }
 
 func TestChargeTransactionNilParam(t *testing.T) {
+	midtrans.ServerKey = sandboxServerKey
 	_, err := ChargeTransaction(nil)
 	assert.Equal(t, err.GetStatusCode(), 500)
-	assert.Contains(t, err.GetMessage(), "Midtrans API is returning API error. HTTP status code: 500 Internal Server Error API response:")
+	assert.Contains(t, err.GetMessage(), "Midtrans API is returning API error.")
 }
 
 func TestChargeTransactionWithMapNilParam(t *testing.T) {
+	midtrans.ServerKey = sandboxServerKey
 	_, err := ChargeTransactionWithMap(nil)
 	assert.Equal(t, err.GetStatusCode(), 500)
-	assert.Contains(t, err.GetMessage(), "Midtrans API is returning API error. HTTP status code: 500 Internal Server Error API response:")
+	assert.Contains(t, err.GetMessage(), "Midtrans API is returning API error.")
 }
 
 func TestChargeWrongServerKey(t *testing.T) {
@@ -193,13 +195,13 @@ func TestRefundTransaction(t *testing.T)  {
 		Reason:    "Out of stock",
 	}
 	midtrans.ServerKey = sandboxServerKey
-	res1, _ := RefundTransaction("DUMMY", refundReq)
-	assert.Equal(t, res1.StatusCode, "404")
+	_, err1 := RefundTransaction("DUMMY", refundReq)
+	assert.Equal(t, err1.StatusCode, 404)
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	res2, _ := c.RefundTransaction("DUMMY", refundReq)
-	assert.Equal(t, res2.StatusCode, "404")
+	_, err2 := c.RefundTransaction("DUMMY", refundReq)
+	assert.Equal(t, err2.StatusCode, 404)
 }
 
 func TestDirectRefundTransaction(t *testing.T)  {
@@ -220,22 +222,22 @@ func TestDirectRefundTransaction(t *testing.T)  {
 
 func TestCheckTransaction(t *testing.T) {
 	midtrans.ServerKey = sandboxServerKey
-	res1, _ := CheckTransaction("DUMMY")
-	assert.Equal(t, res1.StatusCode, "404")
+	_, err := CheckTransaction("DUMMY")
+	assert.Equal(t, err.GetStatusCode(), 404)
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	res2, _ := c.CheckTransaction("DUMMY")
-	assert.Equal(t, res2.StatusCode, "404")
+	_, err2 := c.CheckTransaction("DUMMY")
+	assert.Equal(t, err2.StatusCode, 404)
 }
 
 func TestGetStatusB2B(t *testing.T) {
 	midtrans.ServerKey = sandboxServerKey
-	res1, _ := GetStatusB2B("DUMMY")
-	assert.Equal(t, res1.StatusCode, "404")
+	_, err1 := GetStatusB2B("DUMMY")
+	assert.Equal(t, err1.StatusCode, 404)
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	res2, _ := GetStatusB2B("DUMMY")
-	assert.Equal(t, res2.StatusCode, "404")
+	_, err2 := GetStatusB2B("DUMMY")
+	assert.Equal(t, err2.StatusCode, 404)
 }
