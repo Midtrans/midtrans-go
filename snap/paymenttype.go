@@ -72,7 +72,6 @@ const (
 
 	// PaymentTypeAlfamart : alfamart
 	PaymentTypeAlfamart SnapPaymentType = "alfamart"
-
 )
 
 // AllSnapPaymentType : Get All available SnapPaymentType

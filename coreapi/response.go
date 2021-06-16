@@ -194,21 +194,21 @@ type BinResponse struct {
 }
 
 type CreateSubscriptionResponse struct {
-	ID                string                   `json:"id"`
-	Name              string                   `json:"name"`
-	Amount            string                   `json:"amount"`
-	Currency          string                   `json:"currency"`
-	CreatedAt         string                   `json:"created_at"`
-	Schedule          ScheduleResponse         `json:"schedule"`
-	Status            string                   `json:"status"`
-	Token             string                   `json:"token"`
-	PaymentType       string                   `json:"payment_type"`
-	Metadata          interface{}              `json:"metadata"`
-	CustomerDetails   midtrans.CustomerDetails `json:"customer_details"`
-	TransactionId     []string                 `json:"transaction_id"`
+	ID              string                   `json:"id"`
+	Name            string                   `json:"name"`
+	Amount          string                   `json:"amount"`
+	Currency        string                   `json:"currency"`
+	CreatedAt       string                   `json:"created_at"`
+	Schedule        ScheduleResponse         `json:"schedule"`
+	Status          string                   `json:"status"`
+	Token           string                   `json:"token"`
+	PaymentType     string                   `json:"payment_type"`
+	Metadata        interface{}              `json:"metadata"`
+	CustomerDetails midtrans.CustomerDetails `json:"customer_details"`
+	TransactionId   []string                 `json:"transaction_id"`
 
-	StatusMessage     string                   `json:"status_message"`
-	ValidationMessage []string                 `json:"validation_message"`
+	StatusMessage     string   `json:"status_message"`
+	ValidationMessage []string `json:"validation_message"`
 }
 
 type StatusSubscriptionResponse = CreateSubscriptionResponse

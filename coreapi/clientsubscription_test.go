@@ -15,7 +15,7 @@ var subs Client
 var subscriptionId string
 var subscriptionName string
 
-func initiateMidtransSubs()  {
+func initiateMidtransSubs() {
 	midtrans.ServerKey = sandboxServerKey
 	midtrans.ClientKey = sandboxClientKey
 
@@ -24,23 +24,23 @@ func initiateMidtransSubs()  {
 
 func TestCreateSubscription(t *testing.T) {
 	initiateMidtransSubs()
-	subscriptionName = "MidGoSubTest-"+timestamp()
+	subscriptionName = "MidGoSubTest-" + timestamp()
 	req := &SubscriptionReq{
 		Name:        subscriptionName,
 		Amount:      100000,
 		Currency:    "IDR",
 		PaymentType: PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule:        Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
+		Schedule: Schedule{
+			Interval:     1,
+			IntervalUnit: "month",
+			MaxInterval:  12,
 		},
 		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
+			FName: "MidtransGo",
+			LName: "SubscriptionTest",
+			Email: "mid-go@mainlesia.com",
+			Phone: "081234567",
 		},
 	}
 
@@ -106,16 +106,16 @@ func TestUpdateSubscription(t *testing.T) {
 		Currency:    "IDR",
 		PaymentType: PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule:        Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
+		Schedule: Schedule{
+			Interval:     1,
+			IntervalUnit: "month",
+			MaxInterval:  12,
 		},
 		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
+			FName: "MidtransGo",
+			LName: "SubscriptionTest",
+			Email: "mid-go@mainlesia.com",
+			Phone: "081234567",
 		},
 	}
 	resp, err := subs.UpdateSubscription(subscriptionId, reqUpdate)
@@ -128,4 +128,3 @@ func TestUpdateSubscription(t *testing.T) {
 		assert.Equal(t, resp.StatusMessage, "Subscription is updated.")
 	}
 }
-

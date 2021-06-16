@@ -149,7 +149,7 @@ func TestCreateAndRejectPayout(t *testing.T) {
 	assert.Equal(t, approveResp.Status, "ok")
 }
 
-func TestPayoutHistory(t *testing.T)  {
+func TestPayoutHistory(t *testing.T) {
 	fromDate, toDate := generateDate()
 
 	iris := Client{}
@@ -159,8 +159,7 @@ func TestPayoutHistory(t *testing.T)  {
 	assert.NotNil(t, resp)
 }
 
-
-func TestGetTopUpChannels(t *testing.T)  {
+func TestGetTopUpChannels(t *testing.T) {
 	iris := Client{}
 	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
 	resp, err := iris.GetTopUpChannels()
@@ -168,7 +167,7 @@ func TestGetTopUpChannels(t *testing.T)  {
 	assert.NotNil(t, resp)
 }
 
-func TestGetListBeneficiaryBank(t *testing.T)  {
+func TestGetListBeneficiaryBank(t *testing.T) {
 	iris := Client{}
 	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
 	resp, err := iris.GetBeneficiaryBanks()
@@ -176,8 +175,7 @@ func TestGetListBeneficiaryBank(t *testing.T)  {
 	assert.NotNil(t, resp)
 }
 
-
-func TestValidateBankAccount(t *testing.T)  {
+func TestValidateBankAccount(t *testing.T) {
 	iris := Client{}
 	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
 	resp, err := iris.ValidateBankAccount("danamon", "000001137298")

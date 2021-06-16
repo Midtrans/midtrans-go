@@ -6,6 +6,7 @@ import (
 	"github.com/midtrans/midtrans-go/example"
 	"log"
 )
+
 var c coreapi.Client
 var subscriptionName string
 var subscriptionId string
@@ -20,23 +21,23 @@ func main() {
 }
 
 func CreateSubscription() {
-	subscriptionName = "MidGoSubTest-"+ example.Random()
+	subscriptionName = "MidGoSubTest-" + example.Random()
 	req := &coreapi.SubscriptionReq{
 		Name:        subscriptionName,
 		Amount:      100000,
 		Currency:    "IDR",
 		PaymentType: coreapi.PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule:        coreapi.Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
+		Schedule: coreapi.Schedule{
+			Interval:     1,
+			IntervalUnit: "month",
+			MaxInterval:  12,
 		},
 		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
+			FName: "MidtransGo",
+			LName: "SubscriptionTest",
+			Email: "mid-go@mainlesia.com",
+			Phone: "081234567",
 		},
 	}
 
@@ -92,16 +93,16 @@ func UpdateSubscription() {
 		Currency:    "IDR",
 		PaymentType: coreapi.PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule:    coreapi.Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
+		Schedule: coreapi.Schedule{
+			Interval:     1,
+			IntervalUnit: "month",
+			MaxInterval:  12,
 		},
 		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
+			FName: "MidtransGo",
+			LName: "SubscriptionTest",
+			Email: "mid-go@mainlesia.com",
+			Phone: "081234567",
 		},
 	}
 	resp, err := c.UpdateSubscription(subscriptionId, reqUpdate)

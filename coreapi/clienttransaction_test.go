@@ -61,10 +61,10 @@ func TestExpireTransaction(t *testing.T) {
 	assert.Equal(t, err2.StatusCode, 404)
 }
 
-func TestRefundTransaction(t *testing.T)  {
+func TestRefundTransaction(t *testing.T) {
 	refundReq := &RefundReq{
-		Amount:    10000,
-		Reason:    "Out of stock",
+		Amount: 10000,
+		Reason: "Out of stock",
 	}
 	midtrans.ServerKey = sandboxServerKey
 	_, err1 := RefundTransaction("DUMMY", refundReq)
@@ -76,7 +76,7 @@ func TestRefundTransaction(t *testing.T)  {
 	assert.Equal(t, err2.StatusCode, 404)
 }
 
-func TestDirectRefundTransaction(t *testing.T)  {
+func TestDirectRefundTransaction(t *testing.T) {
 	refundReq := &RefundReq{
 		RefundKey: "ORDER-ID-UNIQUE-ID",
 		Amount:    10000,

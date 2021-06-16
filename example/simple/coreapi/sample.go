@@ -44,7 +44,7 @@ func chargeTransactionWithMap() {
 }
 
 func getCardToken() string {
-	midtrans.ClientKey  = example.SandboxClientKey2
+	midtrans.ClientKey = example.SandboxClientKey2
 	resp, err := coreapi.CardToken("4105058689481467", 12, 2021, "123")
 	if err != nil {
 		fmt.Println("Error get card token", err.GetMessage())
