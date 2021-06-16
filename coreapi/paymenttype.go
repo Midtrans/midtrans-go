@@ -1,6 +1,7 @@
 package coreapi
 
 type CoreapiPaymentType string
+type SubscriptionPaymentType = CoreapiPaymentType
 
 const (
 	// PaymentTypeBankTransfer : bank_transfer
@@ -44,4 +45,8 @@ const (
 
 	// PaymentTypeMandiriClickpay : mandiri_clickpay
 	PaymentTypeMandiriClickpay CoreapiPaymentType = "mandiri_clickpay"
+
+	CreditCardPaymentTypeSubs SubscriptionPaymentType = "credit_card"
+
+	GopayPaymentTypeSubs SubscriptionPaymentType = "gopay"
 )
