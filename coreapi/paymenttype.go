@@ -1,6 +1,7 @@
 package coreapi
 
 type CoreapiPaymentType string
+type SubscriptionPaymentType = CoreapiPaymentType
 
 const (
 	// PaymentTypeBankTransfer : bank_transfer

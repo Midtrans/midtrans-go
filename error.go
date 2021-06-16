@@ -1,14 +1,14 @@
 package midtrans
 
 type Error struct {
-	Message string
-	StatusCode int
-	RawError error
+	Message        string
+	StatusCode     int
+	RawError       error
 	RawApiResponse *ApiResponse
 }
 
 // GetMessage this get general message error when call api
-func (e *Error) GetMessage() string  {
+func (e *Error) GetMessage() string {
 	return e.Message
 }
 

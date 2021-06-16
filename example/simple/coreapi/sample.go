@@ -44,7 +44,7 @@ func chargeTransactionWithMap() {
 }
 
 func getCardToken() string {
-	midtrans.ClientKey  = example.SandboxClientKey2
+	midtrans.ClientKey = example.SandboxClientKey2
 	resp, err := coreapi.CardToken("4105058689481467", 12, 2021, "123")
 	if err != nil {
 		fmt.Println("Error get card token", err.GetMessage())
@@ -147,6 +147,7 @@ func main() {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{\n    \"masked_card\": \"451111-1117\",\n    \"bank\": \"bca\",\n    \"eci\": \"06\",\n    \"channel_response_code\": \"7\",\n    \"channel_response_message\": \"Denied\",\n    \"transaction_time\": \"2021-06-08 15:49:54\",\n    \"gross_amount\": \"100000.00\",\n    \"currency\": \"IDR\",\n      \"payment_type\": \"credit_card\",\n    \"signature_key\": \"76fe68ed1b7040c7c329356c1cd47819be3ccb8b056376ff3488bfa9af1db52a85ded0501b2dab1de56e5852982133a9ef7a47c54222abbe72288c2c4f591a71\",\n    \"status_code\": \"202\",\n    \"transaction_id\": \"36f3687e-05d4-4879-a428-fd6d1ffb786e\",\n    \"transaction_status\": \"deny\",\n    \"fraud_status\": \"challenge\",\n    \"status_message\": \"Success, transaction is found\",\n    \"merchant_id\": \"G812785002\",\n    \"card_type\": \"credit\"\n}"))
 	notification(w, r)
+
 }
 
 // notification : Midtrans-Go simple sample HTTP Notification handling

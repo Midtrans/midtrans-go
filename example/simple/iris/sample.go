@@ -13,7 +13,7 @@ import (
 var irisCreator iris.Client
 var irisApprover iris.Client
 
-func setupIrisGateway()  {
+func setupIrisGateway() {
 	irisCreator.New(example.IrisCreatorKeySandbox, midtrans.Sandbox)
 	irisApprover.New(example.IrisApproverKeySandbox, midtrans.Sandbox)
 }
@@ -79,7 +79,7 @@ func createPayout() []iris.CreatePayoutDetailResponse {
 
 func GetPayoutDetails(refNo string) {
 	payoutReps, _ := irisCreator.GetPayoutDetails(refNo)
-	fmt.Println("Iris Payout details",payoutReps)
+	fmt.Println("Iris Payout details", payoutReps)
 }
 
 func CreateAndApprovePayout() {
@@ -112,30 +112,27 @@ func CreateAndRejectPayout() {
 	fmt.Println("Iris reject payout resp: ", approveResp)
 }
 
-func PayoutHistory()  {
+func PayoutHistory() {
 	fromDate, toDate := generateDate()
 
 	resp, _ := irisApprover.GetTransactionHistory(fromDate, toDate)
 	fmt.Println("Iris Payout history: ", resp)
 }
 
-
-func GetTopUpChannels()  {
+func GetTopUpChannels() {
 	resp, _ := irisApprover.GetTopUpChannels()
 	fmt.Println("Iris TopUp Channels resp: ", resp)
 }
 
-func GetListBeneficiaryBank()  {
+func GetListBeneficiaryBank() {
 	resp, _ := irisApprover.GetBeneficiaryBanks()
 	fmt.Println("Iris Beneficiary Banks Resp: ", resp)
 }
 
-
-func ValidateBankAccount()  {
+func ValidateBankAccount() {
 	resp, _ := irisApprover.ValidateBankAccount("danamon", "000001137298")
 	fmt.Println("Validate Bank Account Resp: ", resp)
 }
-
 
 func main() {
 	setupIrisGateway()
@@ -181,5 +178,3 @@ func mockBeneficiaries() iris.Beneficiaries {
 		Email:     "midgo" + random + "@mail.com",
 	}
 }
-
-

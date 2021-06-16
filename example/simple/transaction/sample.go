@@ -9,11 +9,11 @@ import (
 
 var c coreapi.Client
 
-func initiateCoreApiClient()  {
+func initiateCoreApiClient() {
 	c.New(example.SandboxServerKey1, midtrans.Sandbox)
 }
 
-func CheckTransaction()  {
+func CheckTransaction() {
 	res, err := c.CheckTransaction("YOUR-ORDER-ID_or_TRANSACTION-ID")
 	if err != nil {
 		// do something on error handle
@@ -61,7 +61,7 @@ func ExpireTransaction() {
 	fmt.Println("Response: ", res)
 }
 
-func CaptureTransaction()  {
+func CaptureTransaction() {
 	refundRequest := &coreapi.CaptureReq{
 		TransactionID: "TRANSACTION-ID",
 		GrossAmt:      10000,
@@ -73,11 +73,10 @@ func CaptureTransaction()  {
 	fmt.Println("Response: ", res)
 }
 
-
 func RefundTransaction() {
 	refundRequest := &coreapi.RefundReq{
-		Amount:    5000,
-		Reason:    "Item out of stock",
+		Amount: 5000,
+		Reason: "Item out of stock",
 	}
 
 	res, err := c.RefundTransaction("YOUR_ORDER_ID_or_TRANSACTION_ID", refundRequest)

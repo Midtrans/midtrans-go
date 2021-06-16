@@ -1,5 +1,7 @@
 package coreapi
 
+import "github.com/midtrans/midtrans-go"
+
 type ResponseWithMap map[string]interface{}
 
 // VANumber : bank virtual account number
@@ -189,4 +191,42 @@ type BinResponse struct {
 		BankCode             string `json:"bank_code"`
 		Bank                 string `json:"bank"`
 	} `json:"data"`
+}
+
+type CreateSubscriptionResponse struct {
+	ID              string                   `json:"id"`
+	Name            string                   `json:"name"`
+	Amount          string                   `json:"amount"`
+	Currency        string                   `json:"currency"`
+	CreatedAt       string                   `json:"created_at"`
+	Schedule        ScheduleResponse         `json:"schedule"`
+	Status          string                   `json:"status"`
+	Token           string                   `json:"token"`
+	PaymentType     string                   `json:"payment_type"`
+	Metadata        interface{}              `json:"metadata"`
+	CustomerDetails midtrans.CustomerDetails `json:"customer_details"`
+	TransactionId   []string                 `json:"transaction_id"`
+
+	StatusMessage     string   `json:"status_message"`
+	ValidationMessage []string `json:"validation_message"`
+}
+
+type StatusSubscriptionResponse = CreateSubscriptionResponse
+
+type UpdateSubscriptionResponse struct {
+	StatusMessage string `json:"status_message"`
+}
+
+type EnableSubscriptionResponse = UpdateSubscriptionResponse
+type DisableSubscriptionResponse = UpdateSubscriptionResponse
+
+//ScheduleResponse Subscription schedule response object
+type ScheduleResponse struct {
+	Interval            int    `json:"interval"`
+	IntervalUnit        string `json:"interval_unit"`
+	MaxInterval         int    `json:"max_interval"`
+	CurrentInterval     int    `json:"current_interval"`
+	StartTime           string `json:"start_time"`
+	PreviousExecutionAt string `json:"previous_execution_at"`
+	NextExecutionAt     string `json:"next_execution_at"`
 }
