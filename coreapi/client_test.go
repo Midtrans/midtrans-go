@@ -3,6 +3,7 @@ package coreapi
 import (
 	"github.com/midtrans/midtrans-go"
 	assert "github.com/stretchr/testify/require"
+	"log"
 	"testing"
 	"time"
 )
@@ -189,55 +190,124 @@ func TestChargeWrongServerKey(t *testing.T) {
 	assert.Equal(t, err.GetStatusCode(), 401)
 }
 
-func TestRefundTransaction(t *testing.T)  {
-	refundReq := &RefundReq{
-		Amount:    10000,
-		Reason:    "Out of stock",
+/*
+This is subscription API integration test section
+*/
+var subs Client
+
+var subscriptionId string
+var subscriptionName string
+
+func initiateMidtransSubs()  {
+	midtrans.ServerKey = sandboxServerKey
+	midtrans.ClientKey = sandboxClientKey
+
+	subs.New(sandboxServerKey, midtrans.Sandbox)
+}
+
+func TestCreateSubscription(t *testing.T) {
+	initiateMidtransSubs()
+	subscriptionName = "MidGoSubTest-"+timestamp()
+	req := &SubscriptionReq{
+		Name:        subscriptionName,
+		Amount:      100000,
+		Currency:    "IDR",
+		PaymentType: CreditCardPaymentTypeSubs,
+		Token:       "DUMMY",
+		Schedule:        Schedule{
+			Interval:            1,
+			IntervalUnit:        "month",
+			MaxInterval:         12,
+		},
+		CustomerDetails: &midtrans.CustomerDetails{
+			FName:    "MidtransGo",
+			LName:    "SubscriptionTest",
+			Email:    "mid-go@mainlesia.com",
+			Phone:    "081234567",
+		},
 	}
-	midtrans.ServerKey = sandboxServerKey
-	_, err1 := RefundTransaction("DUMMY", refundReq)
-	assert.Equal(t, err1.StatusCode, 404)
 
-	c := Client{}
-	c.New(sandboxServerKey, midtrans.Sandbox)
-	_, err2 := c.RefundTransaction("DUMMY", refundReq)
-	assert.Equal(t, err2.StatusCode, 404)
-}
-
-func TestDirectRefundTransaction(t *testing.T)  {
-	refundReq := &RefundReq{
-		RefundKey: "ORDER-ID-UNIQUE-ID",
-		Amount:    10000,
-		Reason:    "Out of stock",
+	resp, err := subs.CreateSubscription(req)
+	if err != nil {
+		log.Println("Failure :")
+		log.Fatalln(err)
+	} else {
+		log.Println("Success :")
+		log.Println(resp)
+		assert.Equal(t, resp.Status, "active")
+		assert.NotEmpty(t, resp.ID)
+		subscriptionId = resp.ID
 	}
-	midtrans.ServerKey = sandboxServerKey
-	resp1, _ := DirectRefundTransaction("DUMMY", refundReq)
-	assert.Nil(t, resp1)
 
-	c := Client{}
-	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.DirectRefundTransaction("DUMMY", refundReq)
-	assert.Nil(t, resp2)
 }
 
-func TestCheckTransaction(t *testing.T) {
-	midtrans.ServerKey = sandboxServerKey
-	_, err := CheckTransaction("DUMMY")
-	assert.Equal(t, err.GetStatusCode(), 404)
-
-	c := Client{}
-	c.New(sandboxServerKey, midtrans.Sandbox)
-	_, err2 := c.CheckTransaction("DUMMY")
-	assert.Equal(t, err2.StatusCode, 404)
+func TestGetSubscription(t *testing.T) {
+	initiateMidtransSubs()
+	resp, err := subs.GetSubscription(subscriptionId)
+	if err != nil {
+		log.Println("Failure :")
+		log.Fatal(err)
+	} else {
+		log.Println("Success :")
+		log.Println(resp)
+		assert.Equal(t, resp.Status, "active")
+		assert.Equal(t, resp.StatusMessage, "")
+	}
 }
 
-func TestGetStatusB2B(t *testing.T) {
-	midtrans.ServerKey = sandboxServerKey
-	_, err1 := GetStatusB2B("DUMMY")
-	assert.Equal(t, err1.StatusCode, 404)
+func TestDisableSubscription(t *testing.T) {
+	initiateMidtransSubs()
+	resp, err := subs.DisableSubscription(subscriptionId)
+	if err != nil {
+		log.Println("Failure :")
+		log.Fatal(err)
+	} else {
+		log.Println("Success :")
+		log.Println(resp)
+		assert.Equal(t, resp.StatusMessage, "Subscription is updated.")
+	}
+}
 
-	c := Client{}
-	c.New(sandboxServerKey, midtrans.Sandbox)
-	_, err2 := GetStatusB2B("DUMMY")
-	assert.Equal(t, err2.StatusCode, 404)
+func TestEnableSubscription(t *testing.T) {
+	initiateMidtransSubs()
+	resp, err := subs.EnableSubscription(subscriptionId)
+	if err != nil {
+		log.Println("Failure :")
+		log.Fatal(err)
+	} else {
+		log.Println("Success :")
+		log.Println(resp)
+		assert.Equal(t, resp.StatusMessage, "Subscription is updated.")
+	}
+}
+
+func TestUpdateSubscription(t *testing.T) {
+	initiateMidtransSubs()
+	reqUpdate := &SubscriptionReq{
+		Name:        subscriptionName,
+		Amount:      50000,
+		Currency:    "IDR",
+		PaymentType: CreditCardPaymentTypeSubs,
+		Token:       "DUMMY",
+		Schedule:        Schedule{
+			Interval:            1,
+			IntervalUnit:        "month",
+			MaxInterval:         12,
+		},
+		CustomerDetails: &midtrans.CustomerDetails{
+			FName:    "MidtransGo",
+			LName:    "SubscriptionTest",
+			Email:    "mid-go@mainlesia.com",
+			Phone:    "081234567",
+		},
+	}
+	resp, err := subs.UpdateSubscription(subscriptionId, reqUpdate)
+	if err != nil {
+		log.Println("Failure :")
+		log.Fatal(err)
+	} else {
+		log.Println("Success :")
+		log.Println(resp)
+		assert.Equal(t, resp.StatusMessage, "Subscription is updated.")
+	}
 }
