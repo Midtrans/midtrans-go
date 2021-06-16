@@ -29,7 +29,7 @@ func TestCreateSubscription(t *testing.T) {
 		Name:        subscriptionName,
 		Amount:      100000,
 		Currency:    "IDR",
-		PaymentType: CreditCardPaymentTypeSubs,
+		PaymentType: PaymentTypeCreditCard,
 		Token:       "DUMMY",
 		Schedule:        Schedule{
 			Interval:            1,
@@ -104,7 +104,7 @@ func TestUpdateSubscription(t *testing.T) {
 		Name:        subscriptionName,
 		Amount:      50000,
 		Currency:    "IDR",
-		PaymentType: CreditCardPaymentTypeSubs,
+		PaymentType: PaymentTypeCreditCard,
 		Token:       "DUMMY",
 		Schedule:        Schedule{
 			Interval:            1,
