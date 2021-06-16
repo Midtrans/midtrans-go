@@ -7,7 +7,6 @@ import (
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/midtrans/midtrans-go/example"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -149,11 +148,6 @@ func main() {
 	r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{\n    \"masked_card\": \"451111-1117\",\n    \"bank\": \"bca\",\n    \"eci\": \"06\",\n    \"channel_response_code\": \"7\",\n    \"channel_response_message\": \"Denied\",\n    \"transaction_time\": \"2021-06-08 15:49:54\",\n    \"gross_amount\": \"100000.00\",\n    \"currency\": \"IDR\",\n      \"payment_type\": \"credit_card\",\n    \"signature_key\": \"76fe68ed1b7040c7c329356c1cd47819be3ccb8b056376ff3488bfa9af1db52a85ded0501b2dab1de56e5852982133a9ef7a47c54222abbe72288c2c4f591a71\",\n    \"status_code\": \"202\",\n    \"transaction_id\": \"36f3687e-05d4-4879-a428-fd6d1ffb786e\",\n    \"transaction_status\": \"deny\",\n    \"fraud_status\": \"challenge\",\n    \"status_message\": \"Success, transaction is found\",\n    \"merchant_id\": \"G812785002\",\n    \"card_type\": \"credit\"\n}"))
 	notification(w, r)
 
-	// 10. Subscription sample implementation
-	CreateSubscription()
-	DisableSubscription()
-	EnableSubscription()
-	UpdateSubscription()
 }
 
 // notification : Midtrans-Go simple sample HTTP Notification handling
@@ -203,102 +197,4 @@ func notification(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("ok"))
-}
-
-var subscriptionName string
-var subscriptionId string
-
-func CreateSubscription() {
-	subscriptionName = "MidGoSubTest-"+ example.Random()
-	req := &coreapi.SubscriptionReq{
-		Name:        subscriptionName,
-		Amount:      100000,
-		Currency:    "IDR",
-		PaymentType: coreapi.CreditCardPaymentTypeSubs,
-		Token:       "DUMMY",
-		Schedule:        coreapi.Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
-		},
-		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
-		},
-	}
-
-	resp, err := c.CreateSubscription(req)
-	if err != nil {
-		log.Println("Failure :")
-		log.Fatalln(err)
-	} else {
-		log.Println("Success :")
-		log.Println(resp)
-		subscriptionId = resp.ID
-	}
-
-}
-
-func GetSubscription() {
-	resp, err := c.GetSubscription(subscriptionId)
-	if err != nil {
-		log.Println("Failure :")
-		log.Fatal(err)
-	} else {
-		log.Println("Success :")
-		log.Println(resp)
-	}
-}
-
-func DisableSubscription() {
-	resp, err := c.DisableSubscription(subscriptionId)
-	if err != nil {
-		log.Println("Failure :")
-		log.Fatal(err)
-	} else {
-		log.Println("Success :")
-		log.Println(resp)
-	}
-}
-
-func EnableSubscription() {
-	resp, err := c.EnableSubscription(subscriptionId)
-	if err != nil {
-		log.Println("Failure :")
-		log.Fatal(err)
-	} else {
-		log.Println("Success :")
-		log.Println(resp)
-	}
-}
-
-func UpdateSubscription() {
-	reqUpdate := &coreapi.SubscriptionReq{
-		Name:        subscriptionName,
-		Amount:      50000,
-		Currency:    "IDR",
-		PaymentType: coreapi.CreditCardPaymentTypeSubs,
-		Token:       "DUMMY",
-		Schedule:    coreapi.Schedule{
-			Interval:            1,
-			IntervalUnit:        "month",
-			MaxInterval:         12,
-		},
-		CustomerDetails: &midtrans.CustomerDetails{
-			FName:    "MidtransGo",
-			LName:    "SubscriptionTest",
-			Email:    "mid-go@mainlesia.com",
-			Phone:    "081234567",
-		},
-	}
-	resp, err := c.UpdateSubscription(subscriptionId, reqUpdate)
-	if err != nil {
-		log.Println("Failure :")
-		log.Fatal(err)
-	} else {
-		log.Println("Success :")
-		log.Println(resp)
-	}
 }
