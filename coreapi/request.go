@@ -192,3 +192,55 @@ type RefundReq struct {
 	Amount    int64  `json:"amount"`
 	Reason    string `json:"reason"`
 }
+
+type SubscriptionReq struct {
+	// Name Subscription's name that will be used to generate transaction's order id.
+	// Note: Allowed symbols are dash(-), underscore(_), tilde (~), and dot (.)
+	Name string `json:"name"`
+
+	// Amount that will be used to make recurring charge. Note: Do not use decimal
+	Amount int64 `json:"amount"`
+
+	// Currency ISO-4217 representation for 3 digit alphabetic currency code. Note: Currently only support IDR
+	Currency string `json:"currency"`
+
+	// PaymentType Transaction payment method. Note: currently only support credit_card and gopay
+	PaymentType SubscriptionPaymentType `json:"payment_type"`
+
+	// Token Saved payment token. Note: For `credit_card` should use `saved_token_id` received in charge response.
+	// For gopay should use payment_options. token received in get pay account response
+	Token string `json:"token"`
+
+	// Schedule Subscription schedule details
+	Schedule Schedule `json:"schedule"`
+
+	// Metadata of subscription from merchant, the size must be less than 1KB
+	Metadata interface{} `json:"metadata,omitempty"`
+
+	// CustomerDetails Customer details information
+	CustomerDetails *midtrans.CustomerDetails `json:"customer_details,omitempty"`
+
+	// Gopay subscription information, required if payment type is gopay
+	Gopay *GopaySubscriptionDetails `json:"gopay,omitempty"`
+}
+
+type GopaySubscriptionDetails struct {
+	AccountId string `json:"account_id"` // Gopay Account ID from Core API
+}
+
+//Schedule Create Subscription schedule object
+type Schedule struct {
+	// Subscription's interval given by merchant
+	Interval int `json:"interval"`
+
+	// Interval temporal unit Note: currently only support day, week, and month
+	IntervalUnit string `json:"interval_unit"`
+
+	// MaxInterval Maximum interval of subscription. Subscription will end after maximum interval is reached
+	MaxInterval int `json:"max_interval"`
+
+	// StartTime Timestamp of subscription, format: yyyy-MM-dd HH:mm:ss Z. The value must be after the current time.
+	// If specified, first payment will happen on start_time. If start_time is not specified, the default value for
+	// start_time will be current time and first payment will happen on one interval after current time.
+	StartTime string `json:"start_time,omitempty"`
+}
