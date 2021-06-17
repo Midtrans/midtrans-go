@@ -1,4 +1,6 @@
 # Midtrans Go Library
+[![Go Report Card](https://goreportcard.com/badge/github.com/midtrans/midtrans-go)](https://goreportcard.com/report/github.com/midtrans/midtrans-go)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Midtrans :heart: Go !
 
@@ -600,6 +602,15 @@ midtrans.DefaultLoggerLevel = &midtrans.LoggerImplementation{LogLevel: midtrans.
 // LogError     : sets a logger to show error messages only.
 // LogInfo      : sets a logger to show information messages
 // LogDebug     : sets a logger to show informational messages for debugging
+```
+
+### 3.4 Override HTTP Client timeout
+By default, timeout value for HTTP Client 80 seconds. But you can override the HTTP client default config from global variable `midtrans.DefaultGoHttpClient`:
+```go
+t := 300 * time.Millisecond
+midtrans.DefaultGoHttpClient = &http.Client{
+	Timeout:       t,
+}
 ```
 
 ## 4. Handling Error
