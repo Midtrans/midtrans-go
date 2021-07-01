@@ -10,7 +10,7 @@ import (
 
 // LinkPaymentAccount : Do `/v2/pay/account` to link customer account to be used for specific payment channels
 // more detail refer to: https://api-docs.midtrans.com/#create-pay-account
-func (c Client) LinkPaymentAccount(req *PaymentAccount) (*PaymentAccountResponse, *midtrans.Error) {
+func (c Client) LinkPaymentAccount(req *PaymentAccountReq) (*PaymentAccountResponse, *midtrans.Error) {
 	resp := &PaymentAccountResponse{}
 	jsonReq, _ := json.Marshal(req)
 	err := c.HttpClient.Call(
@@ -28,7 +28,7 @@ func (c Client) LinkPaymentAccount(req *PaymentAccount) (*PaymentAccountResponse
 
 // LinkPaymentAccount : Do `/v2/pay/account/{account_id}` to link customer account to be used for specific payment channels
 // more detail refer to: https://api-docs.midtrans.com/#get-pay-account
-func LinkPaymentAccount(req *PaymentAccount) (*PaymentAccountResponse, *midtrans.Error) {
+func LinkPaymentAccount(req *PaymentAccountReq) (*PaymentAccountResponse, *midtrans.Error) {
 	return getDefaultClient().LinkPaymentAccount(req)
 }
 
