@@ -233,31 +233,31 @@ type ScheduleResponse struct {
 }
 
 type PaymentAccountResponse struct {
-	StatusCode             string   `json:"status_code"`
-	PaymentType            string   `json:"payment_type"`
-	AccountId              string   `json:"account_id"`
-	AccountStatus          string   `json:"account_status"`
-	ChannelResponseCode    string   `json:"channel_response_code"`
-	ChannelResponseMessage string   `json:"channel_response_message"`
-	Action                 Action   `json:"action"`
-	Metadata               Metadata `json:"metadata"`
-	StatusMessage          string   `json:"status_message"`
-	ID                     string   `json:"id"`
+	StatusCode             string                        `json:"status_code"`
+	PaymentType            string                        `json:"payment_type"`
+	AccountId              string                        `json:"account_id"`
+	AccountStatus          string                        `json:"account_status"`
+	ChannelResponseCode    string                        `json:"channel_response_code"`
+	ChannelResponseMessage string                        `json:"channel_response_message"`
+	Action                 Action                        `json:"action"`
+	Metadata               PaymentAccountMetadataDetails `json:"metadata"`
+	StatusMessage          string                        `json:"status_message"`
+	ID                     string                        `json:"id"`
 }
 
-type Metadata struct {
-	PaymentOptions []PaymentOptions `json:"payment_options"`
+type PaymentAccountMetadataDetails struct {
+	PaymentOptions []PaymentOptionsDetails `json:"payment_options"`
 }
 
-type PaymentOptions struct {
-	Name     string      `json:"name"`
-	Active   bool        `json:"active"`
-	Metadata interface{} `json:"metadata"`
-	Balance  Balance     `json:"balance"`
-	Token    string      `json:"token"`
+type PaymentOptionsDetails struct {
+	Name     string         `json:"name"`
+	Active   bool           `json:"active"`
+	Metadata interface{}    `json:"metadata"`
+	Balance  BalanceDetails `json:"balance"`
+	Token    string         `json:"token"`
 }
 
-type Balance struct {
+type BalanceDetails struct {
 	Value    string `json:"value"`
 	Currency string `json:"currency"`
 }
