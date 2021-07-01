@@ -46,13 +46,13 @@ func createPayload(orderId string, paymentType CoreapiPaymentType, cardToken str
 
 func TestRegisterCard(t *testing.T) {
 	midtrans.ClientKey = sandboxClientKey
-	resp1, _ := RegisterCard(sampleCardNumber, 12, 2021, "123")
+	resp1, _ := RegisterCard(sampleCardNumber, 12, 2021)
 	assert.Equal(t, resp1.StatusCode, "200")
 	assert.Equal(t, resp1.MaskCard, "481111-1114")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2021, "123", sandboxClientKey)
+	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2021, sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "200")
 	assert.Equal(t, resp2.MaskCard, "410505-1467")
 }
@@ -138,14 +138,14 @@ func TestCardPointInquiry(t *testing.T) {
 // Failure test case
 func TestRegisterCardFailure(t *testing.T) {
 	midtrans.ClientKey = sandboxClientKey
-	resp1, _ := RegisterCard(sampleCardNumber, 12, 2020, "123")
+	resp1, _ := RegisterCard(sampleCardNumber, 12, 2020)
 
 	assert.Equal(t, resp1.StatusCode, "400")
 	assert.Equal(t, resp1.StatusMessage, "One or more parameters in the payload is invalid.")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2020, "123", sandboxClientKey)
+	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2020, sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "400")
 	assert.Equal(t, resp2.StatusMessage, "One or more parameters in the payload is invalid.")
 }

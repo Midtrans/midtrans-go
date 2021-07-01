@@ -115,6 +115,7 @@ type TransactionStatusResponse struct {
 	CustomField2           string          `json:"custom_field2"`
 	CustomField3           string          `json:"custom_field3"`
 	Metadata               interface{}     `json:"metadata"`
+	PaymentOptionsType     string          `json:"payment_options_type"`
 }
 
 type TransactionStatusB2bResponse struct {
@@ -229,4 +230,34 @@ type ScheduleResponse struct {
 	StartTime           string `json:"start_time"`
 	PreviousExecutionAt string `json:"previous_execution_at"`
 	NextExecutionAt     string `json:"next_execution_at"`
+}
+
+type PaymentAccountResponse struct {
+	StatusCode             string                        `json:"status_code"`
+	PaymentType            string                        `json:"payment_type"`
+	AccountId              string                        `json:"account_id"`
+	AccountStatus          string                        `json:"account_status"`
+	ChannelResponseCode    string                        `json:"channel_response_code"`
+	ChannelResponseMessage string                        `json:"channel_response_message"`
+	Action                 Action                        `json:"action"`
+	Metadata               PaymentAccountMetadataDetails `json:"metadata"`
+	StatusMessage          string                        `json:"status_message"`
+	ID                     string                        `json:"id"`
+}
+
+type PaymentAccountMetadataDetails struct {
+	PaymentOptions []PaymentOptionsDetails `json:"payment_options"`
+}
+
+type PaymentOptionsDetails struct {
+	Name     string         `json:"name"`
+	Active   bool           `json:"active"`
+	Metadata interface{}    `json:"metadata"`
+	Balance  BalanceDetails `json:"balance"`
+	Token    string         `json:"token"`
+}
+
+type BalanceDetails struct {
+	Value    string `json:"value"`
+	Currency string `json:"currency"`
 }

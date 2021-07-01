@@ -116,13 +116,12 @@ func CardToken(cardNumber string, expMonth int, expYear int, cvv string) (*CardT
 
 // RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.CardRegisterResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#register-card
-func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, cvv string, clientKey string) (*CardRegisterResponse, *midtrans.Error) {
+func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, clientKey string) (*CardRegisterResponse, *midtrans.Error) {
 	resp := &CardRegisterResponse{}
 	URL := c.Env.BaseUrl() +
 		"/v2/card/register?card_number=" + cardNumber +
 		"&card_exp_month=" + strconv.Itoa(expMonth) +
 		"&card_exp_year=" + strconv.Itoa(expYear) +
-		"&card_cvv=" + cvv +
 		"&client_key=" + clientKey
 
 	err := c.HttpClient.Call(http.MethodGet, URL, nil, c.Options, nil, resp)
@@ -135,9 +134,9 @@ func (c Client) RegisterCard(cardNumber string, expMonth int, expYear int, cvv s
 
 // RegisterCard : Do `/card/register` API request to Midtrans Core API return `coreapi.CardRegisterResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#register-card
-func RegisterCard(cardNumber string, expMonth int, expYear int, cvv string) (*CardRegisterResponse, *midtrans.Error) {
+func RegisterCard(cardNumber string, expMonth int, expYear int) (*CardRegisterResponse, *midtrans.Error) {
 	c := getDefaultClient()
-	return c.RegisterCard(cardNumber, expMonth, expYear, cvv, c.ClientKey)
+	return c.RegisterCard(cardNumber, expMonth, expYear, c.ClientKey)
 }
 
 // CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.CardTokenResponse`,

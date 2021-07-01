@@ -157,8 +157,12 @@ type ConvStoreDetails struct {
 
 // GopayDetails : Represent gopay detail
 type GopayDetails struct {
-	EnableCallback bool   `json:"enable_callback,omitempty"`
-	CallbackUrl    string `json:"callback_url,omitempty"`
+	EnableCallback     bool   `json:"enable_callback,omitempty"`      // To determine appending callback url in the deeplink. Default value: false
+	CallbackUrl        string `json:"callback_url,omitempty"`         // To determine where GO-JEK apps will redirect after successful payment. Can be HTTP or deeplink url. Default value: callback_url in dashboard settings
+	AccountID          string `json:"account_id,omitempty"`           // Required for GoPay tokenization. Linked customer account ID from create pay account API.
+	PaymentOptionToken string `json:"payment_option_token,omitempty"` // Required for GoPay tokenization. Token to specify the payment option made by the customer from get pay account API metadata.
+	PreAuth            bool   `json:"pre_auth,omitempty"`             // To make payment mode into reservation of customer balance only. Once, customer balance is reserved, a subsequent capture call is expected to be initiated by merchants.
+	Recurring          bool   `json:"recurring,omitempty"`
 }
 
 // ShopeePayDetails : Represent shopeepay detail
@@ -212,7 +216,7 @@ type SubscriptionReq struct {
 	Token string `json:"token"`
 
 	// Schedule Subscription schedule details
-	Schedule Schedule `json:"schedule"`
+	Schedule ScheduleDetails `json:"schedule"`
 
 	// Metadata of subscription from merchant, the size must be less than 1KB
 	Metadata interface{} `json:"metadata,omitempty"`
@@ -228,8 +232,8 @@ type GopaySubscriptionDetails struct {
 	AccountId string `json:"account_id"` // Gopay Account ID from Core API
 }
 
-//Schedule Create Subscription schedule object
-type Schedule struct {
+//ScheduleDetails Create Subscription schedule object
+type ScheduleDetails struct {
 	// Subscription's interval given by merchant
 	Interval int `json:"interval"`
 
@@ -243,4 +247,15 @@ type Schedule struct {
 	// If specified, first payment will happen on start_time. If start_time is not specified, the default value for
 	// start_time will be current time and first payment will happen on one interval after current time.
 	StartTime string `json:"start_time,omitempty"`
+}
+
+type PaymentAccountReq struct {
+	PaymentType  CoreapiPaymentType   `json:"payment_type"`  // Payment channel where the account register to
+	GopayPartner *GopayPartnerDetails `json:"gopay_partner"` // GoPay linking specific parameters
+}
+
+type GopayPartnerDetails struct {
+	PhoneNumber string `json:"phone_number"`           // Phone number linked to the customer account
+	CountryCode string `json:"country_code"`           // Country code associated to the phone number
+	RedirectURL string `json:"redirect_url,omitempty"` // URL where user will be redirected to after finishing the confirmation on Gojek app
 }

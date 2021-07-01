@@ -18,6 +18,7 @@ func main() {
 	DisableSubscription()
 	EnableSubscription()
 	UpdateSubscription()
+	GetSubscription()
 }
 
 func CreateSubscription() {
@@ -28,7 +29,7 @@ func CreateSubscription() {
 		Currency:    "IDR",
 		PaymentType: coreapi.PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule: coreapi.Schedule{
+		Schedule: coreapi.ScheduleDetails{
 			Interval:     1,
 			IntervalUnit: "month",
 			MaxInterval:  12,
@@ -93,7 +94,7 @@ func UpdateSubscription() {
 		Currency:    "IDR",
 		PaymentType: coreapi.PaymentTypeCreditCard,
 		Token:       "DUMMY",
-		Schedule: coreapi.Schedule{
+		Schedule: coreapi.ScheduleDetails{
 			Interval:     1,
 			IntervalUnit: "month",
 			MaxInterval:  12,

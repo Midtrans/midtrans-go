@@ -55,7 +55,7 @@ func getCardToken() string {
 
 func registerCard() {
 	midtrans.ClientKey = example.SandboxClientKey2
-	resp, err := coreapi.RegisterCard("4811111111111114", 12, 2021, "123")
+	resp, err := coreapi.RegisterCard("4811111111111114", 12, 2021)
 	if err != nil {
 		fmt.Println("Error register card token", err.GetMessage())
 	}

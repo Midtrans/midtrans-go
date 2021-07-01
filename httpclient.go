@@ -140,7 +140,7 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 		statusCode, _ := strconv.Atoi(data["status_code"].(string))
 		if statusCode >= 401 && statusCode != 407 {
 			return &Error{
-				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", res.Status, string(resBody)),
+				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody)),
 				StatusCode:     statusCode,
 				RawApiResponse: rawResponse,
 			}
@@ -150,7 +150,7 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 	// Check StatusCode from Midtrans HTTP response api StatusCode
 	if res.StatusCode >= 400 {
 		return &Error{
-			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", res.Status, string(resBody)),
+			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
 			StatusCode:     res.StatusCode,
 			RawApiResponse: rawResponse,
 			RawError:       err,
