@@ -22,10 +22,10 @@ func initiateMidtransTokenization() {
 	subs.New(sandboxServerKey, midtrans.Sandbox)
 }
 
-func paymentAccount(phoneNumber string) *PaymentAccount {
-	return &PaymentAccount{
+func paymentAccount(phoneNumber string) *PaymentAccountReq {
+	return &PaymentAccountReq{
 		PaymentType:  PaymentTypeGopay,
-		GopayPartner: &GopayPartner{
+		GopayPartner: &GopayPartnerDetails{
 			PhoneNumber: phoneNumber,
 			CountryCode: "62",
 			RedirectURL: "https://midtrans.com/",

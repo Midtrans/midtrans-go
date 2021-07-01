@@ -12,10 +12,10 @@ var accountId string
 var accountIdActive = "18631af2-542a-435c-848f-3bc63cbd221c"
 var paymentOptionToken string
 
-func paymentAccount(phoneNumber string) *coreapi.PaymentAccount {
-	return &coreapi.PaymentAccount{
+func paymentAccount(phoneNumber string) *coreapi.PaymentAccountReq {
+	return &coreapi.PaymentAccountReq{
 		PaymentType: coreapi.PaymentTypeGopay,
-		GopayPartner: &coreapi.GopayPartner{
+		GopayPartner: &coreapi.GopayPartnerDetails{
 			PhoneNumber: phoneNumber,
 			CountryCode: "62",
 			RedirectURL: "https://midtrans.com/",
