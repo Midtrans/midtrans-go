@@ -216,7 +216,7 @@ type SubscriptionReq struct {
 	Token string `json:"token"`
 
 	// Schedule Subscription schedule details
-	Schedule Schedule `json:"schedule"`
+	Schedule ScheduleDetails `json:"schedule"`
 
 	// Metadata of subscription from merchant, the size must be less than 1KB
 	Metadata interface{} `json:"metadata,omitempty"`
@@ -232,8 +232,8 @@ type GopaySubscriptionDetails struct {
 	AccountId string `json:"account_id"` // Gopay Account ID from Core API
 }
 
-//Schedule Create Subscription schedule object
-type Schedule struct {
+//ScheduleDetails Create Subscription schedule object
+type ScheduleDetails struct {
 	// Subscription's interval given by merchant
 	Interval int `json:"interval"`
 
@@ -249,12 +249,12 @@ type Schedule struct {
 	StartTime string `json:"start_time,omitempty"`
 }
 
-type PaymentAccount struct {
-	PaymentType  CoreapiPaymentType `json:"payment_type"`  // Payment channel where the account register to
-	GopayPartner *GopayPartner      `json:"gopay_partner"` // GoPay linking specific parameters
+type PaymentAccountReq struct {
+	PaymentType  CoreapiPaymentType   `json:"payment_type"`  // Payment channel where the account register to
+	GopayPartner *GopayPartnerDetails `json:"gopay_partner"` // GoPay linking specific parameters
 }
 
-type GopayPartner struct {
+type GopayPartnerDetails struct {
 	PhoneNumber string `json:"phone_number"`           // Phone number linked to the customer account
 	CountryCode string `json:"country_code"`           // Country code associated to the phone number
 	RedirectURL string `json:"redirect_url,omitempty"` // URL where user will be redirected to after finishing the confirmation on Gojek app
