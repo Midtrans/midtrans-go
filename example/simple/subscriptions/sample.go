@@ -18,6 +18,7 @@ func main() {
 	DisableSubscription()
 	EnableSubscription()
 	UpdateSubscription()
+	GetSubscription()
 }
 
 func CreateSubscription() {
