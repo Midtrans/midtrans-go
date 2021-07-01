@@ -19,7 +19,7 @@ func (c Client) CreateSubscription(req *SubscriptionReq) (*CreateSubscriptionRes
 		&c.ServerKey,
 		c.Options,
 		bytes.NewBuffer(jsonReq),
-		&resp)
+		resp)
 	if err != nil {
 		return resp, err
 	}
@@ -40,7 +40,7 @@ func (c Client) GetSubscription(subscriptionId string) (*StatusSubscriptionRespo
 		http.MethodGet,
 		fmt.Sprintf("%s/v1/subscriptions/%s", c.Env.BaseUrl(), subscriptionId),
 		&c.ServerKey,
-		nil,
+		c.Options,
 		nil,
 		resp,
 	)
@@ -65,7 +65,7 @@ func (c Client) DisableSubscription(subscriptionId string) (*DisableSubscription
 		http.MethodPost,
 		fmt.Sprintf("%s/v1/subscriptions/%s/disable", c.Env.BaseUrl(), subscriptionId),
 		&c.ServerKey,
-		nil,
+		c.Options,
 		nil,
 		resp,
 	)
@@ -90,7 +90,7 @@ func (c Client) EnableSubscription(subscriptionId string) (*EnableSubscriptionRe
 		http.MethodPost,
 		fmt.Sprintf("%s/v1/subscriptions/%s/enable", c.Env.BaseUrl(), subscriptionId),
 		&c.ServerKey,
-		nil,
+		c.Options,
 		nil,
 		resp,
 	)
@@ -118,7 +118,7 @@ func (c Client) UpdateSubscription(subscriptionId string, req *SubscriptionReq) 
 		&c.ServerKey,
 		c.Options,
 		bytes.NewBuffer(jsonReq),
-		&resp)
+		resp)
 	if err != nil {
 		return resp, err
 	}
