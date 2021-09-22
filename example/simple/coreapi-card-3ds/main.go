@@ -15,16 +15,16 @@ import (
 )
 
 // Set Your server key
-// can find in Merchant Portal -> Settings -> Access keys
-const SERVER_KEY string = ""
-const CLIENT_KEY string = ""
+// You can find it in Merchant Portal -> Settings -> Access keys
+const SERVER_KEY string = "SB-Mid-server-1isH_dlGSg6uy.I7NpeNK53i"
+const CLIENT_KEY string = "SB-Mid-client-yrY4WjUNOnhOyIIH"
 
-type TokenAndAuth struct {
+type CardTokenAndAuthRequest struct {
     TokenID string `json:"token_id"`
     Secure bool    `json:"authenticate_3ds"`
 }
 
-type StatusTransaction struct {
+type StatusTransactionRequest struct {
     TransactionID string `json:"transaction_id"`
 }
 
@@ -34,12 +34,14 @@ func main() {
     mux.HandleFunc("/charge_core_api_ajax", ChargeAjaxHandler)
     mux.HandleFunc("/check_transaction_status", StatusAjaxHandler)
 
-    log.Println("Starting web on port 8080")
-    err := http.ListenAndServe(":8080", mux)
+    log.Println("Starting web on port 3000")
+    err := http.ListenAndServe(":3000", mux)
     log.Fatal(err)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
+
+    fmt.Println(generateOrderIdSuffix)
     if r.URL.Path != "/" {
         http.NotFound(w, r)
         return
@@ -70,8 +72,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ChargeAjaxHandler(w http.ResponseWriter, r *http.Request) {
-    var data TokenAndAuth
-    err := json.NewDecoder(r.Body).Decode(&data)
+    var requestBody CardTokenAndAuthRequest
+    err := json.NewDecoder(r.Body).Decode(&requestBody)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
@@ -83,12 +85,12 @@ func ChargeAjaxHandler(w http.ResponseWriter, r *http.Request) {
     chargeReq := &coreapi.ChargeReq{
         PaymentType: coreapi.PaymentTypeCreditCard,
         TransactionDetails: midtrans.TransactionDetails{
-            OrderID:  "MID-GO-TEST-" + Random(),
+            OrderID:  "MID-GO-TEST-" + generateOrderIdSuffix(),
             GrossAmt: 200000,
         },
         CreditCard: &coreapi.CreditCardDetails{
-            TokenID:        data.TokenID,
-            Authentication: data.Secure,
+            TokenID:        requestBody.TokenID,
+            Authentication: requestBody.Secure,
         },
         Items: &[]midtrans.ItemDetails{
             midtrans.ItemDetails{
@@ -108,8 +110,8 @@ func ChargeAjaxHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StatusAjaxHandler(w http.ResponseWriter, r *http.Request) {
-    var data StatusTransaction
-    err := json.NewDecoder(r.Body).Decode(&data)
+    var requestBody StatusTransactionRequest
+    err := json.NewDecoder(r.Body).Decode(&requestBody)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
@@ -117,14 +119,13 @@ func StatusAjaxHandler(w http.ResponseWriter, r *http.Request) {
 
     var c = coreapi.Client{}
     c.New(SERVER_KEY, midtrans.Sandbox)
-    res, _ := c.CheckTransaction(data.TransactionID)
+    res, _ := c.CheckTransaction(requestBody.TransactionID)
     response, _ := json.Marshal(res)
 
     w.Header().Set("Content-Type", "application/json")
     w.Write(response)
 }
 
-func Random() string {
-    time.Sleep(500 * time.Millisecond)
+func generateOrderIdSuffix() string {
     return strconv.FormatInt(time.Now().Unix(), 10)
 }
