@@ -178,7 +178,7 @@ func TestGetListBeneficiaryBank(t *testing.T) {
 func TestValidateBankAccount(t *testing.T) {
 	iris := Client{}
 	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := iris.ValidateBankAccount("danamon", "000001137298")
+	resp, err := iris.ValidateBankAccount("mandiri", "1111222233333")
 	assert.Nil(t, err)
-	assert.Equal(t, resp.AccountNo, "000001137298")
+	assert.Equal(t, resp.AccountNo, "1111222233333")
 }
