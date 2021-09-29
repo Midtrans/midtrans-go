@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/picomodal/3.0.0/picoModal.js"></script>
+</head>
+<body>
+    <!-- non-relevant, logic only used for demo/example purpose -->
+    {{if .needCredential}}
+    <code><h4>Please set your server key and client key from sandbox In file: main.go</h4>
+    // Set Your server key
+    // You can find it in Merchant Portal -> Settings -> Access keys
+    <br>SERVER_KEY = ""
+    <br>CLIENT_KEY = ""
+    </code>
+    {{end}}
+    <h1>Checkout</h1>
+    <form action="#" method="POST" id="payment-form">
+        <fieldset>
+            <legend>Checkout</legend>
+            <small><strong>Field that may be presented to customer:</strong></small>
+            <p>
+                <label>Card Number</label>
+                <input class="card-number" value="4811 1111 1111 1114" size="23" type="text" autocomplete="off" />
+            </p>
+            <p>
+                <label>Expiration (MM/YYYY)</label>
+                <input class="card-expiry-month" value="12" placeholder="MM" size="2" type="text" />
+                <span> / </span>
+                <input class="card-expiry-year" value="2025" placeholder="YYYY" size="4" type="text" />
+            </p>
+            <p>
+                <label>CVV</label>
+                <input class="card-cvv" value="123" size="4" type="password" autocomplete="off" />
+            </p>
+
+            <small><strong>Fields that shouldn't be presented to the customer:</strong></small>
+            <p>
+                <label>3D Secure</label>
+                <input class="authenticate_3ds" type="checkbox" name="authenticate_3ds" value="true" checked>
+            </p>
+
+            <input id="token_id" name="token_id" type="hidden" />
+            <button class="submit-button" type="submit">Submit Payment</button>
+        </fieldset>
+    </form>
+
+    <code>
+        <b>Transaction Result:</b>
+        <pre id="result"> Awaiting transactions... </pre>
+        <b>Transaction verified status result:</b>
+        <pre id="status-result"> Awaiting transactions... </pre>
+        <pre>
+          <b>Testing cards:</b>
+
+          <b>For 3D Secure:</b>
+          Visa success              4811 1111 1111 1114
+          Visa deny by bank         4711 1111 1111 1115
+          Visa deny by FDS          4611 1111 1111 1116
+
+          MasterCard success        5211 1111 1111 1117
+          MasterCard deny by bank   5111 1111 1111 1118
+          MasterCard deny by FDS    5411 1111 1111 1115
+
+          Challenge by FDS          4511 1111 1111 1117 
+      </pre>
+    </code>
+
+    <hr>
+    <small>Check `main.go` file, func `ChargeAjaxHandler` for the backend implementation</small>
+
+    <!-- Import MidtransNew3ds library -->
+    <!-- TODO change data-environment to `production` for Production mode -->
+    <!-- TODO change data-client-key to your production client key for Production mode -->
+    <script id= "midtrans-script" src="https://api.midtrans.com/v2/assets/js/midtrans-new-3ds.min.js" data-environment="sandbox" data-client-key="{{ .clientKey }}" type="text/javascript"></script>
+
+    <!-- Javascript for token generation -->
+    <script type="text/javascript">
+        // open the console log to check the flow
+        // 3ds new flow:
+        // 1. get token_id
+        // 2. send token_id to backend
+        // 3. initial charge from backend to midtrans api
+        // 4. open redirect_url
+
+        // On Submit button clicked
+        document.querySelector(".submit-button").onclick = function (event) {
+            console.log("SUBMIT button clicked");
+            // prepare cardData
+            var cardData = {
+                "card_number": document.querySelector(".card-number").value,
+                "card_exp_month": document.querySelector(".card-expiry-month").value,
+                "card_exp_year": document.querySelector(".card-expiry-year").value,
+                "card_cvv": document.querySelector(".card-cvv").value,
+            };
+
+            console.log('[1] Use card data to get card token on the callback');
+            MidtransNew3ds.getCardToken(cardData, getCardTokenCallback);
+            event.preventDefault(); return false;
+        };
+
+        // getCardTokenCallback triggered when `MidtransNew3ds.getCardToken` completed.
+        var getCardTokenCallback = {
+            onSuccess: function(response){
+                // success to get card token
+                // send token_id, secure params
+                // we send secure param for sample, in production, you should define transaction is secure/not in backend
+                // we recommend always use secure=true
+                console.log('[2] Send AJAX to let backend charge the card using the card token_id');
+                fetch("/charge_core_api_ajax", {
+                    method : "POST",
+                    body: JSON.stringify({ 
+                        "token_id" : response.token_id,
+                        "authenticate_3ds" : document.querySelector('.authenticate_3ds').checked
+                    }),
+                    headers: {'Content-Type': 'application/json'},
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(responseObj) {
+                    console.log('[3] response charge from backend:', responseObj);
+                    if (responseObj.status_code == "201"){
+                        console.log('[3.1] Transaction need 3DS authentication');
+                        MidtransNew3ds.authenticate(responseObj.redirect_url, callback3dsAuthentication);
+                    } else {
+                        // Transaction do not need 3DS Authentication, transaction is complete with result
+                        transactionComplete(responseObj);
+                    }
+                })
+            },
+            onFailure: function(response){
+                console.log(response);
+                alert(response.status_message)
+                transactionComplete(response);
+            }
+        }
+
+        var callback3dsAuthentication = {
+            performAuthentication: function(redirect_url){
+                // [3.2] 3ds authentication redirect_url received, open iframe to display to customer
+                popupModal.openPopup(redirect_url);
+            },
+                // [3.3] When 3DS authentication result received, which contains transaction result
+                // it will trigger one of function below, according to status: success/failure/pending
+            onSuccess: function(response){
+                transactionComplete(response);
+            },
+            onFailure: function(response){
+                transactionComplete(response);
+            },
+            onPending: function(response){
+                transactionComplete(response);
+            }
+        }
+
+        function transactionComplete(responseObj){
+            // Close 3DS popup, then display the result (for example)
+            console.log("transactionComplete with status: ",responseObj);
+            popupModal.closePopup();
+
+            document.querySelector("#result").innerText = JSON.stringify(responseObj, null, 2);
+            document.querySelector("#result").scrollIntoView();
+            
+            if (responseObj.transaction_id){
+                // [4] Inform the result to backend update DB status and verify to Midtrans
+                // Check backend implementation on `web.js` file, section `[4]`
+                fetch('/check_transaction_status', {
+                    method : "POST",
+                    body: JSON.stringify({ "transaction_id" : responseObj.transaction_id }),
+                    headers: {'Content-Type': 'application/json'},
+                })
+                .then(function(statusResponse) { return statusResponse.json(); } )
+                .then(function(statusResponseObj) {
+                    // Transaction status received after being verified
+                    console.log("Check transaction response:",statusResponseObj);
+                    // transactionComplete(statusResponseObj);
+                    document.querySelector("#status-result").innerText = 
+                    JSON.stringify(statusResponseObj, null, 2);
+                })
+            }
+        }
+
+        // helper functions below
+        let popupModal = (function(){
+            let modal = null;
+            return {
+                openPopup(url){
+                    modal = picoModal({
+                        content:'<iframe frameborder="0" style="height:90vh; width:100%;" src="'+url+'"></iframe>',
+                        width: "75%", 
+                        closeButton: false, 
+                        overlayClose: false,
+                        escCloses: false
+                    }).show();
+                },
+                closePopup(){
+                    try{
+                        modal.close();
+                    } catch(e) {}
+                }
+            }
+        }());
+    </script>
+</body>
+</html>
