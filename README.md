@@ -631,6 +631,7 @@ There are:
 - [Core Api examples](example/simple/coreapi/sample.go)
 - [Snap examples](example/simple/snap/sample.go)
 - [Iris examples](example/simple/iris/sample.go)
+- [Readme Example](example/README.md)
 
 Integration test are available
 - [CoreApi Sample Functional Test](coreapi/client_test.go)

@@ -3,15 +3,16 @@
 package main
 
 import (
-    "html/template"
-    "net/http"
-    "log"
-    "path"
-    "time"
-    "strconv"
+    "encoding/json"
+    "fmt"
     "github.com/midtrans/midtrans-go"
     "github.com/midtrans/midtrans-go/coreapi"
-    "encoding/json"
+    "html/template"
+    "log"
+    "net/http"
+    "path"
+    "strconv"
+    "time"
 )
 
 // Set Your server key
@@ -48,7 +49,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     needCredential := false
-    if(len(SERVER_KEY) == 0 || len(CLIENT_KEY) == 0 ){
+    if len(SERVER_KEY) == 0 || len(CLIENT_KEY) == 0 {
         needCredential = true
     }
 

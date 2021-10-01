@@ -29,7 +29,7 @@ type BeneficiaryBankResponse struct {
 type CreatePayoutResponse struct {
 	Payouts      []CreatePayoutDetailResponse `json:"payouts"`
 	ErrorMessage string                       `json:"error_message"`
-	Errors       []string                     `json:"errors"`
+	Errors       interface{}                  `json:"errors"`
 }
 
 // CreatePayoutDetailResponse : Represent Create payout detail response payload

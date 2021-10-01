@@ -178,7 +178,38 @@ func TestGetListBeneficiaryBank(t *testing.T) {
 func TestValidateBankAccount(t *testing.T) {
 	iris := Client{}
 	iris.New(irisApproverKeySandbox, midtrans.Sandbox)
-	resp, err := iris.ValidateBankAccount("danamon", "000001137298")
+	resp, err := iris.ValidateBankAccount("mandiri", "1111222233333")
 	assert.Nil(t, err)
-	assert.Equal(t, resp.AccountNo, "000001137298")
+	assert.Equal(t, resp.AccountNo, "1111222233333")
+}
+
+func TestCreatePayoutFail(t *testing.T)  {
+	iris := Client{}
+	iris.New(irisCreatorKeySandbox, midtrans.Sandbox)
+
+	p1 := CreatePayoutDetailReq{
+		BeneficiaryAccount: "1380011819286",
+		BeneficiaryBank:    "mandiri",
+		BeneficiaryEmail:   "tony.stark@mail.com",
+		Amount:             random(),
+		Notes:              "MidGoUnitTest",
+	}
+
+	p2 := CreatePayoutDetailReq{
+		BeneficiaryAccount: "1380011819286",
+		BeneficiaryBank:    "mandiri",
+		BeneficiaryEmail:   "jon.snow@mail.com",
+		Amount:             random(),
+		Notes:              "MidGoUnitTest",
+	}
+	var payouts []CreatePayoutDetailReq
+	payouts = append(payouts, p1)
+	payouts = append(payouts, p2)
+
+
+	cp := CreatePayoutReq{Payouts: payouts}
+	payoutReps, err := iris.CreatePayout(cp)
+	assert.NotNil(t, payoutReps)
+	assert.NotNil(t, err)
+	assert.Equal(t, "An error occurred when creating payouts", payoutReps.ErrorMessage)
 }

@@ -97,66 +97,78 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 	res, err := c.HttpClient.Do(req)
 	if err != nil {
 		c.Logger.Error("Cannot send request: %v", err.Error())
+		var statusCode int
+
+		if res != nil {
+			statusCode = res.StatusCode
+		} else if strings.Contains(err.Error(), "timeout") {
+			statusCode = 408
+		} else {
+			statusCode = 0
+		}
+
 		return &Error{
 			Message:    fmt.Sprintf("Error when request via HttpClient, Cannot send request with error: %s", err.Error()),
-			StatusCode: res.StatusCode,
+			StatusCode: statusCode,
 			RawError:   err,
 		}
 	}
 
-	defer res.Body.Close()
+	if res != nil {
+		defer res.Body.Close()
 
-	c.Logger.Info("================== END ==================")
-	c.Logger.Info("Request completed in %v ", time.Since(start))
+		c.Logger.Info("================== END ==================")
+		c.Logger.Info("Request completed in %v ", time.Since(start))
 
-	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		c.Logger.Error("Request failed: %v", err)
-		return &Error{
-			Message:    "Cannot read response body: " + err.Error(),
-			StatusCode: res.StatusCode,
-		}
-	}
-
-	rawResponse := newHTTPResponse(res, resBody)
-	c.Logger.Debug("=============== Response ===============")
-	// Loop through headers to perform log
-	logHttpHeaders(c.Logger, rawResponse.Header, false)
-	c.Logger.Debug("Response Body: %v", string(rawResponse.RawBody))
-
-	if result != nil {
-		if err = json.Unmarshal(resBody, &result); err != nil {
+		resBody, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			c.Logger.Error("Request failed: %v", err)
 			return &Error{
-				Message:        fmt.Sprintf("Invalid body response, parse error during API request to Midtrans with message: %s", err.Error()),
+				Message:    "Cannot read response body: " + err.Error(),
+				StatusCode: res.StatusCode,
+				RawError: err,
+			}
+		}
+
+		rawResponse := newHTTPResponse(res, resBody)
+		c.Logger.Debug("=============== Response ===============")
+		// Loop through headers to perform log
+		logHttpHeaders(c.Logger, rawResponse.Header, false)
+		c.Logger.Debug("Response Body: %v", string(rawResponse.RawBody))
+
+		if result != nil {
+			if err = json.Unmarshal(resBody, &result); err != nil {
+				return &Error{
+					Message:        fmt.Sprintf("Invalid body response, parse error during API request to Midtrans with message: %s", err.Error()),
+					StatusCode:     res.StatusCode,
+					RawError:       err,
+					RawApiResponse: rawResponse,
+				}
+			}
+		}
+
+		// Check status_code from Midtrans response body
+		if found, data := HasOwnProperty("status_code", resBody); found {
+			statusCode, _ := strconv.Atoi(data["status_code"].(string))
+			if statusCode >= 401 && statusCode != 407 {
+				return &Error{
+					Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody)),
+					StatusCode:     statusCode,
+					RawApiResponse: rawResponse,
+				}
+			}
+		}
+
+		// Check StatusCode from Midtrans HTTP response api StatusCode
+		if res.StatusCode >= 400 {
+			return &Error{
+				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
 				StatusCode:     res.StatusCode,
+				RawApiResponse: rawResponse,
 				RawError:       err,
-				RawApiResponse: rawResponse,
 			}
 		}
 	}
-
-	// Check status_code from Midtrans response body
-	if found, data := HasOwnProperty("status_code", resBody); found {
-		statusCode, _ := strconv.Atoi(data["status_code"].(string))
-		if statusCode >= 401 && statusCode != 407 {
-			return &Error{
-				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody)),
-				StatusCode:     statusCode,
-				RawApiResponse: rawResponse,
-			}
-		}
-	}
-
-	// Check StatusCode from Midtrans HTTP response api StatusCode
-	if res.StatusCode >= 400 {
-		return &Error{
-			Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
-			StatusCode:     res.StatusCode,
-			RawApiResponse: rawResponse,
-			RawError:       err,
-		}
-	}
-
 	return nil
 }
 
