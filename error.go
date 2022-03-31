@@ -7,6 +7,15 @@ type Error struct {
 	RawApiResponse *ApiResponse
 }
 
+// Error returns error message.
+// To comply midtrans.Error with Go error interface.
+func (e *Error) Error() string {
+	if e.RawError != nil {
+		return e.RawError.Error()
+	}
+	return e.Message
+}
+
 // GetMessage this get general message error when call api
 func (e *Error) GetMessage() string {
 	return e.Message
