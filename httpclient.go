@@ -2,6 +2,7 @@ package midtrans
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -151,9 +152,11 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 		if found, data := HasOwnProperty("status_code", resBody); found {
 			statusCode, _ := strconv.Atoi(data["status_code"].(string))
 			if statusCode >= 401 && statusCode != 407 {
+				errMessage := fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody))
 				return &Error{
-					Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody)),
+					Message:        errMessage,
 					StatusCode:     statusCode,
+					RawError: 		errors.New(errMessage),
 					RawApiResponse: rawResponse,
 				}
 			}
@@ -161,9 +164,11 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 
 		// Check StatusCode from Midtrans HTTP response api StatusCode
 		if res.StatusCode >= 400 {
+			errMessage := fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody))
 			return &Error{
-				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
+				Message:        errMessage,
 				StatusCode:     res.StatusCode,
+				RawError:       errors.New(errMessage),
 				RawApiResponse: rawResponse,
 			}
 		}
