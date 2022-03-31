@@ -67,16 +67,16 @@ func (c *HttpClientImplementation) Call(method string, url string, apiKey *strin
 				Message: "The API Key (ServerKey/IrisApiKey) is invalid, as it is an empty string. Please double-check your API key. " +
 					"You can check from the Midtrans Dashboard. " +
 					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-					"for the details or contact support at support@midtrans.com if you have any questions.",
+					"for the details.",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
 		} else if strings.Contains(key, " ") {
 			err := &Error{
-				Message: "The API Key (ServerKey/IrisApiKey) is contains white-space. Please double-check your API key. " +
+				Message: "The API Key (ServerKey/IrisApiKey) contains white-space. Please double-check your API key. " +
 					"You can check the ServerKey from the Midtrans Dashboard. " +
 					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-					"for the details or contact support at support@midtrans.com if you have any questions.",
+					"for the details.",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
@@ -165,7 +165,6 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
 				StatusCode:     res.StatusCode,
 				RawApiResponse: rawResponse,
-				RawError:       err,
 			}
 		}
 	}
