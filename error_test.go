@@ -29,6 +29,8 @@ func TestErrorResponse(t *testing.T) {
 	jsonReq, _ := json.Marshal("{\"transaction_details\": {\"order_id\": \"TEST-1648108994111\", \"gross_amount\": 10000}}")
 	err := c.Call(http.MethodPost, "https://app.midtrans.com/snap/v1/transactions", &serverKey, nil, bytes.NewBuffer(jsonReq), nil)
 
+	var midErr = err.Unwrap()
+	assert.True(t, true, errors.Is(err, midErr))
 	assert.Error(t, err)
 	assert.Equal(t, 401, err.StatusCode)
 	assert.Equal(t, "app.midtrans.com", err.RawApiResponse.Request.Host)
