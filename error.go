@@ -15,6 +15,10 @@ func (e *Error) Error() string {
 	}
 	return e.Message
 }
+// Unwrap method that returns its contained error
+func (e *Error) Unwrap() error {
+	return e.RawError
+}
 
 // GetMessage this get general message error when call api
 func (e *Error) GetMessage() string {
