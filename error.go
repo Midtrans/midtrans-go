@@ -1,5 +1,7 @@
 package midtrans
 
+import "fmt"
+
 type Error struct {
 	Message        string
 	StatusCode     int
@@ -11,11 +13,13 @@ type Error struct {
 // To comply midtrans.Error with Go error interface.
 func (e *Error) Error() string {
 	if e.RawError != nil {
-		return e.RawError.Error()
+		return fmt.Sprintf("%s: %s", e.Message, e.RawError.Error())
 	}
 	return e.Message
 }
+
 // Unwrap method that returns its contained error
+// if there is RawError supplied during error creation, return RawError. Else, will return nil
 func (e *Error) Unwrap() error {
 	return e.RawError
 }
