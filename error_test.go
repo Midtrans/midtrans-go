@@ -27,7 +27,7 @@ func TestErrorStruct(t *testing.T) {
 }
 
 func TestErrorResponse(t *testing.T) {
-	serverKey := "dummy "
+	serverKey := "dummy"
 	c := GetHttpClient(Environment)
 	jsonReq, _ := json.Marshal("{\"transaction_details\": {\"order_id\": \"TEST-1648108994111\", \"gross_amount\": 10000}}")
 	err := c.Call(http.MethodPost, "https://app.midtrans.com/snap/v1/transactions", &serverKey, nil, bytes.NewBuffer(jsonReq), nil)
