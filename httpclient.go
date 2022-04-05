@@ -64,24 +64,20 @@ func (c *HttpClientImplementation) Call(method string, url string, apiKey *strin
 	if apiKey != nil {
 		key := *apiKey
 		if key == "" {
-			errMessage := "The API Key (ServerKey/IrisApiKey) is invalid, as it is an empty string. Please double-check your API key. " +
-				"You can check from the Midtrans Dashboard. " +
-				"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-				"for the details or please contact us via https://midtrans.com/contact-us. "
 			err := &Error{
-				Message: errMessage,
-				RawError: errors.New(errMessage),
+				Message: "The API Key (ServerKey/IrisApiKey) is invalid, as it is an empty string. Please double-check your API key. " +
+					"You can check from the Midtrans Dashboard. " +
+					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
+					"for the details or please contact us via https://midtrans.com/contact-us. ",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
 		} else if strings.Contains(key, " ") {
-			errMessage := "The API Key (ServerKey/IrisApiKey) contains white-space. Please double-check your API key. " +
-				"You can check the ServerKey from the Midtrans Dashboard. " +
-				"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-				"for the details or please contact us via https://midtrans.com/contact-us. "
 			err := &Error{
-				Message: errMessage,
-				RawError: errors.New(errMessage),
+				Message:  "The API Key (ServerKey/IrisApiKey) contains white-space. Please double-check your API key. " +
+					"You can check the ServerKey from the Midtrans Dashboard. " +
+					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
+					"for the details or please contact us via https://midtrans.com/contact-us. ",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
