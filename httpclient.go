@@ -2,6 +2,7 @@ package midtrans
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -67,16 +68,16 @@ func (c *HttpClientImplementation) Call(method string, url string, apiKey *strin
 				Message: "The API Key (ServerKey/IrisApiKey) is invalid, as it is an empty string. Please double-check your API key. " +
 					"You can check from the Midtrans Dashboard. " +
 					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-					"for the details or contact support at support@midtrans.com if you have any questions.",
+					"for the details or please contact us via https://midtrans.com/contact-us. ",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
 		} else if strings.Contains(key, " ") {
 			err := &Error{
-				Message: "The API Key (ServerKey/IrisApiKey) is contains white-space. Please double-check your API key. " +
+				Message:  "The API Key (ServerKey/IrisApiKey) contains white-space. Please double-check your API key. " +
 					"You can check the ServerKey from the Midtrans Dashboard. " +
 					"See https://docs.midtrans.com/en/midtrans-account/overview?id=retrieving-api-access-keys " +
-					"for the details or contact support at support@midtrans.com if you have any questions.",
+					"for the details or please contact us via https://midtrans.com/contact-us. ",
 			}
 			c.Logger.Error("Authentication: ", err.GetMessage())
 			return err
@@ -151,9 +152,11 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 		if found, data := HasOwnProperty("status_code", resBody); found {
 			statusCode, _ := strconv.Atoi(data["status_code"].(string))
 			if statusCode >= 401 && statusCode != 407 {
+				errMessage := fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody))
 				return &Error{
-					Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s API response: %s", strconv.Itoa(statusCode), string(resBody)),
+					Message:        errMessage,
 					StatusCode:     statusCode,
+					RawError: 		errors.New(errMessage),
 					RawApiResponse: rawResponse,
 				}
 			}
@@ -161,11 +164,12 @@ func (c *HttpClientImplementation) DoRequest(req *http.Request, result interface
 
 		// Check StatusCode from Midtrans HTTP response api StatusCode
 		if res.StatusCode >= 400 {
+			errMessage := fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody))
 			return &Error{
-				Message:        fmt.Sprintf("Midtrans API is returning API error. HTTP status code: %s  API response: %s", strconv.Itoa(res.StatusCode), string(resBody)),
+				Message:        errMessage,
 				StatusCode:     res.StatusCode,
+				RawError:       errors.New(errMessage),
 				RawApiResponse: rawResponse,
-				RawError:       err,
 			}
 		}
 	}

@@ -180,7 +180,7 @@ type ExpiryDetails struct {
 	Duration int64 `json:"duration"`
 }
 
-// Callbacks : Redirect URL after transaction is successfully paid (Overriden by JS callback).
+// Callbacks : Redirect URL after transaction is successfully paid (Overridden by JS callback).
 // Can also be set via Snap Settings menu in your dashboard.
 type Callbacks struct {
 	Finish string `json:"finish,omitempty"`

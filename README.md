@@ -616,13 +616,30 @@ midtrans.DefaultGoHttpClient = &http.Client{
 ## 4. Handling Error
 When using function that result in Midtrans API call e.g: c.ChargeTransaction(...) or s.CreateTransaction(...) there's a chance it may throw error (Midtrans [Error object](/error.go)), the error object will contains below properties that can be used as information to your error handling logic:
 ```go
-    _, err = c.chargeTransaction(param);
+    _, err = c.chargeTransaction(param)
     if err != nil {
-        msg := err.GetMessage()                // general message error
+        msg := err.Error()                     // general message error
         stsCode := err.GetStatusCode()         // HTTP status code e.g: 400, 401, etc.
         rawApiRes := err.GetRawApiResponse()   // raw Go HTTP response object
-        rawErr := err.GetRawError()            // raw Go err object
+        rawErr := err.Unwrap()                 // raw Go err object
     }
+```
+midtrans.error complies with [Go standard error](https://go.dev/blog/go1.13-errors). which support `Error, Unwrap, Is, As`.
+```go
+// sample using errors.As
+_, err := c.chargeTransaction(param)
+var Err *midtrans.Error
+if errors.As(err, &Err) {
+	fmt.Println(Err.Message)
+	fmt.Println(Err.StatusCode)
+}
+
+// sample using unwrap
+_, err := c.chargeTransaction(param)
+if err != nil {
+	log.Print(errors.Unwrap(err))
+    fmt.Print(err)
+}
 ```
 
 ## 5. Examples

@@ -17,8 +17,9 @@ func timestamp() string {
 }
 
 func getCardToken(cardNumber string) string {
+	year := time.Now().Year() + 1
 	midtrans.ClientKey = sandboxClientKey
-	res, _ := CardToken(cardNumber, 12, 21, "123")
+	res, _ := CardToken(cardNumber, 12, year, "123")
 	return res.TokenID
 }
 
@@ -45,26 +46,28 @@ func createPayload(orderId string, paymentType CoreapiPaymentType, cardToken str
 }
 
 func TestRegisterCard(t *testing.T) {
+	year := time.Now().Year() + 1
 	midtrans.ClientKey = sandboxClientKey
-	resp1, _ := RegisterCard(sampleCardNumber, 12, 2021)
+	resp1, _ := RegisterCard(sampleCardNumber, 12, year)
 	assert.Equal(t, resp1.StatusCode, "200")
 	assert.Equal(t, resp1.MaskCard, "481111-1114")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.RegisterCard(bniCardNumber, 12, 2021, sandboxClientKey)
+	resp2, _ := c.RegisterCard(bniCardNumber, 12, year, sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "200")
 	assert.Equal(t, resp2.MaskCard, "410505-1467")
 }
 
 func TestCardToken(t *testing.T) {
+	year := time.Now().Year() + 1
 	midtrans.ClientKey = sandboxClientKey
-	resp1, _ := CardToken(sampleCardNumber, 12, 2021, "123")
+	resp1, _ := CardToken(sampleCardNumber, 12, year, "123")
 	assert.Equal(t, resp1.StatusCode, "200")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
-	resp2, _ := c.CardToken(bniCardNumber, 12, 2021, "123", sandboxClientKey)
+	resp2, _ := c.CardToken(bniCardNumber, 12, year, "123", sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "200")
 }
 
