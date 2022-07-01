@@ -106,6 +106,7 @@ type EChannelDetail struct {
 	BillInfo6 string `json:"bill_info6,omitempty"`
 	BillInfo7 string `json:"bill_info7,omitempty"`
 	BillInfo8 string `json:"bill_info8,omitempty"`
+	BillKey   string `json:"bill_key,omitempty"`
 }
 
 // BCAKlikPayDetails : Represent Internet Banking for BCA KlikPay
