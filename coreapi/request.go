@@ -62,6 +62,9 @@ type CreditCardDetails struct {
 
 	// PointRedeemAmount For Mandiri Point, you can only do Full Redemption.(use -1 for Full Redemption)
 	PointRedeemAmount int64 `json:"point_redeem_amount,omitempty"`
+
+	// Determines how the transaction status is updated to the merchant frontend. Possible values are js_event (default) and form
+	CallbackType string `json:"callback_type,omitempty"`
 }
 
 // BankTransferDetails : Represent bank_transfer detail
