@@ -191,3 +191,18 @@ func TestChargeWrongServerKey(t *testing.T) {
 	c.ChargeTransaction(&ChargeReq{})
 	assert.Equal(t, err.GetStatusCode(), 401)
 }
+
+func TestChargeTransactionWithQRISIncludesQRString(t *testing.T) {
+	midtrans.ServerKey = sandboxServerKey
+	resp1, _ := ChargeTransaction(createPayload("MID-GO-UNIT_TEST-1"+timestamp(), PaymentTypeQris, ""))
+	assert.Equal(t, resp1.StatusCode, "201")
+	assert.Equal(t, resp1.PaymentType, "qris")
+	assert.NotEmpty(t, resp1.QRString)
+
+	c := Client{}
+	c.New(sandboxServerKey, midtrans.Sandbox)
+	resp2, _ := c.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), PaymentTypeQris, ""))
+	assert.Equal(t, resp2.StatusCode, "201")
+	assert.Equal(t, resp2.PaymentType, "qris")
+	assert.Empty(t, resp2.QRString)
+}

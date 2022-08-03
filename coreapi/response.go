@@ -59,6 +59,7 @@ type ChargeResponse struct {
 	Actions                []Action   `json:"actions"`
 	PaymentCode            string     `json:"payment_code"`
 	Store                  string     `json:"store"`
+	QRString               string     `json:"qr_string"`
 }
 
 //ApproveResponse : Approve response type when calling Midtrans approve transaction API
