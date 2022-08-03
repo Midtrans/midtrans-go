@@ -204,5 +204,5 @@ func TestChargeTransactionWithQRISIncludesQRString(t *testing.T) {
 	resp2, _ := c.ChargeTransaction(createPayload("MID-GO-UNIT_TEST-2"+timestamp(), PaymentTypeQris, ""))
 	assert.Equal(t, resp2.StatusCode, "201")
 	assert.Equal(t, resp2.PaymentType, "qris")
-	assert.Empty(t, resp2.QRString)
+	assert.NotEmpty(t, resp2.QRString)
 }
