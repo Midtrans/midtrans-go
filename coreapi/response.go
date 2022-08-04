@@ -60,6 +60,7 @@ type ChargeResponse struct {
 	PaymentCode            string     `json:"payment_code"`
 	Store                  string     `json:"store"`
 	QRString               string     `json:"qr_string"`
+	OnUs                   bool       `json:"on_us"`
 }
 
 //ApproveResponse : Approve response type when calling Midtrans approve transaction API
