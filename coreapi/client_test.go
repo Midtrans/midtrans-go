@@ -50,13 +50,13 @@ func TestRegisterCard(t *testing.T) {
 	midtrans.ClientKey = sandboxClientKey
 	resp1, _ := RegisterCard(sampleCardNumber, 12, year)
 	assert.Equal(t, resp1.StatusCode, "200")
-	assert.Equal(t, resp1.MaskCard, "481111-1114")
+	assert.Equal(t, resp1.MaskCard, "48111111-1114")
 
 	c := Client{}
 	c.New(sandboxServerKey, midtrans.Sandbox)
 	resp2, _ := c.RegisterCard(bniCardNumber, 12, year, sandboxClientKey)
 	assert.Equal(t, resp2.StatusCode, "200")
-	assert.Equal(t, resp2.MaskCard, "410505-1467")
+	assert.Equal(t, resp2.MaskCard, "41050586-1467")
 }
 
 func TestCardToken(t *testing.T) {
