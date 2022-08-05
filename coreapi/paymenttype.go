@@ -43,6 +43,9 @@ const (
 	// PaymentTypeAkulaku : akulaku
 	PaymentTypeAkulaku CoreapiPaymentType = "akulaku"
 
+	// PaymentTypeKredivo : kredivo
+	PaymentTypeKredivo CoreapiPaymentType = "kredivo"
+
 	// PaymentTypeMandiriClickpay : mandiri_clickpay
 	PaymentTypeMandiriClickpay CoreapiPaymentType = "mandiri_clickpay"
 )
