@@ -1,11 +1,10 @@
 package coreapi
 
 import (
-	"log"
-	"testing"
-
 	"github.com/midtrans/midtrans-go"
 	assert "github.com/stretchr/testify/require"
+	"log"
+	"testing"
 )
 
 /*
