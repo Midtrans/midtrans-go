@@ -241,7 +241,7 @@ type PaymentAccountResponse struct {
 	AccountStatus          string                        `json:"account_status"`
 	ChannelResponseCode    string                        `json:"channel_response_code"`
 	ChannelResponseMessage string                        `json:"channel_response_message"`
-	Action                 Action                        `json:"action"`
+	Actions                []Action                      `json:"actions"`
 	Metadata               PaymentAccountMetadataDetails `json:"metadata"`
 	StatusMessage          string                        `json:"status_message"`
 	ID                     string                        `json:"id"`

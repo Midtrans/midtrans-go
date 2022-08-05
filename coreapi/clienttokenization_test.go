@@ -1,10 +1,11 @@
 package coreapi
 
 import (
-	"github.com/midtrans/midtrans-go"
-	assert "github.com/stretchr/testify/require"
 	"log"
 	"testing"
+
+	"github.com/midtrans/midtrans-go"
+	assert "github.com/stretchr/testify/require"
 )
 
 /*
@@ -24,7 +25,7 @@ func initiateMidtransTokenization() {
 
 func paymentAccount(phoneNumber string) *PaymentAccountReq {
 	return &PaymentAccountReq{
-		PaymentType:  PaymentTypeGopay,
+		PaymentType: PaymentTypeGopay,
 		GopayPartner: &GopayPartnerDetails{
 			PhoneNumber: phoneNumber,
 			CountryCode: "62",
@@ -78,6 +79,7 @@ func TestLinkPaymentAccount(t *testing.T) {
 		log.Println(resp)
 		assert.Equal(t, "201", resp.StatusCode)
 		assert.NotEmpty(t, resp.AccountId)
+		assert.NotEmpty(t, resp.Actions)
 		accountId = resp.AccountId
 	}
 }
@@ -105,5 +107,3 @@ func TestUnlinkPaymentAccount(t *testing.T) {
 		assert.Equal(t, 412, err.StatusCode)
 	}
 }
-
-
