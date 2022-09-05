@@ -20,7 +20,7 @@ const (
 	Production
 
 	//libraryVersion : midtrans go library version
-	libraryVersion = "v1.3.4"
+	libraryVersion = "v1.3.5"
 )
 
 //ServerKey is config payment API key for global use
