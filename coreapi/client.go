@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/midtrans/midtrans-go"
 	"net/http"
 	"strconv"
+
+	"github.com/midtrans/midtrans-go"
 )
 
 // Client : CoreAPI Client struct
@@ -141,8 +142,8 @@ func RegisterCard(cardNumber string, expMonth int, expYear int) (*CardRegisterRe
 
 // CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.CardTokenResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#point-inquiry
-func (c Client) CardPointInquiry(cardToken string) (*CardTokenResponse, *midtrans.Error) {
-	resp := &CardTokenResponse{}
+func (c Client) CardPointInquiry(cardToken string) (*PointInquiryResponse, *midtrans.Error) {
+	resp := &PointInquiryResponse{}
 	err := c.HttpClient.Call(
 		http.MethodGet,
 		fmt.Sprintf("%s/v2/point_inquiry/%s", c.Env.BaseUrl(), cardToken),
@@ -160,7 +161,7 @@ func (c Client) CardPointInquiry(cardToken string) (*CardTokenResponse, *midtran
 
 // CardPointInquiry : Do `/point_inquiry/{tokenId}` API request to Midtrans Core API return `coreapi.CardTokenResponse`,
 // more detail refer to: https://api-docs.midtrans.com/#point-inquiry
-func CardPointInquiry(cardToken string) (*CardTokenResponse, *midtrans.Error) {
+func CardPointInquiry(cardToken string) (*PointInquiryResponse, *midtrans.Error) {
 	return getDefaultClient().CardPointInquiry(cardToken)
 }
 
