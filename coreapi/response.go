@@ -23,7 +23,7 @@ type PaymentAmount struct {
 	Amount string `json:"amount"`
 }
 
-//ChargeResponse : CoreAPI charge response struct when calling Midtrans API
+// ChargeResponse : CoreAPI charge response struct when calling Midtrans API
 type ChargeResponse struct {
 	TransactionID          string     `json:"transaction_id"`
 	OrderID                string     `json:"order_id"`
@@ -63,22 +63,22 @@ type ChargeResponse struct {
 	OnUs                   bool       `json:"on_us"`
 }
 
-//ApproveResponse : Approve response type when calling Midtrans approve transaction API
+// ApproveResponse : Approve response type when calling Midtrans approve transaction API
 type ApproveResponse = ChargeResponse
 
-//DenyResponse : Deny response type when calling Midtrans deny transaction API
+// DenyResponse : Deny response type when calling Midtrans deny transaction API
 type DenyResponse = ChargeResponse
 
-//CancelResponse : Cancel response type when calling Midtrans cancel transaction API
+// CancelResponse : Cancel response type when calling Midtrans cancel transaction API
 type CancelResponse = ChargeResponse
 
-//ExpireResponse : Expire response type when calling Midtrans expire transaction API
+// ExpireResponse : Expire response type when calling Midtrans expire transaction API
 type ExpireResponse = ChargeResponse
 
-//CaptureResponse : Capture response type when calling Midtrans API capture for credit card transaction
+// CaptureResponse : Capture response type when calling Midtrans API capture for credit card transaction
 type CaptureResponse = ChargeResponse
 
-//TransactionStatusResponse : Status transaction response struct
+// TransactionStatusResponse : Status transaction response struct
 type TransactionStatusResponse struct {
 	TransactionTime        string          `json:"transaction_time"`
 	GrossAmount            string          `json:"gross_amount"`
@@ -141,7 +141,7 @@ type RefundDetails struct {
 	CreatedAt            string `json:"created_at"`
 }
 
-//RefundResponse : Refund response struct when calling Midtrans refund and direct refund API
+// RefundResponse : Refund response struct when calling Midtrans refund and direct refund API
 type RefundResponse struct {
 	StatusCode           string `json:"status_code"`
 	StatusMessage        string `json:"status_message"`
@@ -225,7 +225,7 @@ type UpdateSubscriptionResponse struct {
 type EnableSubscriptionResponse = UpdateSubscriptionResponse
 type DisableSubscriptionResponse = UpdateSubscriptionResponse
 
-//ScheduleResponse Subscription schedule response object
+// ScheduleResponse Subscription schedule response object
 type ScheduleResponse struct {
 	Interval            int    `json:"interval"`
 	IntervalUnit        string `json:"interval_unit"`
@@ -264,4 +264,12 @@ type PaymentOptionsDetails struct {
 type BalanceDetails struct {
 	Value    string `json:"value"`
 	Currency string `json:"currency"`
+}
+
+type PointInquiryResponse struct {
+	StatusCode         string `json:"status_code"`
+	StatusMessage      string `json:"status_message"`
+	PointBalance       int    `json:"point_balance"`
+	TransactionTime    string `json:"transaction_time"`
+	PointBalanceAmount string `json:"point_balance_amount"`
 }
