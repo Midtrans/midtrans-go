@@ -292,7 +292,7 @@ midtrans.Environment = midtrans.Sandbox
 
 // 2. Initiate charge request
 chargeReq := &coreapi.ChargeReq{
-	PaymentType: midtrans.SourceCreditCard,
+	PaymentType: coreapi.PaymentTypeCreditCard,
 	TransactionDetails: midtrans.TransactionDetails{
 		OrderID:  "12345",
 		GrossAmt: 200000,
@@ -301,8 +301,8 @@ chargeReq := &coreapi.ChargeReq{
 		TokenID:        "YOUR-CC-TOKEN",
 		Authentication: true,
 	},
-	Items: &[]midtrans.ItemDetail{
-		coreapi.ItemDetail{
+	Items: &[]midtrans.ItemDetails{
+		{
 			ID:    "ITEM1",
 			Price: 200000,
 			Qty:   1,
