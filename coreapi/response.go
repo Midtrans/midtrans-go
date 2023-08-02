@@ -118,7 +118,7 @@ type TransactionStatusResponse struct {
 	CustomField3           string          `json:"custom_field3"`
 	Metadata               interface{}     `json:"metadata"`
 	PaymentOptionsType     string          `json:"payment_options_type"`
-	InstallmentTerms       int             `json:"installment_terms"`
+	InstallmentTerm        int             `json:"installment_term"`
 	ThreeDsVersion         string          `json:"three_ds_version"`
 }
 
