@@ -61,6 +61,8 @@ type ChargeResponse struct {
 	Store                  string     `json:"store"`
 	QRString               string     `json:"qr_string"`
 	OnUs                   bool       `json:"on_us"`
+	ThreeDsVersion         string     `json:"three_ds_version"`
+	ExpiryTime             string     `json:"expiry_time"`
 }
 
 // ApproveResponse : Approve response type when calling Midtrans approve transaction API
@@ -120,6 +122,7 @@ type TransactionStatusResponse struct {
 	PaymentOptionsType     string          `json:"payment_options_type"`
 	InstallmentTerm        int             `json:"installment_term"`
 	ThreeDsVersion         string          `json:"three_ds_version"`
+	ExpiryTime             string          `json:"expiry_time"`
 }
 
 type TransactionStatusB2bResponse struct {
