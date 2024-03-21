@@ -11,6 +11,7 @@ const sandboxClientKey = "SB-Mid-client-yUgKb__vX_zH2TMN"
 const sandboxServerKey = "SB-Mid-server-TvgWB_Y9s81-rbMBH7zZ8BHW"
 const sampleCardNumber = "4811111111111114"
 const bniCardNumber = "4105058689481467"
+const bcaBinNumber = "45563300"
 
 func timestamp() string {
 	return time.Now().UTC().Format("2006010215040105")
@@ -205,4 +206,10 @@ func TestChargeTransactionWithQRISIncludesQRString(t *testing.T) {
 	assert.Equal(t, resp2.StatusCode, "201")
 	assert.Equal(t, resp2.PaymentType, "qris")
 	assert.NotEmpty(t, resp2.QRString)
+}
+func TestGetBIN(t *testing.T) {
+	midtrans.ClientKey = sandboxClientKey
+	resp, _ := GetBIN(bcaBinNumber)
+	assert.Equal(t, resp.Data.BankCode, "BCA")
+	assert.Equal(t, resp.Data.RegistrationRequired, false)
 }
