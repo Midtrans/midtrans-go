@@ -188,7 +188,7 @@ type CardRegisterResponse struct {
 
 type BinResponse struct {
 	Data struct {
-		RegistrationRequired string `json:"registration_required"`
+		RegistrationRequired bool   `json:"registration_required"`
 		CountryName          string `json:"country_name"`
 		CountryCode          string `json:"country_code"`
 		Channel              string `json:"channel"`
