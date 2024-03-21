@@ -1,6 +1,7 @@
 package coreapi
 
 import (
+	"encoding/json"
 	"github.com/midtrans/midtrans-go"
 	assert "github.com/stretchr/testify/require"
 	"testing"
@@ -207,9 +208,82 @@ func TestChargeTransactionWithQRISIncludesQRString(t *testing.T) {
 	assert.Equal(t, resp2.PaymentType, "qris")
 	assert.NotEmpty(t, resp2.QRString)
 }
+
 func TestGetBIN(t *testing.T) {
 	midtrans.ClientKey = sandboxClientKey
 	resp, _ := GetBIN(bcaBinNumber)
 	assert.Equal(t, resp.Data.BankCode, "BCA")
 	assert.Equal(t, resp.Data.RegistrationRequired, false)
+}
+
+type mockHTTPClient struct {
+	// Define a field to hold the dummy response
+	dummyResponseJSON []byte
+}
+
+// Implement the GetBIN method of the Client interface for the mock client
+func (m *mockHTTPClient) GetBIN(binNumber string) (*BinResponse, error) {
+	// Return the stored dummy response
+	var binResponse BinResponse
+	err := json.Unmarshal(m.dummyResponseJSON, &binResponse)
+	if err != nil {
+		return nil, err
+	}
+	return &binResponse, nil
+}
+
+func TestGetBINWithRegistrationRequiredIsNullFromResponse(t *testing.T) {
+	dummyResponseJSON := []byte(`{
+		"data": {
+			"registration_required": null,
+			"country_name": "INDONESIA",
+			"country_code": "ID",
+			"channel": "online_offline",
+			"brand": "VISA",
+			"bin_type": "CREDIT",
+			"bin_class": "GOLD",
+			"bin": "45563300",
+			"bank_code": "BCA",
+			"bank": "BANK CENTRAL ASIA"
+		}
+	}`)
+
+	// Create an instance of the mock HTTP client with the dummy response
+	mockClient := &mockHTTPClient{
+		dummyResponseJSON: dummyResponseJSON,
+	}
+
+	// Call the GetBIN function with the mock client
+	resp, err := mockClient.GetBIN(bcaBinNumber)
+
+	// Check if there's no error
+	assert.NoError(t, err)
+
+	// Check if the response matches the expected values
+	assert.Equal(t, resp.Data.BankCode, "BCA")
+	assert.Equal(t, resp.Data.RegistrationRequired, false)
+}
+
+func TestGetBINWithRegistrationRequiredIsTrueFromResponse(t *testing.T) {
+	dummyResponseJSON := []byte(`{
+		"data": {
+			"registration_required": true,
+			"country_name": "INDONESIA",
+			"country_code": "ID",
+			"channel": "online_offline",
+			"brand": "VISA",
+			"bin_type": "CREDIT",
+			"bin_class": "GOLD",
+			"bin": "45563300",
+			"bank_code": "BCA",
+			"bank": "BANK CENTRAL ASIA"
+		}
+	}`)
+	mockClient := &mockHTTPClient{
+		dummyResponseJSON: dummyResponseJSON,
+	}
+	resp, err := mockClient.GetBIN(bcaBinNumber)
+	assert.NoError(t, err)
+	assert.Equal(t, resp.Data.BankCode, "BCA")
+	assert.Equal(t, resp.Data.RegistrationRequired, true)
 }
