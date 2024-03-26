@@ -106,7 +106,7 @@ func (c Client) CreatePayout(req CreatePayoutReq) (*CreatePayoutResponse, *midtr
 	return resp, nil
 }
 
-// ApprovePayout : this method for Apporver to approve multiple payout request.
+// ApprovePayout : this method for Approver to approve multiple payout request.
 // https://iris-docs.midtrans.com/#approve-payouts
 func (c Client) ApprovePayout(req ApprovePayoutReq) (*ApprovePayoutResponse, *midtrans.Error) {
 	resp := &ApprovePayoutResponse{}
@@ -126,7 +126,7 @@ func (c Client) ApprovePayout(req ApprovePayoutReq) (*ApprovePayoutResponse, *mi
 	return resp, nil
 }
 
-// RejectPayout : This method for Apporver to reject multiple payout request.
+// RejectPayout : This method for Approver to reject multiple payout request.
 // https://iris-docs.midtrans.com/#reject-payouts
 func (c Client) RejectPayout(req RejectPayoutReq) (*RejectPayoutResponse, *midtrans.Error) {
 	resp := &RejectPayoutResponse{}
