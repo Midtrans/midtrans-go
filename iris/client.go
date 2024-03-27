@@ -174,7 +174,7 @@ func (c Client) GetTransactionHistory(fromDate string, toDate string) ([]Transac
 	jsonReq, _ := json.Marshal(`{ "from_date": ` + fromDate + `, "to_date": ` + toDate + `}`)
 	err := c.HttpClient.Call(
 		http.MethodGet,
-		fmt.Sprintf("%s/api/v1/statements", c.Env.IrisURL()),
+		fmt.Sprintf("%s/api/v1/statements?from_date=%s&to_date=%s", c.Env.IrisURL(), fromDate, toDate),
 		c.IrisApiKey,
 		c.Options,
 		bytes.NewBuffer(jsonReq),
