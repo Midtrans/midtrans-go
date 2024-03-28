@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-//EnvironmentType is global config Environment for Midtrans api
+// EnvironmentType is global config Environment for Midtrans api
 type EnvironmentType int8
 
 const (
@@ -20,29 +20,29 @@ const (
 	Production
 
 	//libraryVersion : midtrans go library version
-	libraryVersion = "v1.3.7"
+	libraryVersion = "v1.3.8"
 )
 
-//ServerKey is config payment API key for global use
+// ServerKey is config payment API key for global use
 var ServerKey string
 
-//ClientKey is config payment public API key for global use
+// ClientKey is config payment public API key for global use
 var ClientKey string
 
-//PaymentOverrideNotification opt to change or add custom notification urls globally on every transaction.
+// PaymentOverrideNotification opt to change or add custom notification urls globally on every transaction.
 var PaymentOverrideNotification *string
 
-//PaymentAppendNotification opt to change or set custom notification urls globally on every transaction.
+// PaymentAppendNotification opt to change or set custom notification urls globally on every transaction.
 var PaymentAppendNotification *string
 
-//SetPaymentOverrideNotification opt to change or set custom notification urls globally on every transaction.
-//To use new notification url(s) disregarding the settings on Midtrans dashboard, only receive up to maximum of 3 urls.
+// SetPaymentOverrideNotification opt to change or set custom notification urls globally on every transaction.
+// To use new notification url(s) disregarding the settings on Midtrans dashboard, only receive up to maximum of 3 urls.
 func SetPaymentOverrideNotification(val string) {
 	PaymentOverrideNotification = &val
 }
 
-//SetPaymentAppendNotification opt to change or add custom notification urls globally on every transaction.
-//To use new notification url(s) disregarding the settings on Midtrans dashboard, only receive up to maximum of 3 urls.
+// SetPaymentAppendNotification opt to change or add custom notification urls globally on every transaction.
+// To use new notification url(s) disregarding the settings on Midtrans dashboard, only receive up to maximum of 3 urls.
 func SetPaymentAppendNotification(val string) {
 	PaymentAppendNotification = &val
 }
@@ -67,7 +67,7 @@ var (
 	}
 )
 
-//GetDefaultLogger the default logger that the library will use to log errors, debug, and informational messages.
+// GetDefaultLogger the default logger that the library will use to log errors, debug, and informational messages.
 func GetDefaultLogger(env EnvironmentType) LoggerInterface {
 	if env == Sandbox {
 		return &LoggerImplementation{LogLevel: LogDebug}
@@ -76,7 +76,7 @@ func GetDefaultLogger(env EnvironmentType) LoggerInterface {
 	}
 }
 
-//GetHttpClient : get HttpClient implementation
+// GetHttpClient : get HttpClient implementation
 func GetHttpClient(Env EnvironmentType) *HttpClientImplementation {
 	return &HttpClientImplementation{
 		HttpClient: DefaultGoHttpClient,
@@ -109,7 +109,7 @@ func (e EnvironmentType) IrisURL() string {
 	return strings.Replace(e.BaseUrl(), "api.", "app.", 1) + "/iris"
 }
 
-//ConfigOptions : is used to configure some feature before request to Midtrans API
+// ConfigOptions : is used to configure some feature before request to Midtrans API
 // via `coreapi.Gateway` `snap.Gateway` and `iris.Gateway`
 type ConfigOptions struct {
 	PaymentIdempotencyKey       *string
@@ -145,7 +145,7 @@ func (o *ConfigOptions) SetPaymentAppendNotification(val string) {
 	o.PaymentAppendNotification = &val
 }
 
-//SetContext : options to change or add Context for each API request
+// SetContext : options to change or add Context for each API request
 func (o *ConfigOptions) SetContext(ctx context.Context) {
 	o.Ctx = ctx
 }
