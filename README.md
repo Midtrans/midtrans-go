@@ -371,10 +371,10 @@ func (c Client) GetBeneficiaries() ([]Beneficiaries, *midtrans.Error)
 // CreatePayout : This method for Creator to create a payout. It can be used for single payout and also multiple payouts.
 func (c Client) CreatePayout(req CreatePayoutReq) (*CreatePayoutResponse, *midtrans.Error)
 
-// ApprovePayout : this method for Apporver to approve multiple payout request.
+// ApprovePayout : this method for Approver to approve multiple payout request.
 func (c Client) ApprovePayout(req ApprovePayoutReq) (*ApprovePayoutResponse, *midtrans.Error)
 
-// RejectPayout : This method for Apporver to reject multiple payout request.
+// RejectPayout : This method for Approver to reject multiple payout request.
 func (c Client) RejectPayout(req RejectPayoutReq) (*RejectPayoutResponse, *midtrans.Error)
 
 // GetPayoutDetails : Get details of a single payout.
