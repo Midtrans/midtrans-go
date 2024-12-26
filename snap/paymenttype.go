@@ -72,6 +72,9 @@ const (
 
 	// PaymentTypeAlfamart : alfamart
 	PaymentTypeAlfamart SnapPaymentType = "alfamart"
+
+	// PaymentTypeOtherQris : other_qris
+	PaymentTypeOtherQris SnapPaymentType = "other_qris"
 )
 
 // AllSnapPaymentType : Get All available SnapPaymentType
@@ -99,4 +102,5 @@ var AllSnapPaymentType = []SnapPaymentType{
 	PaymentTypeAkulaku,
 	PaymentTypeAlfamart,
 	PaymentTypeConvenienceStore,
+	PaymentTypeOtherQris,
 }
