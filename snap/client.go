@@ -184,3 +184,55 @@ func (c Client) CreateTransactionUrl(req *Request) (string, *midtrans.Error) {
 func CreateTransactionUrl(req *Request) (string, *midtrans.Error) {
 	return getDefaultClient().CreateTransactionUrl(req)
 }
+
+// GopayAccountInfo represents the response from GetGopayAccount
+type GopayAccountInfo struct {
+	UserID        string `json:"user_id"`
+	AccountStatus string `json:"account_status"`
+	Balance       string `json:"balance"`
+	PhoneNumber   string `json:"phone_number"`
+	CountryCode   string `json:"country_code"`
+	AccountID     string `json:"account_id"`
+}
+
+// GetGopayAccount : Get GoPay account information for a specific user_id
+func (c Client) GetGopayAccount(userID string) (*GopayAccountInfo, *midtrans.Error) {
+	resp := &GopayAccountInfo{}
+	err := c.HttpClient.Call(
+		http.MethodGet,
+		fmt.Sprintf("%s/snap/v3/users/%s/gopay", c.Env.SnapURL(), userID),
+		&c.ServerKey,
+		c.Options,
+		nil,
+		resp,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GetGopayAccount : Get GoPay account information for a specific user_id using default client
+func GetGopayAccount(userID string) (*GopayAccountInfo, *midtrans.Error) {
+	return getDefaultClient().GetGopayAccount(userID)
+}
+
+// UnlinkGopayAccount : Unlink GoPay account for a specific user_id
+func (c Client) UnlinkGopayAccount(userID string) *midtrans.Error {
+	err := c.HttpClient.Call(
+		http.MethodDelete,
+		fmt.Sprintf("%s/snap/v3/users/%s/gopay", c.Env.SnapURL(), userID),
+		&c.ServerKey,
+		c.Options,
+		nil,
+		nil,
+	)
+
+	return err
+}
+
+// UnlinkGopayAccount : Unlink GoPay account for a specific user_id using default client
+func UnlinkGopayAccount(userID string) *midtrans.Error {
+	return getDefaultClient().UnlinkGopayAccount(userID)
+}

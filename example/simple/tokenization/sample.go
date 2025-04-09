@@ -33,7 +33,7 @@ func main() {
 }
 
 func LinkPaymentAccount() {
-	req := paymentAccount("62877812345678")
+	req := paymentAccount("628778123456")
 	resp, err := c.LinkPaymentAccount(req)
 	if err != nil {
 		log.Println("Failure :")

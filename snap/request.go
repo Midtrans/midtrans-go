@@ -150,6 +150,15 @@ type GopayDetails struct {
 	// CallbackUrl : Determine where should customer be redirected from GoJek apps.
 	// It supports both HTTP and deeplink. Default: same value as finish url
 	CallbackUrl string `json:"callback_url,omitempty"`
+
+	// Tokenization : Enable GoPay account linking/tokenization. Default: false
+	Tokenization bool `json:"tokenization,omitempty"`
+
+	// PhoneNumber : Customer's phone number that will be linked (must include country code)
+	PhoneNumber string `json:"phone_number,omitempty"`
+
+	// CountryCode : Customer's phone number country code (e.g. 62 for Indonesia)
+	CountryCode string `json:"country_code,omitempty"`
 }
 
 // ShopeePayDetails : Represent shopeepay detail
