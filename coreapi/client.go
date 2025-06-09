@@ -172,7 +172,7 @@ func (c Client) GetBIN(binNumber string) (*BinResponse, *midtrans.Error) {
 	err := c.HttpClient.Call(
 		http.MethodGet,
 		fmt.Sprintf("%s/v1/bins/%s", c.Env.BaseUrl(), binNumber),
-		&c.ClientKey,
+		&c.ServerKey,
 		c.Options,
 		nil,
 		resp,
